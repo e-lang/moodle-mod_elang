@@ -1,7 +1,7 @@
 moodle-mod_elang
 ================
 
-A moodle module for learning language
+A moodle module for learning language published under the [CeCILL-B licence](http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license)
 
 * Place the elang folder into the /mod folder of the moodle directory.
 
