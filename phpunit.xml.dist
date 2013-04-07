@@ -1,0 +1,13 @@
+<phpunit
+	bootstrap="tests/bootstrap.php"
+	colors="true"
+	stopOnFailure="false"
+	testdox="true"
+	verbose="true"
+	processIsolation="false"
+	backupStaticAttributes="false"
+	backupGlobals="false">
+	<testsuite name="AllTests">
+		<directory>tests</directory>
+	</testsuite>
+</phpunit>
