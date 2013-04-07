@@ -10,12 +10,4 @@
 [submodule "src/view/lib/captionator"]
 	path = src/view/lib/captionator
 	url = git://github.com/cgiffard/Captionator.git
-[submodule "src/lib/onyx"]
-	path = src/lib/onyx
-	url = git://github.com/enyojs/onyx.git
-[submodule "src/lib/layout"]
-	path = src/lib/layout
-	url = git://github.com/enyojs/layout.git
-[submodule "src/lib/captionator"]
-	path = src/lib/captionator
-	url = git://github.com/cgiffard/Captionator.git
+
