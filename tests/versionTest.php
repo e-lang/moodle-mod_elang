@@ -22,7 +22,7 @@ class VersionTest extends PHPUnit_Framework_TestCase
 	{
 		$module = new stdClass;
 		$this->object = $module;
-		require __DIRNAME__ . '/../src/version.php';
+		require __DIR__ . '/../src/version.php';
 	}
 
 	/**
