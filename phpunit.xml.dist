@@ -8,6 +8,6 @@
 	backupStaticAttributes="false"
 	backupGlobals="false">
 	<testsuite name="AllTests">
-		<directory>tests</directory>
+		<directory>test</directory>
 	</testsuite>
 </phpunit>
