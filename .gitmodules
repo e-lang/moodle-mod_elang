@@ -9,4 +9,4 @@
 	url = git://github.com/enyojs/layout.git
 [submodule "src/view"]
 	path = src/view
-	url = git@github.com:chdemko/moodle-mod_elang-client.git
+	url = git://github.com/chdemko/moodle-mod_elang-client.git
