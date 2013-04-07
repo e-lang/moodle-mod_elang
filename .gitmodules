@@ -1,10 +1,21 @@
-[submodule "view/enyo"]
-	path = view/enyo
+[submodule "src/view/enyo"]
+	path = src/view/enyo
 	url = git://github.com/enyojs/enyo.git
-[submodule "view/lib/onyx"]
-	path = view/lib/onyx
+[submodule "src/view/lib/onyx"]
+	path = src/view/lib/onyx
 	url = git://github.com/enyojs/onyx.git
-[submodule "view/lib/layout"]
-	path = view/lib/layout
+[submodule "src/view/lib/layout"]
+	path = src/view/lib/layout
 	url = git://github.com/enyojs/layout.git
-
+[submodule "src/view/lib/captionator"]
+	path = src/view/lib/captionator
+	url = git://github.com/cgiffard/Captionator.git
+[submodule "src/lib/onyx"]
+	path = src/lib/onyx
+	url = git://github.com/enyojs/onyx.git
+[submodule "src/lib/layout"]
+	path = src/lib/layout
+	url = git://github.com/enyojs/layout.git
+[submodule "src/lib/captionator"]
+	path = src/lib/captionator
+	url = git://github.com/cgiffard/Captionator.git
