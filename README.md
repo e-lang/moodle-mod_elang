@@ -1,7 +1,7 @@
 moodle-mod_elang-server
 =======================
 
-[![Build Status](https://travis-ci.org/chdemko/moodle-mod_elang-server.png?branch=master)](https://travis-ci.org/chdemko/moodle-mod_elang-server)
+[![Build Status](https://travis-ci.org/chdemko/moodle-mod_elang.png?branch=master)](https://travis-ci.org/chdemko/moodle-mod_elang)
 
 Description
 -----------
