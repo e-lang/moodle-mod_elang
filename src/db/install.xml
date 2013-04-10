@@ -3,23 +3,70 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
-  <TABLES>
-    <TABLE NAME="elang" COMMENT="Default comment for elang, please edit me">
-      <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="course"/>
-        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Course elang activity belongs to" PREVIOUS="id" NEXT="name"/>
-        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="name field for moodle instances" PREVIOUS="course" NEXT="intro"/>
-        <FIELD NAME="intro" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" COMMENT="General introduction of the elang activity" PREVIOUS="name" NEXT="introformat"/>
-        <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="Format of the intro field (MOODLE, HTML, MARKDOWN...)" PREVIOUS="intro" NEXT="timecreated"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="introformat" NEXT="timemodified"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="timecreated"/>
-      </FIELDS>
-      <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-      </KEYS>
-      <INDEXES>
-        <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
-      </INDEXES>
-    </TABLE>
-  </TABLES>
+	<TABLES>
+		<TABLE NAME="elang" COMMENT="Exercises" NEXT="video">
+			<FIELDS>
+				<FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="course"/>
+				<FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Course elang activity belongs to" PREVIOUS="id" NEXT="name"/>
+				<FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="titles" PREVIOUS="course" NEXT="intro"/>
+				<FIELD NAME="intro" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" COMMENT="videoname" PREVIOUS="name" NEXT="introformat"/>
+				<FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="description" PREVIOUS="intro" NEXT="timecreated"/>
+				<FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="introformat" NEXT="timemodified"/>
+				<FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="timecreated" NEXT="poster"/>
+				<FIELD NAME="poster" TYPE="text" LENGTH="medium" NOTNULL="false" SEQUENCE="false" PREVIOUS="timemodified" NEXT="duration"/>
+				<FIELD NAME="duration" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="poster"/>
+			</FIELDS>
+			<KEYS>
+				<KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+			</KEYS>
+			<INDEXES>
+				<INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
+			</INDEXES>
+		</TABLE>
+	
+		<TABLE NAME="video" COMMENT="video" PREVIOUS="elang" NEXT="cue">
+			<FIELDS>
+				<FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="id_elang"/>
+				<FIELD NAME="id_elang" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="format"/>
+				<FIELD NAME="format" TYPE="text" LENGTH="medium" NOTNULL="false" SEQUENCE="false" PREVIOUS="id_elang" NEXT="file"/>
+				<FIELD NAME="file" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" PREVIOUS="format"/>
+			</FIELDS>
+			<KEYS>
+				<KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="foreign"/>
+				<KEY NAME="foreign" TYPE="foreign" FIELDS="id_elang" REFTABLE="elang" REFFIELDS="id" PREVIOUS="primary"/>
+			</KEYS>
+		</TABLE>
+	
+		<TABLE NAME="cue" COMMENT="exercise's cue" PREVIOUS="video" NEXT="responses">
+			<FIELDS>
+				<FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="id_elang"/>
+				<FIELD NAME="id_elang" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="begin"/>
+				<FIELD NAME="begin" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="id_elang" NEXT="end"/>
+				<FIELD NAME="end" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="begin" NEXT="title"/>
+				<FIELD NAME="title" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" PREVIOUS="end" NEXT="cuetext"/>
+				<FIELD NAME="cuetext" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" PREVIOUS="title"/>
+			</FIELDS>
+			<KEYS>
+				<KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="foreign"/>
+				<KEY NAME="foreign" TYPE="foreign" FIELDS="id_elang" REFTABLE="elang" REFFIELDS="id" PREVIOUS="primary"/>
+			</KEYS>
+			<INDEXES>
+				<INDEX NAME="begin" UNIQUE="false" FIELDS="begin"/>
+			</INDEXES>
+		</TABLE>
+		
+		<TABLE NAME="responses" COMMENT="user's responses" PREVIOUS="cue">
+			<FIELDS>
+				<FIELD NAME="idcue" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" NEXT="iduser"/>
+				<FIELD NAME="iduser" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="idcue" NEXT="date"/>
+				<FIELD NAME="date" TYPE="datetime" NOTNULL="true" SEQUENCE="false" PREVIOUS="iduser" NEXT="usertext"/>
+				<FIELD NAME="usertext" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" PREVIOUS="date"/>
+			</FIELDS>
+			<KEYS>
+				<KEY NAME="primary" TYPE="primary" FIELDS="idcue, iduser, date" NEXT="fsequence"/>
+				<KEY NAME="fsequence" TYPE="foreign" FIELDS="iduser" REFTABLE="sequence" REFFIELDS="id_sequence" PREVIOUS="primary" NEXT="fetudiant"/>
+				<KEY NAME="fetudiant" TYPE="foreign" FIELDS="iduser" REFTABLE="user" REFFIELDS="id" PREVIOUS="fsequence"/>
+			</KEYS>
+		</TABLE>
+	</TABLES>
 </XMLDB>
