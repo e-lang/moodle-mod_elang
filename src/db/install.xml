@@ -4,7 +4,7 @@
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-   <TABLE NAME="elang" COMMENT="Default comment for elang, please edit me" NEXT="theme">
+   <TABLE NAME="elang" COMMENT="Exercises" NEXT="video">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="course"/>
         <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Course elang activity belongs to" PREVIOUS="id" NEXT="name"/>
@@ -12,8 +12,14 @@
         <FIELD NAME="intro" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" COMMENT="General introduction of the elang activity" PREVIOUS="name" NEXT="introformat"/>
         <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="Format of the intro field (MOODLE, HTML, MARKDOWN...)" PREVIOUS="intro" NEXT="timecreated"/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="introformat" NEXT="timemodified"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="timecreated"/>
-      </FIELDS>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="timecreated" NEXT="title"/>
+		<FIELD NAME="title" TYPE="text" LENGTH="medium" NOTNULL="false" SEQUENCE="false" COMMENT="exercise's title" PREVIOUS="timemodified" NEXT="description"/>
+        <FIELD NAME="description" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" PREVIOUS="title" NEXT="poster"/>
+		<FIELD NAME="poster" TYPE="text" LENGTH="medium" NOTNULL="false" SEQUENCE="false" PREVIOUS="description" NEXT="videoname"/>
+        <FIELD NAME="videoname" TYPE="text" LENGTH="medium" NOTNULL="false" SEQUENCE="false" PREVIOUS="poster" NEXT="duration"/>
+		<FIELD NAME="duration" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="videoname"/>
+
+	 </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
@@ -22,76 +28,48 @@
       </INDEXES>
     </TABLE>
 	
-	<TABLE NAME="theme" COMMENT="theme" PREVIOUS="elang" NEXT="exercice">
-      <FIELDS>
-        <FIELD NAME="id_theme" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="designation_theme"/>
-        <FIELD NAME="designation_theme" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" PREVIOUS="id_theme"/>
-      </FIELDS>
-      <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id_theme"/>
-      </KEYS>
-    </TABLE>
-	
-	<TABLE NAME="exercice" COMMENT="exercice" PREVIOUS="theme" NEXT="video">
+	<TABLE NAME="video" COMMENT="video" PREVIOUS="elang" NEXT="cue">
 		<FIELDS>
-        <FIELD NAME="id_exercice" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="id_theme"/>
-        <FIELD NAME="id_theme" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id_exercice" NEXT="titre"/>
-        <FIELD NAME="titre" TYPE="text" LENGTH="medium" NOTNULL="false" SEQUENCE="false" PREVIOUS="id_theme" NEXT="description"/>
-        <FIELD NAME="description" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" PREVIOUS="titre"/>
-       
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="id_exercise"/>
+        <FIELD NAME="id_exercise" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="format"/>
+        <FIELD NAME="format" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" PREVIOUS="id_exercise" NEXT="file"/>
+		<FIELD NAME="file" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" PREVIOUS="format"/>
 	   </FIELDS>
       <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id_exercice" NEXT="foreign"/>
-        <KEY NAME="foreign" TYPE="foreign" FIELDS="id_theme" REFTABLE="theme" REFFIELDS="id_theme" PREVIOUS="primary"/>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="foreign"/>
+        <KEY NAME="foreign" TYPE="foreign" FIELDS="id_exercise" REFTABLE="elang" REFFIELDS="id" PREVIOUS="primary"/>
       </KEYS>
 	</TABLE>
 	
-	<TABLE NAME="video" COMMENT="video" PREVIOUS="exercice" NEXT="sequence">
+	<TABLE NAME="cue" COMMENT="exercise's cue" PREVIOUS="video" NEXT="responses">
 		<FIELDS>
-        <FIELD NAME="id_video" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="id_exercice"/>
-        <FIELD NAME="id_exercice" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id_video" NEXT="poster"/>
-        <FIELD NAME="poster" TYPE="text" LENGTH="medium" NOTNULL="false" SEQUENCE="false" PREVIOUS="id_exercice" NEXT="nom_video"/>
-        <FIELD NAME="nom_video" TYPE="text" LENGTH="medium" NOTNULL="false" SEQUENCE="false" PREVIOUS="poster" NEXT="description"/>
-		<FIELD NAME="description" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" PREVIOUS="nom_video" NEXT="duree"/>
-		<FIELD NAME="duree" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="description" NEXT="fichier_video"/>
-		<FIELD NAME="fichier_video" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" PREVIOUS="duree"/>
-	   </FIELDS>
-      <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id_video" NEXT="foreign"/>
-        <KEY NAME="foreign" TYPE="foreign" FIELDS="id_exercice" REFTABLE="exercice" REFFIELDS="id_exercice" PREVIOUS="primary"/>
-      </KEYS>
-	</TABLE>
-	
-	<TABLE NAME="sequence" COMMENT="sequence" PREVIOUS="video" NEXT="reponses">
-		<FIELDS>
-        <FIELD NAME="id_sequence" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="id_exercice"/>
-        <FIELD NAME="id_exercice" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id_sequence" NEXT="begin"/>
-        <FIELD NAME="begin" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" PREVIOUS="id_exercice" NEXT="end"/>
-        <FIELD NAME="end" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" PREVIOUS="begin" NEXT="titre"/>
-		<FIELD NAME="titre" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" PREVIOUS="end" NEXT="texte"/>
-		<FIELD NAME="texte" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" PREVIOUS="titre" NEXT="order"/>
-		<FIELD NAME="order" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="texte"/>	  
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="id_exercise"/>
+        <FIELD NAME="id_exercise" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="begin"/>
+        <FIELD NAME="begin" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="id_exercise" NEXT="end"/>
+        <FIELD NAME="end" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="begin" NEXT="title"/>
+		<FIELD NAME="title" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" PREVIOUS="end" NEXT="cuetext"/>
+		<FIELD NAME="cuetext" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" PREVIOUS="title"/>
 	  </FIELDS>
       <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id_sequence" NEXT="foreign"/>
-        <KEY NAME="foreign" TYPE="foreign" FIELDS="id_exercice" REFTABLE="exercice" REFFIELDS="id_exercice" PREVIOUS="primary"/>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="foreign"/>
+        <KEY NAME="foreign" TYPE="foreign" FIELDS="id_exercise" REFTABLE="elang" REFFIELDS="id" PREVIOUS="primary"/>
       </KEYS>
 	  <INDEXES>
-        <INDEX NAME="order" UNIQUE="false" FIELDS="order"/>
+        <INDEX NAME="begin" UNIQUE="false" FIELDS="begin"/>
       </INDEXES>
 	</TABLE>
 	
-	<TABLE NAME="reponses" COMMENT="reponses" PREVIOUS="sequence">
+	<TABLE NAME="responses" COMMENT="user's responses" PREVIOUS="cue">
 		<FIELDS>
-        <FIELD NAME="id_sequence" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" NEXT="id_etudiant"/>
-        <FIELD NAME="id_etudiant" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id_sequence" NEXT="date"/>
-        <FIELD NAME="date" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" PREVIOUS="id_etudiant" NEXT="texte"/>
-		<FIELD NAME="texte" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" PREVIOUS="date"/>
+        <FIELD NAME="idcue" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" NEXT="iduser"/>
+        <FIELD NAME="iduser" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="idcue" NEXT="date"/>
+        <FIELD NAME="date" TYPE="datetime" NOTNULL="true" SEQUENCE="false" PREVIOUS="iduser" NEXT="usertext"/>
+		<FIELD NAME="usertext" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" PREVIOUS="date"/>
 	   </FIELDS>
       <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id_sequence, id_etudiant, date" NEXT="fsequence"/>
-        <KEY NAME="fsequence" TYPE="foreign" FIELDS="id_sequence" REFTABLE="sequence" REFFIELDS="id_sequence" PREVIOUS="primary" NEXT="fetudiant"/>
-        <KEY NAME="fetudiant" TYPE="foreign" FIELDS="id_etudiant" REFTABLE="user" REFFIELDS="id" PREVIOUS="fsequence"/>
+        <KEY NAME="primary" TYPE="primary" FIELDS="idcue, iduser, date" NEXT="fsequence"/>
+        <KEY NAME="fsequence" TYPE="foreign" FIELDS="iduser" REFTABLE="sequence" REFFIELDS="id_sequence" PREVIOUS="primary" NEXT="fetudiant"/>
+        <KEY NAME="fetudiant" TYPE="foreign" FIELDS="iduser" REFTABLE="user" REFFIELDS="id" PREVIOUS="fsequence"/>
 
       </KEYS>
 	</TABLE>
