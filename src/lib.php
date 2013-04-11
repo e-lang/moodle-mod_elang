@@ -9,10 +9,10 @@
  * logic, should go to locallib.php. This will help to save some memory when
  * Moodle is performing actions across all modules.
  *
- * @package    mod
+ * @package	mod
  * @subpackage elang
  * @copyright  2013 University of La Rochelle, France
- * @license    http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ * @license	http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -21,7 +21,7 @@ defined('MOODLE_INTERNAL') || die();
 //define('NEWMODULE_ULTIMATE_ANSWER', 42);
 
 ////////////////////////////////////////////////////////////////////////////////
-// Moodle core API                                                            //
+// Moodle core API															//
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -32,10 +32,10 @@ defined('MOODLE_INTERNAL') || die();
  * @return mixed true if the feature is supported, null if unknown
  */
 function elang_supports($feature) {
-    switch($feature) {
-        case FEATURE_MOD_INTRO:         return true;
-        default:                        return null;
-    }
+	switch($feature) {
+		case FEATURE_MOD_INTRO:		 return true;
+		default:						return null;
+	}
 }
 
 /**
@@ -51,29 +51,32 @@ function elang_supports($feature) {
  * @return int The id of the newly inserted elang record
  */
 function elang_add_instance(stdClass $elang, mod_elang_mod_form $mform = null) {
-    global $DB;
+	global $DB;
 
-    $elang->timecreated = time();
+	$elang->timecreated = time();
 
 	//To get the subtitle content, use :
-	$mform->get_file_content('poster');
+	$subtitle = $mform->get_file_content('subtitle');
 	
-	//Then you must apply the Valentin/David treatment to the subtitle :
+	//Then you must apply the treatment to the subtitle :
 	//
 	
 	//Then you must store data result in the database using moodle's functions :
-	//
+	//Example :
+	$video = new stdClass();
+	$video->id_elang		= 1;
+	$video->format			= 'test';
+	$video->file			= 'test.avi';
+	$lastInsertID = $DB->insert_record("elang_video", $video);
 	
-	
-	
-    # TESTS #
+	# TESTS #
 	//debug(file_save_draft_area_files(file_get_submitted_draft_itemid('poster'), $context->id, 'mod_assignment', 'poster', 0, array('subdirs' => false, 'maxfiles' => 1)));
 	//debug($mform->get_new_filename('poster'));
 	//$posterName = file_get_submitted_draft_itemid('poster') . $mform->get_new_filename('poster');
 	//debug('Contenu du fichier poster.png : ' . $mform->get_file_content('poster'));
 	//debug($posterName);
 	
-    return $DB->insert_record('elang', $elang);
+	return $DB->insert_record('elang', $elang);
 }
 
 //This function write a string in a debug file at the root :
@@ -95,14 +98,14 @@ function debug($str)
  * @return boolean Success/Fail
  */
 function elang_update_instance(stdClass $elang, mod_elang_mod_form $mform = null) {
-    global $DB;
+	global $DB;
 
-    $elang->timemodified = time();
-    $elang->id = $elang->instance;
+	$elang->timemodified = time();
+	$elang->id = $elang->instance;
 
-    # You may have to add extra stuff in here #
+	# You may have to add extra stuff in here #
 
-    return $DB->update_record('elang', $elang);
+	return $DB->update_record('elang', $elang);
 }
 
 /**
@@ -116,17 +119,17 @@ function elang_update_instance(stdClass $elang, mod_elang_mod_form $mform = null
  * @return boolean Success/Failure
  */
 function elang_delete_instance($id) {
-    global $DB;
+	global $DB;
 
-    if (! $elang = $DB->get_record('elang', array('id' => $id))) {
-        return false;
-    }
+	if (! $elang = $DB->get_record('elang', array('id' => $id))) {
+		return false;
+	}
 
-    # Delete any dependent records here #
+	# Delete any dependent records here #
 
-    $DB->delete_records('elang', array('id' => $elang->id));
+	$DB->delete_records('elang', array('id' => $elang->id));
 
-    return true;
+	return true;
 }
 
 /**
@@ -140,10 +143,10 @@ function elang_delete_instance($id) {
  */
 function elang_user_outline($course, $user, $mod, $elang) {
 
-    $return = new stdClass();
-    $return->time = 0;
-    $return->info = '';
-    return $return;
+	$return = new stdClass();
+	$return->time = 0;
+	$return->info = '';
+	return $return;
 }
 
 /**
@@ -167,7 +170,7 @@ function elang_user_complete($course, $user, $mod, $elang) {
  * @return boolean
  */
 function elang_print_recent_activity($course, $viewfullnames, $timestart) {
-    return false;  //  True if anything was printed, otherwise false
+	return false;  //  True if anything was printed, otherwise false
 }
 
 /**
@@ -206,7 +209,7 @@ function elang_print_recent_mod_activity($activity, $courseid, $detail, $modname
  * @todo Finish documenting this function
  **/
 function elang_cron () {
-    return true;
+	return true;
 }
 
 /**
@@ -216,11 +219,11 @@ function elang_cron () {
  * @return array
  */
 function elang_get_extra_capabilities() {
-    return array();
+	return array();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// Gradebook API                                                              //
+// Gradebook API															  //
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -235,14 +238,14 @@ function elang_get_extra_capabilities() {
  * @return bool true if the scale is used by the given elang instance
  */
 function elang_scale_used($elangid, $scaleid) {
-    global $DB;
+	global $DB;
 
-    /** @example */
-    if ($scaleid and $DB->record_exists('elang', array('id' => $elangid, 'grade' => -$scaleid))) {
-        return true;
-    } else {
-        return false;
-    }
+	/** @example */
+	if ($scaleid and $DB->record_exists('elang', array('id' => $elangid, 'grade' => -$scaleid))) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 /**
@@ -254,14 +257,14 @@ function elang_scale_used($elangid, $scaleid) {
  * @return boolean true if the scale is used by any elang instance
  */
 function elang_scale_used_anywhere($scaleid) {
-    global $DB;
+	global $DB;
 
-    /** @example */
-    if ($scaleid and $DB->record_exists('elang', array('grade' => -$scaleid))) {
-        return true;
-    } else {
-        return false;
-    }
+	/** @example */
+	if ($scaleid and $DB->record_exists('elang', array('grade' => -$scaleid))) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 /**
@@ -273,17 +276,17 @@ function elang_scale_used_anywhere($scaleid) {
  * @return void
  */
 function elang_grade_item_update(stdClass $elang) {
-    global $CFG;
-    require_once($CFG->libdir.'/gradelib.php');
+	global $CFG;
+	require_once($CFG->libdir.'/gradelib.php');
 
-    /** @example */
-    $item = array();
-    $item['itemname'] = clean_param($elang->name, PARAM_NOTAGS);
-    $item['gradetype'] = GRADE_TYPE_VALUE;
-    $item['grademax']  = $elang->grade;
-    $item['grademin']  = 0;
+	/** @example */
+	$item = array();
+	$item['itemname'] = clean_param($elang->name, PARAM_NOTAGS);
+	$item['gradetype'] = GRADE_TYPE_VALUE;
+	$item['grademax']  = $elang->grade;
+	$item['grademin']  = 0;
 
-    grade_update('mod/elang', $elang->course, 'mod', 'elang', $elang->id, 0, null, $item);
+	grade_update('mod/elang', $elang->course, 'mod', 'elang', $elang->id, 0, null, $item);
 }
 
 /**
@@ -296,17 +299,17 @@ function elang_grade_item_update(stdClass $elang) {
  * @return void
  */
 function elang_update_grades(stdClass $elang, $userid = 0) {
-    global $CFG, $DB;
-    require_once($CFG->libdir.'/gradelib.php');
+	global $CFG, $DB;
+	require_once($CFG->libdir.'/gradelib.php');
 
-    /** @example */
-    $grades = array(); // populate array of grade objects indexed by userid
+	/** @example */
+	$grades = array(); // populate array of grade objects indexed by userid
 
-    grade_update('mod/elang', $elang->course, 'mod', 'elang', $elang->id, 0, $grades);
+	grade_update('mod/elang', $elang->course, 'mod', 'elang', $elang->id, 0, $grades);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// File API                                                                   //
+// File API																   //
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -321,7 +324,7 @@ function elang_update_grades(stdClass $elang, $userid = 0) {
  * @return array of [(string)filearea] => (string)description
  */
 function elang_get_file_areas($course, $cm, $context) {
-    return array();
+	return array();
 }
 
 /**
@@ -342,7 +345,7 @@ function elang_get_file_areas($course, $cm, $context) {
  * @return file_info instance or null if not found
  */
 function elang_get_file_info($browser, $areas, $course, $cm, $context, $filearea, $itemid, $filepath, $filename) {
-    return null;
+	return null;
 }
 
 /**
@@ -360,19 +363,19 @@ function elang_get_file_info($browser, $areas, $course, $cm, $context, $filearea
  * @param array $options additional options affecting the file serving
  */
 function elang_pluginfile($course, $cm, $context, $filearea, array $args, $forcedownload, array $options=array()) {
-    global $DB, $CFG;
+	global $DB, $CFG;
 
-    if ($context->contextlevel != CONTEXT_MODULE) {
-        send_file_not_found();
-    }
+	if ($context->contextlevel != CONTEXT_MODULE) {
+		send_file_not_found();
+	}
 
-    require_login($course, true, $cm);
+	require_login($course, true, $cm);
 
-    send_file_not_found();
+	send_file_not_found();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// Navigation API                                                             //
+// Navigation API															 //
 ////////////////////////////////////////////////////////////////////////////////
 
 /**

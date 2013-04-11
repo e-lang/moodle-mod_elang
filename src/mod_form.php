@@ -59,9 +59,10 @@ class mod_elang_mod_form extends moodleform_mod {
 		{
 			$debug = fopen('/debug.txt', 'a');
 			fputs($debug,  $str . "\n");
-		}*/
+		}
 		
-		//debug('mod_form.php');
+		debug('mod_form.php');
+		debug($mform->id);*/
 		
 		$mform->addElement('header', 'elangfieldset', get_string('upload', 'elang'));
 		//$mform->addElement('static', 'label2', 'elangsetting2', 'Your elang fields go here. Replace me!');
