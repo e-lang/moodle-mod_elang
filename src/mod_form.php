@@ -50,27 +50,34 @@ class mod_elang_mod_form extends moodleform_mod {
 		// Adding the rest of elang settings, spreeading all them into this fieldset
 		// or adding more fieldsets ('header' elements) if needed for better logic
 		//$mform->addElement('static', 'label1', 'elangsetting1', 'Your elang fields go here. Replace me!');
-		$options = array(	NOGROUPS	   => get_string('element1'),
+		/*$options = array(	NOGROUPS	   => get_string('element1'),
 							SEPARATEGROUPS => get_string('element2'),
 							VISIBLEGROUPS  => get_string('element3'));
-		$mform->addElement('select', 'monid', 'Theme', $options, NOGROUPS);
+		$mform->addElement('select', 'monid', 'Theme', $options, NOGROUPS);*/
 		
+		/*function debug($str)
+		{
+			$debug = fopen('/debug.txt', 'a');
+			fputs($debug,  $str . "\n");
+		}*/
+		
+		//debug('mod_form.php');
 		
 		$mform->addElement('header', 'elangfieldset', get_string('upload', 'elang'));
 		//$mform->addElement('static', 'label2', 'elangsetting2', 'Your elang fields go here. Replace me!');
 		$mform->addElement('filemanager', 'videos', get_string('videos', 'elang'), null, array('subdirs' => 0, 'maxbytes' => $maxbytes, 'maxfiles' => 20, 'accepted_types' => array('video')));
 		$mform->addHelpButton('videos', 'videos', 'elang');
-		$mform->addRule('videos', null, 'required', null, 'client');
+		//$mform->addRule('videos', null, 'required', null, 'client');
 		//TODO, required inputs + change accepted_types for subtitle and exercise (?) :
 		$mform->addElement('filepicker', 'subtitle', get_string('subtitle', 'elang'), null, array('maxbytes' => 20000000, 'accepted_types' => '*'));
 		$mform->addHelpButton('subtitle', 'subtitle', 'elang');
-		$mform->addRule('subtitle', null, 'required', null, 'client');
-		$mform->addElement('filepicker', 'exercise', get_string('exercise', 'elang'), null, array('maxbytes' => 20000000, 'accepted_types' => '*'));
-		$mform->addHelpButton('exercise', 'exercise', 'elang');
-		$mform->addRule('exercise', null, 'required', null, 'client');
+		//$mform->addRule('subtitle', null, 'required', null, 'client');
+		/*$mform->addElement('filepicker', 'exercise', get_string('exercise', 'elang'), null, array('maxbytes' => 20000000, 'accepted_types' => '*'));
+		$mform->addHelpButton('exercise', 'exercise', 'elang');*/
+		//$mform->addRule('exercise', null, 'required', null, 'client');
 		$mform->addElement('filepicker', 'poster', get_string('poster', 'elang'), null, array('maxbytes' => 20000000, 'accepted_types' => array('image')));
 		$mform->addHelpButton('poster', 'poster', 'elang');
-		$mform->addRule('poster', null, 'required', null, 'client');
+		//$mform->addRule('poster', null, 'required', null, 'client');
 		//$mform->addHelpButton('name', 'poster_help', 'elang');
 		
 		//-------------------------------------------------------------------------------

@@ -55,9 +55,32 @@ function elang_add_instance(stdClass $elang, mod_elang_mod_form $mform = null) {
 
     $elang->timecreated = time();
 
-    # You may have to add extra stuff in here #
-
+	//To get the subtitle content, use :
+	$mform->get_file_content('poster');
+	
+	//Then you must apply the Valentin/David treatment to the subtitle :
+	//
+	
+	//Then you must store data result in the database using moodle's functions :
+	//
+	
+	
+	
+    # TESTS #
+	//debug(file_save_draft_area_files(file_get_submitted_draft_itemid('poster'), $context->id, 'mod_assignment', 'poster', 0, array('subdirs' => false, 'maxfiles' => 1)));
+	//debug($mform->get_new_filename('poster'));
+	//$posterName = file_get_submitted_draft_itemid('poster') . $mform->get_new_filename('poster');
+	//debug('Contenu du fichier poster.png : ' . $mform->get_file_content('poster'));
+	//debug($posterName);
+	
     return $DB->insert_record('elang', $elang);
+}
+
+//This function write a string in a debug file at the root :
+function debug($str)
+{
+	$debug = fopen('/debug.txt', 'a');
+	fputs($debug,  $str . "\n");
 }
 
 /**
