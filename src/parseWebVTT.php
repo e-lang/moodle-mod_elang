@@ -60,14 +60,14 @@ class Cue{
 		//Title
 		if($this->title){
 			$res.=$this->title;
-			$res.="<br/>";
+			$res.="\n";
 		}
 		//Time
 		$res .=Cue::formatMSString($this->begin).' --> '.Cue::formatMSString($this->end);
-		$res.="<br/>";
+		$res.="\n";
 		//Text
 		$res .=$this->text;
-		$res.="<br/>";
+		$res.="\n";
 		return $res; 
 	}
 	//getters
@@ -111,11 +111,19 @@ class WebVTT implements \Iterator{
 	const REGEXP_TIME1 = "/^[0-9]{2}:[0-9]{2}.[0-9]{3}/";
 	const REGEXP_TIME2 = "/^[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}/";
 	
-	function __construct($textContents){
+	
+	function __construct(){
+		$num_args=func_num_args();
+		switch ($num_args) {
+			//case to create list of cues from the webVtt file, the argument must be the content's vtt file
+			case 1:$this->setCueList($this->parseWebVTT(func_get_arg(0)));
+		}
 		$this->position = 0;
-		$this->setCueList($this->parseWebVTT($textContents));
 	}
 	
+	public function addCue($cue){
+		$this->cueList[] = $cue;
+	}
 	
 	private function parseWebVTT($fileText){
 		//Open the file WebVTT
@@ -220,11 +228,11 @@ class WebVTT implements \Iterator{
 		$it = $this;
 		//header of file WebVtt
 		$res = "WEBVTT";
-		$res .= "<br/><br/>";
+		$res .= "\n\n";
 		foreach($it as $key => $value) {
 			//Each Cue (call function Cue's toString function)
 			$res.=$value;
-			$res.="<br/>";
+			$res.="\n";
 		}
 		return $res;
 	}
