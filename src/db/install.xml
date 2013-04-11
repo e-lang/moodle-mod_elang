@@ -63,9 +63,9 @@
 				<FIELD NAME="usertext" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" PREVIOUS="date"/>
 			</FIELDS>
 			<KEYS>
-				<KEY NAME="primary" TYPE="primary" FIELDS="idcue, iduser, date" NEXT="fsequence"/>
-				<KEY NAME="fsequence" TYPE="foreign" FIELDS="iduser" REFTABLE="sequence" REFFIELDS="id_sequence" PREVIOUS="primary" NEXT="fetudiant"/>
-				<KEY NAME="fetudiant" TYPE="foreign" FIELDS="iduser" REFTABLE="user" REFFIELDS="id" PREVIOUS="fsequence"/>
+				<KEY NAME="primary" TYPE="primary" FIELDS="idcue, iduser, date" NEXT="fcue"/>
+				<KEY NAME="fcue" TYPE="foreign" FIELDS="idcue" REFTABLE="elang_cue" REFFIELDS="id" PREVIOUS="primary" NEXT="fuser"/>
+				<KEY NAME="fuser" TYPE="foreign" FIELDS="iduser" REFTABLE="user" REFFIELDS="id" PREVIOUS="fcue"/>
 			</KEYS>
 		</TABLE>
 		
@@ -76,9 +76,9 @@
 				<FIELD NAME="date" TYPE="datetime" NOTNULL="true" SEQUENCE="false" PREVIOUS="iduser"/>
 			</FIELDS>
 			<KEYS>
-				<KEY NAME="primary" TYPE="primary" FIELDS="idcue, iduser" NEXT="fsequence"/>
-				<KEY NAME="fsequence" TYPE="foreign" FIELDS="iduser" REFTABLE="sequence" REFFIELDS="id_sequence" PREVIOUS="primary" NEXT="fetudiant"/>
-				<KEY NAME="fetudiant" TYPE="foreign" FIELDS="iduser" REFTABLE="user" REFFIELDS="id" PREVIOUS="fsequence"/>
+				<KEY NAME="primary" TYPE="primary" FIELDS="idcue, iduser, date" NEXT="fcue"/>
+				<KEY NAME="fcue" TYPE="foreign" FIELDS="idcue" REFTABLE="elang_cue" REFFIELDS="id" PREVIOUS="primary" NEXT="fuser"/>
+				<KEY NAME="fuser" TYPE="foreign" FIELDS="iduser" REFTABLE="user" REFFIELDS="id" PREVIOUS="fcue"/>
 			</KEYS>
 		</TABLE>
 	</TABLES>
