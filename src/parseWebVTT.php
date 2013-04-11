@@ -14,7 +14,7 @@ namespace parsewebvtt;
 
 class Cue{
 	//attribut for the class Cue
-	protected $titre;
+	protected $title;
 	protected $begin;
 	protected $end;
 	protected $text;
@@ -23,24 +23,56 @@ class Cue{
 	public static function formatStringMS($string){
 		//If the begin or the end use format 00:00.000
 		if(strlen($string)==9){
-			$heure = 0;
+			$hour = 0;
 			$minute = intval(substr($string, 0,2));
-			$seconde = intval(substr($string, 3,2));
+			$second = intval(substr($string, 3,2));
 			$ms = intval(substr($string, 6,3));
 		}else{
 		//If the begin or the end use format 00:00:00.000
-			$heure = intval(substr($string, 0,2));
+			$hour = intval(substr($string, 0,2));
 			$minute = intval(substr($string, 3,2));
-			$seconde = intval(substr($string, 6,2));
+			$second = intval(substr($string, 6,2));
 			$ms = intval(substr($string, 9,3));
 		}
-		$res = $ms + ($seconde*1000) + ($minute * 60000) + ($heure * 3600000);
+		$res = $ms + ($second*1000) + ($minute * 60000) + ($hour * 3600000);
 		return $res;
 	}
 	
+	//Function allow to convert millisecond to string
+	public static function formatMSString($ms){
+		//Millisecond
+		$uSec = $ms % 1000;
+		$ms = floor($ms / 1000);
+		//Second
+		$second = $ms % 60;
+		$ms = floor($ms / 60);
+		//Minute
+		$minute = $ms % 60;
+		$ms = floor($ms / 60);
+		//Hour
+		$hour = $ms % 60;
+		$ms = floor($ms / 60);
+		return  sprintf("%02d", $hour) . ":" . sprintf("%02d", $minute) . ":" . sprintf("%02d", $second) . "." . sprintf("%03d", $uSec);
+	}
+	
+	function __toString(){
+		$res="";
+		//Title
+		if($this->title){
+			$res.=$this->title;
+			$res.="<br/>";
+		}
+		//Time
+		$res .=Cue::formatMSString($this->begin).' --> '.Cue::formatMSString($this->end);
+		$res.="<br/>";
+		//Text
+		$res .=$this->text;
+		$res.="<br/>";
+		return $res; 
+	}
 	//getters
-	public function getTitre(){
-		return $this->titre;
+	public function getTitle(){
+		return $this->title;
 	}
 	public function getBegin(){
 		return $this->begin;
@@ -52,8 +84,8 @@ class Cue{
 		return $this->text;
 	}
 	//setters
-	public function setTitre($titre){
-		$this->titre = $titre;
+	public function setTitle($title){
+		$this->title = $title;
 	}
 	public function setBegin($begin){
 		$this->begin = $begin;
@@ -66,9 +98,9 @@ class Cue{
 	}
 }
 
+class WebVTT implements \Iterator{
 
-class WebVTT{
-
+	private $position = 0;
 	protected $cueList = array();
 	//Define de state of the line (number, time or text)
 	const WEBVTT_STATE_SUBNUMBER = 0;
@@ -80,8 +112,10 @@ class WebVTT{
 	const REGEXP_TIME2 = "/^[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}/";
 	
 	function __construct($textContents){
+		$this->position = 0;
 		$this->setCueList($this->parseWebVTT($textContents));
 	}
+	
 	
 	private function parseWebVTT($fileText){
 		//Open the file WebVTT
@@ -94,17 +128,22 @@ class WebVTT{
 		$subTime = '';
 
 		//variable to access to the first line
-		$boucle=false;
+		$loop=false;
+		$lineBefore;
 		foreach($lines as $line) {
-			if($line==1 || $boucle || strpos($line,"-->")){
-				if(strpos($line, "-->")) $state = constant('parsewebvtt\WebVTT::WEBVTT_STATE_TIME');
+			if($loop || strpos($line,"-->")){
+				if(strpos($line, "-->")){
+
+					$state = WebVTT::WEBVTT_STATE_TIME;
+					$subNum=trim($lineBefore);
+				}
 				switch($state) {
 					case  WebVTT::WEBVTT_STATE_SUBNUMBER:
 						$subNum = trim($line);
 						$state  = WebVTT::WEBVTT_STATE_TIME;
 						break;
 
-					case constant('parsewebvtt\WebVTT::WEBVTT_STATE_TIME'):
+					case WebVTT::WEBVTT_STATE_TIME:
 						$subTime = trim($line);
 						$state   = WebVTT::WEBVTT_STATE_TEXT;
 						break;
@@ -112,7 +151,7 @@ class WebVTT{
 					case WebVTT::WEBVTT_STATE_TEXT:
 						if (trim($line) == '') {
 						$sub = new Cue;
-						$sub->setTitre($subNum);
+						$sub->setTitle($subNum);
 						list($begin, $end) = explode(' --> ', $subTime);
 						//just get the end time without information as 'align:end size:50%'
 						if(preg_match(WebVTT::REGEXP_TIME1,$end,$matches)||preg_match(WebVTT::REGEXP_TIME2,$end,$matches)){
@@ -132,12 +171,13 @@ class WebVTT{
 						}
 						break;
 				}
-				$boucle=true;
-			}   
+				$loop=true;
+			}
+			$lineBefore=$line;
 		}
 		//add the last Cue from the file
 		$sub = new Cue;
-		$sub->setTitre($subNum);
+		$sub->setTitle($subNum);
 		list($begin, $end) = explode(' --> ', $subTime);
 		$sub->setBegin(Cue::formatStringMS($begin));
 		$sub->setEnd(Cue::formatStringMS($end));
@@ -153,5 +193,39 @@ class WebVTT{
 	}
 	public function getCueList(){
 		return $this->cueList;
+	}
+	//iterator's functions
+	function rewind() {
+        $this->position = 0;
+    }
+
+    function current() {
+        return $this->cueList[$this->position];
+    }
+
+    function key() {
+        return $this->position;
+    }
+
+    function next() {
+        ++$this->position;
+    }
+
+    function valid() {
+        return isset($this->cueList[$this->position]);
+    }
+	
+	//This function allow to generate WebVTT string with Cue's list 
+	function __toString(){
+		$it = $this;
+		//header of file WebVtt
+		$res = "WEBVTT";
+		$res .= "<br/><br/>";
+		foreach($it as $key => $value) {
+			//Each Cue (call function Cue's toString function)
+			$res.=$value;
+			$res.="<br/>";
+		}
+		return $res;
 	}
 }
