@@ -20,7 +20,7 @@ defined('MOODLE_INTERNAL') || die();
 //Include of the subtitles's function
 //(WARNING : if the main page of the module is not displayed,
 //it's because of the require_once) :
-//require_once('parseWebVTT.php');
+require_once('parseWebVTT.php');
 
 /** example constant */
 //define('NEWMODULE_ULTIMATE_ANSWER', 42);
