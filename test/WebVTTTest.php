@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '../src/parseWebVTT.php';
+require __DIR__ . '/../src/parseWebVTT.php';
 /**
  * Test parseWebVTT class
  *
