@@ -17,6 +17,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+//Include of the subtitles's function
+//(WARNING : if the main page of the module is not displayed,
+//it's because of the require_once) :
+require_once('parseWebVTT.php');
+
 /** example constant */
 //define('NEWMODULE_ULTIMATE_ANSWER', 42);
 
@@ -51,32 +56,78 @@ function elang_supports($feature) {
  * @return int The id of the newly inserted elang record
  */
 function elang_add_instance(stdClass $elang, mod_elang_mod_form $mform = null) {
-	global $DB;
-
+	global $CFG, $DB;
+	require_once("$CFG->libdir/resourcelib.php");
+	require_once("$CFG->dirroot/mod/resource/locallib.php");
+   
+	//Init some var :
+	$cmid = $elang->coursemodule;
+	$elang->timemodified = time();
 	$elang->timecreated = time();
-
-	//To get the subtitle content, use :
-	$subtitle = $mform->get_file_content('subtitle');
 	
-	//Then you must apply the treatment to the subtitle :
-	//
+	//Storage of the main table of the module :
+	$elang->id = $DB->insert_record('elang', $elang);
 	
-	//Then you must store data result in the database using moodle's functions :
-	//Example :
-	$video = new stdClass();
-	$video->id_elang		= 1;
-	$video->format			= 'test';
-	$video->file			= 'test.avi';
-	$lastInsertID = $DB->insert_record("elang_video", $video);
+	//Storage of files from the filemanager (videos) :
+	$fs = get_file_storage();
+	$cmid = $data->coursemodule;
+	$draftitemid = $data->videos;	
+	$context = context_module::instance($cmid);
+	if ($draftitemid) {
+		file_save_draft_area_files($draftitemid, $context->id, 'mod_elang', 'videos', 0, array('subdirs'=>true));
+	}
 	
-	# TESTS #
-	//debug(file_save_draft_area_files(file_get_submitted_draft_itemid('poster'), $context->id, 'mod_assignment', 'poster', 0, array('subdirs' => false, 'maxfiles' => 1)));
-	//debug($mform->get_new_filename('poster'));
-	//$posterName = file_get_submitted_draft_itemid('poster') . $mform->get_new_filename('poster');
-	//debug('Contenu du fichier poster.png : ' . $mform->get_file_content('poster'));
-	//debug($posterName);
+	//Recuperer le fichier des sous titres de la base de donnees moodle
+	$itemid = file_get_submitted_draft_itemid('subtitle');//recuperer le itemid du fichier
+	$filename=$mform->get_new_filename('subtitle');//recuperer le nom du fichier
+	$fs = get_file_storage();//recuperer les fichiers sotckes dans la base moodle
 	
-	return $DB->insert_record('elang', $elang);
+	// preparer le fichier record object
+	$fileinfo = array(
+    'component' => 'user',     
+    'filearea' => 'draft',    
+    'itemid' => $itemid ,              
+	'contextid' =>5,
+    'filepath' => '/',           
+    'filename' => $filename); 
+ 
+	// Get file
+	$file = $fs->get_file($fileinfo['contextid'],$fileinfo['component'], $fileinfo['filearea'],
+						  $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
+	 
+	// lire le contenu du fichier
+	if ($file) {
+		$contents = $file->get_content();
+		//traitement du contenu du fichier 
+		$ab =new parsewebvtt\WebVTT($contents);
+		
+		$cue = new stdClass();
+		$elang->id= $DB->insert_record('elang', $elang);//recuper id de l exercice aui sera attribue aux sequences
+		
+		foreach($ab->getCueList() as $i => $elt) 
+		
+		{
+			$cue->id_elang=$elang->id;		//recuperer id de l exercice
+			$cue->title	= $elt->getTitle();//le titre
+			$cue->begin	=  $elt->getBegin();//begin
+			$cue->end= $elt->getend();
+			$cue->cuetext=$elt->getText();
+			
+			$lastInsertID = $DB->insert_record("elang_cue", $cue);//inserer dans la base
+		}
+		
+	} else {
+		print("file doesn't exist - do something");
+	}
+	
+	//Use this for display out in a debug file :
+	/*ob_start();
+	print_object($elang);
+	echo "test";
+	$result = ob_get_clean();
+	debug($result);*/
+	
+	return $elang->id;
 }
 
 //This function write a string in a debug file at the root :

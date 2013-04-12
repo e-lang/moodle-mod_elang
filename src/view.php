@@ -36,6 +36,28 @@ $context = get_context_instance(CONTEXT_MODULE, $cm->id);
 
 add_to_log($course->id, 'elang', 'view', "view.php?id={$cm->id}", $elang->name, $cm->id);
 
+///// The way to display files url /////
+$contextid = $context->id;
+$component = 'mod_elang';
+$filearea = 'videos';
+$fs = get_file_storage();
+$files = $fs->get_area_files($contextid, $component, $filearea, 0);
+
+$i = 0;
+foreach($files as $file)
+{
+	//TODO :
+	$fullurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename());
+	echo $fullurl . '<br/>';
+	
+	if($i > 0)
+	{
+		//redirect($fullurl);
+	}
+	$i++;
+}
+///// END /////
+
 /// Print the page header
 
 $PAGE->set_url('/mod/elang/view.php', array('id' => $cm->id));

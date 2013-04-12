@@ -66,7 +66,7 @@ class mod_elang_mod_form extends moodleform_mod {
 		
 		$mform->addElement('header', 'elangfieldset', get_string('upload', 'elang'));
 		//$mform->addElement('static', 'label2', 'elangsetting2', 'Your elang fields go here. Replace me!');
-		$mform->addElement('filemanager', 'videos', get_string('videos', 'elang'), null, array('subdirs' => 0, 'maxbytes' => $maxbytes, 'maxfiles' => 20, 'accepted_types' => array('video')));
+		$mform->addElement('filemanager', 'videos', get_string('videos', 'elang'), null, array('subdirs' => 0, 'maxbytes' => 5000000000000000000000000000000, 'maxfiles' => 20, 'accepted_types' => array('video')));
 		$mform->addHelpButton('videos', 'videos', 'elang');
 		//$mform->addRule('videos', null, 'required', null, 'client');
 		//TODO, required inputs + change accepted_types for subtitle and exercise (?) :
