@@ -19,7 +19,7 @@ class Cue{
 	protected $end;
 	protected $text;
 
-	//Function allow to convert string to millisecond : 00:00:03.500 => 3500
+	//Function allow to convert string to millisecond
 	public static function formatStringMS($string){
 		//If the begin or the end use format 00:00.000
 		if(strlen($string)==9){
@@ -38,7 +38,7 @@ class Cue{
 		return $res;
 	}
 	
-	//Function allow to convert millisecond to string 3500 => 00:00:03.500
+	//Function allow to convert millisecond to string
 	public static function formatMSString($ms){
 		//Millisecond
 		$uSec = $ms % 1000;
@@ -129,21 +129,16 @@ class WebVTT implements \Iterator{
 		$lines   = preg_split("/(\r\n|\n|\r)/",$fileText);
 		$subs    = array();
 		$state   = WebVTT::WEBVTT_STATE_TIME;
-		//title
 		$subNum  = "";
-		//text
 		$subText = '';
-		//time
 		$subTime = '';
 
 		//variable to access to the first line
 		$loop=false;
-		//line before the time => always the title
 		$lineBefore;
 		foreach($lines as $line) {
 			if($loop || strpos($line,"-->")){
 				switch($state) {
-					//case to get the time's line
 					case WebVTT::WEBVTT_STATE_TIME:
 						if(strpos($line, "-->")){
 							$subTime = trim($line);
@@ -151,7 +146,6 @@ class WebVTT implements \Iterator{
 							$state   = WebVTT::WEBVTT_STATE_TEXT;
 						}
 						break;
-					//case to get the text's line
 					case WebVTT::WEBVTT_STATE_TEXT:
 							$sub = new Cue;
 							$sub->setTitle($subNum);
@@ -159,8 +153,6 @@ class WebVTT implements \Iterator{
 							//just get the end time without information as 'align:end size:50%'
 							if(preg_match(WebVTT::REGEXP_TIME1,$end,$matches)||preg_match(WebVTT::REGEXP_TIME2,$end,$matches)){
 								$sub->setEnd(Cue::formatStringMS($matches[0]));
-							}else{
-								$sub->setEnd(Cue::formatStringMS($end));
 							}
 							$sub->setBegin(Cue::formatStringMS($begin));
 							$subText = $line;
@@ -218,4 +210,5 @@ class WebVTT implements \Iterator{
 		}
 		return $res;
 	}
+	
 }
