@@ -14,7 +14,8 @@
 				<FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="introformat" NEXT="timemodified"/>
 				<FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="timecreated" NEXT="poster"/>
 				<FIELD NAME="poster" TYPE="text" LENGTH="medium" NOTNULL="false" SEQUENCE="false" PREVIOUS="timemodified" NEXT="duration"/>
-				<FIELD NAME="duration" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="poster"/>
+				<FIELD NAME="duration" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="poster" NEXT="language"/>
+				<FIELD NAME="language" TYPE="text" LENGTH="short" NOTNULL="false" SEQUENCE="false" PREVIOUS="duration"/>
 			</FIELDS>
 			<KEYS>
 				<KEY NAME="primary" TYPE="primary" FIELDS="id"/>
