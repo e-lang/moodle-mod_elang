@@ -60,14 +60,14 @@ class Cue{
 		//Title
 		if($this->title){
 			$res.=$this->title;
-			$res.="<br/>";
+			$res.="\n";
 		}
 		//Time
 		$res .=Cue::formatMSString($this->begin).' --> '.Cue::formatMSString($this->end);
-		$res.="<br/>";
+		$res.="\n";
 		//Text
 		$res .=$this->text;
-		$res.="<br/>";
+		$res.="\n";
 		return $res; 
 	}
 	//getters
@@ -102,27 +102,33 @@ class WebVTT implements \Iterator{
 
 	private $position = 0;
 	protected $cueList = array();
-	//Define de state of the line (number, time or text)
-	const WEBVTT_STATE_SUBNUMBER = 0;
+	//Define state of the line (number, time or text)
 	const WEBVTT_STATE_TIME = 1;
 	const WEBVTT_STATE_TEXT = 2;
-	const WEBVTT_STATE_BLANK = 3;
 	
 	const REGEXP_TIME1 = "/^[0-9]{2}:[0-9]{2}.[0-9]{3}/";
 	const REGEXP_TIME2 = "/^[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}/";
 	
-	function __construct($textContents){
+	
+	function __construct(){
+		$num_args=func_num_args();
+		switch ($num_args) {
+			//case to create list of cues from the webVtt file, the argument must be the content's vtt file
+			case 1:$this->setCueList($this->parseWebVTT(func_get_arg(0)));
+		}
 		$this->position = 0;
-		$this->setCueList($this->parseWebVTT($textContents));
 	}
 	
+	public function addCue($cue){
+		$this->cueList[] = $cue;
+	}
 	
 	private function parseWebVTT($fileText){
 		//Open the file WebVTT
 		//split the file text into a list in function of : \r\n => windows, \n => linux, \r=> mac
 		$lines   = preg_split("/(\r\n|\n|\r)/",$fileText);
 		$subs    = array();
-		$state   = WebVTT::WEBVTT_STATE_SUBNUMBER;
+		$state   = WebVTT::WEBVTT_STATE_TIME;
 		$subNum  = "";
 		$subText = '';
 		$subTime = '';
@@ -132,59 +138,34 @@ class WebVTT implements \Iterator{
 		$lineBefore;
 		foreach($lines as $line) {
 			if($loop || strpos($line,"-->")){
-				if(strpos($line, "-->")){
-
-					$state = WebVTT::WEBVTT_STATE_TIME;
-					$subNum=trim($lineBefore);
-				}
 				switch($state) {
-					case  WebVTT::WEBVTT_STATE_SUBNUMBER:
-						$subNum = trim($line);
-						$state  = WebVTT::WEBVTT_STATE_TIME;
-						break;
-
 					case WebVTT::WEBVTT_STATE_TIME:
-						$subTime = trim($line);
-						$state   = WebVTT::WEBVTT_STATE_TEXT;
+						if(strpos($line, "-->")){
+							$subTime = trim($line);
+							$subNum = trim($lineBefore);
+							$state   = WebVTT::WEBVTT_STATE_TEXT;
+						}
 						break;
-
 					case WebVTT::WEBVTT_STATE_TEXT:
-						if (trim($line) == '') {
-						$sub = new Cue;
-						$sub->setTitle($subNum);
-						list($begin, $end) = explode(' --> ', $subTime);
-						//just get the end time without information as 'align:end size:50%'
-						if(preg_match(WebVTT::REGEXP_TIME1,$end,$matches)||preg_match(WebVTT::REGEXP_TIME2,$end,$matches)){
-							$sub->setEnd(Cue::formatStringMS($matches[0]));
-						}else{
-							$sub->setEnd(Cue::formatStringMS($end));
-						}
-						$sub->setBegin(Cue::formatStringMS($begin));
-						$sub->setText($subText);
-						$subText     = '';
-						$state       = WebVTT::WEBVTT_STATE_SUBNUMBER;
-
-						$subs[]      = $sub;
-						} else {
-						$subText .= $line;
-
-						}
+							$sub = new Cue;
+							$sub->setTitle($subNum);
+							list($begin, $end) = explode(' --> ', $subTime);
+							//just get the end time without information as 'align:end size:50%'
+							if(preg_match(WebVTT::REGEXP_TIME1,$end,$matches)||preg_match(WebVTT::REGEXP_TIME2,$end,$matches)){
+								$sub->setEnd(Cue::formatStringMS($matches[0]));
+							}
+							$sub->setBegin(Cue::formatStringMS($begin));
+							$subText = $line;
+							$sub->setText($subText);
+							$subText     = '';
+							$state       = WebVTT::WEBVTT_STATE_TIME;
+							$subs[]      = $sub;
 						break;
 				}
 				$loop=true;
 			}
 			$lineBefore=$line;
 		}
-		//add the last Cue from the file
-		$sub = new Cue;
-		$sub->setTitle($subNum);
-		list($begin, $end) = explode(' --> ', $subTime);
-		$sub->setBegin(Cue::formatStringMS($begin));
-		$sub->setEnd(Cue::formatStringMS($end));
-		$sub->setText($subText);
-		$subText     = '';
-		$state       = WebVTT::WEBVTT_STATE_SUBNUMBER;
-		$subs[]      = $sub;
 		return $subs;
 	}
 	
@@ -194,6 +175,7 @@ class WebVTT implements \Iterator{
 	public function getCueList(){
 		return $this->cueList;
 	}
+	
 	//iterator's functions
 	function rewind() {
         $this->position = 0;
@@ -220,12 +202,13 @@ class WebVTT implements \Iterator{
 		$it = $this;
 		//header of file WebVtt
 		$res = "WEBVTT";
-		$res .= "<br/><br/>";
+		$res .= "\n\n";
 		foreach($it as $key => $value) {
 			//Each Cue (call function Cue's toString function)
 			$res.=$value;
-			$res.="<br/>";
+			$res.="\n";
 		}
 		return $res;
 	}
+	
 }
