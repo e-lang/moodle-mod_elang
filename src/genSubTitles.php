@@ -1,8 +1,8 @@
 ﻿<?php
-//id_exo: exercice
+//id: exercice
 if(isset($_GET['e']))
 {
-	$id_exo = $_GET['e'];
+	$id = $_GET['e'];
 }
 else
 {
@@ -24,7 +24,7 @@ function genSubTitles()
 	$requete_student = $bdd->prepare("SELECT idcue
 								FROM mdl_elang_ask_correction
 								WHERE iduser = :id");
-	$requete_student->bindValue(':id',$USER->id(), PDO::PARAM_INT);
+	$requete_student->bindValue(':id',$USER->id, PDO::PARAM_INT);
 	$requete_student->execute();
 	$res = $requete_student->fetchAll();
 	
@@ -38,7 +38,7 @@ function genSubTitles()
 		$requete_text = $bdd->prepare("SELECT cuetext
 									FROM mdl_elang_cue
 									WHERE id_elang = :id");
-		$requete_text->bindValue(':id',$id_exo, PDO::PARAM_INT);
+		$requete_text->bindValue(':id',$id, PDO::PARAM_INT);
 		$requete_text->execute();
 		
 		$text = $requete_text->fetchAll();
@@ -131,7 +131,7 @@ function genSubTitles()
 		$requete_text = $bdd->prepare("SELECT cuetext
 									FROM mdl_elang_cue
 									WHERE id_elang = :id");
-		$requete_text->bindValue(':id',$id_exo, PDO::PARAM_INT);
+		$requete_text->bindValue(':id',$id, PDO::PARAM_INT);
 		$requete_text->execute();
 		
 		$tabRealSequence = $requete_text->fetchAll();
@@ -168,4 +168,3 @@ function genSubTitles()
 		return $gapFill;
 	}
 }
-?>

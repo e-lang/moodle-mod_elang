@@ -1,9 +1,9 @@
 ﻿<?php
 try {
-	$server = "localhost";
-	$user = "root";
-	$pwd = "";
-	$database = 'moodle';
+	$server = $CFG->dbhost;
+	$user = $CFG->dbuser;
+	$pwd = $CFG->dbpass;
+	$database = $CFG->dbname;
 
 	$bdd = new PDO('mysql:host='.$server.';dbname='.$database,
 			$user,
@@ -12,4 +12,3 @@ try {
 	);
 	}
 catch (Exception $e) { die('Erreur : ' . $e->getMessage()); }	
-?>
