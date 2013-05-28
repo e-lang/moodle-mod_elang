@@ -6,6 +6,7 @@ enyo.depends(
 	"App.js",
 	"Video.js",
 	"Input.js",
+	"Input.css",
 	"sequence.js",
 	"sequence.css"
 );

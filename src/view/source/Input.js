@@ -47,24 +47,25 @@ enyo.kind({
 
 	},
 	
-	addText: function(noSec, txt) {
-		//this.$.result.addContent(text);
-		this.$.result.createComponent({tag:"p", content: txt});
+	addText: function(noSec, text) {
+		this.$.result.createComponent({tag:"p", content: text});
 	},
 	
-	addInput: function(/*noSec, noInp*/) {
+	addInput: function() {
 		this.$.result.createComponent({tag:'input'});
+		this.$.result.createComponent({tag:'button', name: "Check", content:"Check"});
+		this.$.result.createComponent({tag:'button', name: "Help", content:"Help"});
 	},
 
 	addTextCheck: function(noSec, text) {
+		this.$.result.createComponent({tag:"p", content: text, classes:"text_check"});
 	},
 	
 	addTextHelp: function(noSec, text) {
 	},
 	
 	reset: function() {
-		this.$.result.components = [];
-			
+		this.$.result.destroyComponents();			
 	},
 	
 	render: function() {
