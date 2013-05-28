@@ -4,5 +4,7 @@ enyo.depends(
 	//"Theme.less",	// uncomment this line, and follow the steps described in Theme.less
 	"App.css",
 	"App.js",
+	"sequence.js",
+	"sequence.css",
 	"Video.js"
 );
