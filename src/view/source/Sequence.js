@@ -1,13 +1,13 @@
 enyo.kind({
     name: "Sequences",
 	tag: "div", 
-	classes:"row-fluid",
+	classes:"div",
     components: [
-    
       {   
 			name: "sequenceList", 
-			tag: "list", 
-			classes:"list",
+			//tag: "row", 
+			//classes:"row",
+			kind: "List", 
 			onSetupItem: "setupItem", 
 			overflow: "auto",
 		 
@@ -45,7 +45,12 @@ enyo.kind({
     ],
     create: function(){
 		this.inherited(arguments);
-		//this.$.sequenceList.setCount(this.datasource.length);
+		this.$.sequenceList.setCount(this.datasource.length);
+		
+	
+		//this.setupItem(0,1);
+		//this.setupItem(0,2);
+		//this.setupItem(0,3);
     },
 	
     setupItem:function(inSender,inEvent) {
