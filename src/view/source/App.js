@@ -22,11 +22,21 @@ enyo.kind({
 	components:[
 		//Bar du haut
 		{kind: "onyx.Toolbar", content: "Video"},
-		//Video
-		{kind: "elang.Video", name : "video", source:videoajax, sstitre : [soustitreajax], width: tailleVideo},
+		
+		{ 
+			kind: "enyo.Panels",
+			fit: true,
+			narrowFit: false,
+			arrangerKind: "CollapsingArranger", components: [
+			
+			//Video
+			{kind: "elang.Video", name : "video", source:videoajax, sstitre : [soustitreajax], width: tailleVideo, content: "start"},
+			{kind: "Sequences", style: "height: 200px;", content: "last"}
+		]},
 		//slide bar défilant suivant l'évolution de la timeline de la vidéo
 		{kind: "onyx.Slider", name:"movingSlide", style: "display : none", lockBar: true, value: 0, onChange:"sliderVideoChanged"},
 		//Boutons de controle
+		
 		{kind: "onyx.Toolbar", components: [
 			{kind: "onyx.Button", style: "height: 35px;width: 35px;", components: [{kind: "onyx.Icon", src: "im/pass_chap_prec.png", style:"background-position:center top; background-size: 22px 22px"}], ontap: "prev"},
 			{kind: "onyx.Button", style: "height: 35px;width: 35px;", name:"PP", components: [{kind: "onyx.Icon", name:"icone", src: "im/play.png", style:"background-position:center top;background-size: 22px 22px"}], ontap: "PP"},
@@ -36,7 +46,11 @@ enyo.kind({
 			{kind: "onyx.Button", style: "height: 35px;width: 35px;", components: [{kind: "onyx.Icon", src: "im/vol_up.png", style:"background-position:center top;background-size: 22px 22px"}], ontap: "volplus"},
 			{kind: "onyx.Button", style: "height: 35px;width: 35px;", components: [{kind: "onyx.Icon", src: "im/vol_off_rouge.png", style:"background-position:center top;background-size: 20px 20px"}], ontap: "voloff"},
 			{kind: "onyx.Slider", name:"volum",style: "width: 40px;",min:0, max:1, lockBar: true, value: 1, onChange:"sliderChanged"}
-		]}
+		]},
+	
+		
+		
+		
 	],
 	//Fonction gérant l'utilisation d'un bouton unique pour faire play et pause
 	PP: function(){
