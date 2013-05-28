@@ -18,7 +18,8 @@ enyo.kind({
 			]},
 			// Sequence list
 			{tag: "div", name: "span6", classes:"span6", components:[
-				{tag: "h1", content: "Liste."}
+				{tag: "h1", content: "Liste."},
+				{kind: "Sequences", style: "height: 200px;"}
 			]}
 		]},
 		// Exercise
