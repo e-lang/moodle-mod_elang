@@ -7,44 +7,69 @@ enyo.kind({
 		
 		{classes: "onyx-sample-tools", components:
 			[
-				{kind:"onyx.Button", name:"Fishbowl Button", content: "Button", ontap:"buttonTapped"}
+				{kind:"onyx.Button", name:" Text", content: "Text", id:1, ontap:"buttonTapped"},
+				{kind:"onyx.Button", name:" Input", content: "Input", id:2, ontap:"buttonTapped"},
+				{kind:"onyx.Button", name:" Check", content: "Check", id:3, ontap:"buttonTapped"},
+				{kind:"onyx.Button", name:" Help", content: "Help", id:4, ontap:"buttonTapped"},
+				{kind:"onyx.Button", name:" Reset", content: "Reset", id:5, ontap:"buttonTapped"},
+				{kind:"onyx.Button", name:" Render", content: "Render", id:6, ontap:"buttonTapped"}
 			]
 		}/* a supprimper lors du push*/,
 
-		{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: 
-			[
-				{kind: "onyx.GroupboxHeader", content: "Result"},
-				{name:"result", classes:"onyx-sample-result"}
-			]
-		}
+		
+		{name:"result", kind: enyo.Control, components:[]}
 		
 	
 	],
 	
 	buttonTapped: function(inSender, inEvent) {
-		if (inSender.content){
+		
+		switch (inSender.id) {
+		case 1 : 
 			this.addText(10,"The button was tapped");
+			break;
+		case 2 : 
 			this.addInput();
-		} else {
-			this.$.result.setContent("The \"" + inSender.getName() + "\" button was tapped");
+			break;
+		case 3 : 
+			this.addTextCheck(11, "check");
+			break;
+		case 4 : 
+			this.addTextHelp(12, "help");
+			break;
+		case 5 : 
+			this.reset();
+			break;		
+		case 6 : 
+			this.render();
+			break;		
 		}
+
 	},
 	
-	addText: function(noSec, text) {
-			//this.$.input_text.setContent("addText the test");
-			 this.$.result.addContent(noSec+" "+text);
-			},
+	addText: function(noSec, txt) {
+		//this.$.result.addContent(text);
+		this.$.result.createComponent({tag:"p", content: txt});
+	},
 	
 	addInput: function(/*noSec, noInp*/) {
-			//this.$.result.addContent("addInput the test");
-			
+		this.$.result.createComponent({tag:'input'});
+	},
+
+	addTextCheck: function(noSec, text) {
+	},
+	
+	addTextHelp: function(noSec, text) {
 	},
 	
 	reset: function() {
-			this.$.result.setContent("");
+		this.$.result.components = [];
 			
-	}
-
+	},
+	
+	render: function() {
+		this.$.result.render();	
+	}	
 	
 });
 
