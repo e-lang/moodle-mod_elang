@@ -24,7 +24,8 @@ enyo.kind({
 		// Exercise
 		{tag: "div", name: "footer", classes:"row-fluid", components:[
 			{tag: "div", name: "span12", classes:"span12", components:[
-				{tag: "h1", content: "footer."}
+				{tag: "h1", content: "footer."},
+				{kind: "elang.input", name : "input"}
 			]}
 		]}
 	], 
