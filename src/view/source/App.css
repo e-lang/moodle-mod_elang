@@ -5,3 +5,8 @@
 .nice-padding {
 	padding: 15px;
 }
+
+video {
+	max-width: 100%;
+	height: auto;
+}
