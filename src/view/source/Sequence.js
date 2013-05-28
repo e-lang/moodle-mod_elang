@@ -53,7 +53,6 @@ enyo.kind({
     },
 	
     setupItem:function(inSender,inEvent) {
-		alert(inEvent.index);
 		this.titre = this.datasource[inEvent.index].titre; 
 		var newtitre =(this.titre.length > 50)?this.titre.substring(0,50)+"...":this.titre;
 
@@ -62,7 +61,6 @@ enyo.kind({
     },
 	
     sequenceItemTapped:function(inSender,inEvent){
-      alert("L'id de "+this.datasource[inEvent.index].titre+" est "+this.datasource[inEvent.index].id);
     }
 });
 

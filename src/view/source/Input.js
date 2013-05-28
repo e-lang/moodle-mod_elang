@@ -7,12 +7,14 @@ enyo.kind({
 		
 		{classes: "onyx-sample-tools", components:
 			[
-				{kind:"onyx.Button", name:" Text", content: "Text", id:1, ontap:"buttonTapped"},
-				{kind:"onyx.Button", name:" Input", content: "Input", id:2, ontap:"buttonTapped"},
-				{kind:"onyx.Button", name:" Check", content: "Check", id:3, ontap:"buttonTapped"},
-				{kind:"onyx.Button", name:" Help", content: "Help", id:4, ontap:"buttonTapped"},
-				{kind:"onyx.Button", name:" Reset", content: "Reset", id:5, ontap:"buttonTapped"},
-				{kind:"onyx.Button", name:" Render", content: "Render", id:6, ontap:"buttonTapped"}
+				{kind:"Button", classes:"btn", name:" Text", content: "Text", id:1, ontap:"buttonTapped"},
+				{kind:"Button", classes:"btn", name:" Input", content: "Input", id:2, ontap:"buttonTapped"},
+				{kind:"Button", classes:"btn", name:" Check", content: "Check", id:3, ontap:"buttonTapped"},
+				{kind:"Button", classes:"btn", name:" Help", content: "Help", id:4, ontap:"buttonTapped"},
+				{kind:"Button", classes:"btn", name:" Reset", content: "Reset", id:5, ontap:"buttonTapped"},
+				{kind:"Button", classes:"btn", name:" Render", content: "Render", id:6, ontap:"buttonTapped"},
+				//{kind:"Button",  content:"Check", onclick:"buttonTapped"}
+				
 			]
 		}/* a supprimper lors du push*/,
 
@@ -43,25 +45,63 @@ enyo.kind({
 		case 6 : 
 			this.render();
 			break;		
+		default :
+			alert("autre");
+			break;
 		}
 
 	},
+		
+	checkTapped: function(inSender, inEvent) {
+		switch (inSender.id) {
+		case 100 :			
+			alert("Check");
+			break;
+		case 101 :			
+			alert("Help");
+			break;
+		default:
+			alert("!!!");
+			break;
+		}
+	},
+	
+
 	
 	addText: function(noSec, text) {
 		this.$.result.createComponent({tag:"p", content: text});
 	},
 	
 	addInput: function() {
-		this.$.result.createComponent({tag:'input'});
-		this.$.result.createComponent({tag:'button', name: "Check", content:"Check"});
-		this.$.result.createComponent({tag:'button', name: "Help", content:"Help"});
+		this.$.result.createComponent(		
+		{
+			tag:"div", components: [
+				{kind:"Input", onchange: "buttonTapped"},
+				{kind:"Button", classes:"btn btn-success", id:100, content:"Check", onclick:"javascript:alert('a')"},
+				{kind:"Button",  classes:"btn btn-info",  id:101, content:"Help", onclick:"checkTapped"},
+			]}		
+		);
 	},
 
 	addTextCheck: function(noSec, text) {
-		this.$.result.createComponent({tag:"p", content: text, classes:"text_check"});
+		this.$.result.createComponent(
+			{tag:"div", classes:"control-group success", components:
+			[
+				{kind:"Input", classes:"inputSuccess", name:"Render", value:text}
+			]}
+		);
+		
+		//this.$.result.createComponent({tag:"p", classes:"text-success", content: text});
+		
 	},
 	
-	addTextHelp: function(noSec, text) {
+	addTextHelp: function(noSec, text) {	
+		this.$.result.createComponent(
+			{tag:"div", classes:"control-group info", components:
+			[
+				{kind:"Input", classes:"inputInfo", name:"Render", value:text}
+			]}
+		);
 	},
 	
 	reset: function() {
@@ -70,7 +110,8 @@ enyo.kind({
 	
 	render: function() {
 		this.$.result.render();	
-	}	
+	},
+	
 	
 });
 
