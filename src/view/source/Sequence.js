@@ -7,6 +7,7 @@ enyo.kind({
 			name: "sequenceList", 
 			//tag: "row", 
 			//classes:"row",
+			count:0, 
 			kind: "List", 
 			onSetupItem: "setupItem", 
 			overflow: "auto",
@@ -47,13 +48,12 @@ enyo.kind({
 		this.inherited(arguments);
 		this.$.sequenceList.setCount(this.datasource.length);
 		
-	
-		//this.setupItem(0,1);
 		//this.setupItem(0,2);
 		//this.setupItem(0,3);
     },
 	
     setupItem:function(inSender,inEvent) {
+		alert(inEvent.index);
 		this.titre = this.datasource[inEvent.index].titre; 
 		var newtitre =(this.titre.length > 50)?this.titre.substring(0,50)+"...":this.titre;
 
