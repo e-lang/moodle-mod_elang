@@ -5,10 +5,3 @@
 .nice-padding {
 	padding: 15px;
 }
-
-
-.fittable-sample-shadow {
-	box-shadow: -6px 0px 6px rgba(0,0,0,0.3);
-	-moz-box-shadow: -6px 0px 6px rgba(0,0,0,0.3);
-	-webkit-box-shadow: -6px 0px 6px rgba(0,0,0,0.3);
-}
