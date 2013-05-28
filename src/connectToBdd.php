@@ -1,8 +1,8 @@
 <?php
 try {
 	$server = "localhost";
-	$user = "icone08";
-	$pwd = "icone08";
+	$user = "root";
+	$pwd = "";
 	$database = 'moodle';
 	
 	$bdd = new PDO('mysql:host='.$server.';dbname='.$database,
