@@ -14,20 +14,25 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['modulename'] = 'elang';
-$string['modulenameplural'] = 'elangs';
-$string['modulename_help'] = 'Use the elang module for... | The elang module allows...';
+$string['configpostermaxsize'] = 'Set the maximum poster size in bytes';
+$string['configsubtitlemaxsize'] = 'Set the maximum subtitle size in bytes';
+$string['configvideomaxsize'] = 'Set the maximum video size in bytes';
+$string['elang'] = 'E-Lang';
 $string['elangfieldset'] = 'Custom example fieldset';
 $string['elangname_help'] = 'This is the content of the help tooltip associated with the elangname field. Markdown syntax is supported.';
-$string['elang'] = 'elang';
-$string['pluginadministration'] = 'elang administration';
-$string['pluginname'] = 'elang';
-
 $string['elangname'] = "Video's title";
-$string['upload'] = 'Upload files for the video exercise';
-$string['videos'] = "Videos";
-$string['videos_help'] = "You can upload several videos with corrects extensions.";
-$string['subtitle'] = 'Subtitle';
-$string['subtitle_help'] = "Upload a file in text mod.";
-$string['poster'] = 'Poster';
+$string['modulename'] = 'E-Lang';
+$string['modulename_help'] = 'Use the E-Lang module for...';
+$string['modulenameplural'] = 'E-Langs';
+$string['pluginadministration'] = 'E-Lang administration';
+$string['pluginname'] = 'E-Lang';
 $string['poster_help'] = "Upload a picture (or screenshot...) which represent the video.";
+$string['postermaxsize'] = 'Maximum poster size';
+$string['poster'] = 'Poster';
+$string['subtitle_help'] = "Upload a file in text mod.";
+$string['subtitlemaxsize'] = 'Maximum subtitle size';
+$string['subtitle'] = 'Subtitle';
+$string['upload'] = 'Upload files for the video exercise';
+$string['videomaxsize'] = 'Maximum video size';
+$string['videos_help'] = "You can upload several videos with corrects extensions.";
+$string['videos'] = "Videos";
