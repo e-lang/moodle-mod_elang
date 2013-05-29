@@ -6,9 +6,12 @@ enyo.kind({
 		// Title and description
 		{tag: "div", name: "header", classes:"row-fluid", components:[
 			{tag: "div", name: "span12", classes:"span12", components:[
-				{tag: "div", classes:"well well-small", components:[
-					{tag: "h1", name:"title", content: "Vidéo"}
-				]}
+				{tag: "div", name:"test", classes:"well well-small", components:[
+					{tag:'h1', components:[
+						{tag: "a", name:"videoTitle", attributes:{'data-placement' :'right', 'data-toggle' :'tooltip'}}
+					]}
+				]
+				}
 			]}
 		]},
 		{tag: "div", name: "body", classes:"row-fluid", components:[
@@ -30,11 +33,10 @@ enyo.kind({
 			]}
 		]}
 	], 
-	
+		  
 	create: function(){
 		this.inherited(arguments);
 		this.getTitle();
-		
 	},
 	
 	// Function to get the title and the description
@@ -61,8 +63,11 @@ enyo.kind({
 	    }
 		// We update the video title with the value in the response
 		var response = JSON.parse(inResponse);
-		this.$.title.content = response.title;
-		this.$.title.render();
+		var title = response.title;
+		var description = response.description;
+		this.$.videoTitle.content = response.title;
+		this.$.videoTitle.render();
+		$('a').data('tooltip',false).attr('data-original-title', response.description);
+		$("a").tooltip();
 	}
 });
-
