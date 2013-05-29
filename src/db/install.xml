@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <XMLDB PATH="mod/elang/db" VERSION="20101203" COMMENT="XMLDB file for Moodle mod/elang"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
 	<TABLES>
 		<TABLE NAME="elang" COMMENT="Exercises" NEXT="elang_video">
@@ -24,7 +24,7 @@
 				<INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
 			</INDEXES>
 		</TABLE>
-	
+
 		<TABLE NAME="elang_video" COMMENT="video" PREVIOUS="elang" NEXT="elang_cue">
 			<FIELDS>
 				<FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="id_elang"/>
@@ -37,7 +37,7 @@
 				<KEY NAME="foreign" TYPE="foreign" FIELDS="id_elang" REFTABLE="elang" REFFIELDS="id" PREVIOUS="primary"/>
 			</KEYS>
 		</TABLE>
-	
+
 		<TABLE NAME="elang_cue" COMMENT="exercise's cue" PREVIOUS="elang_video" NEXT="elang_responses">
 			<FIELDS>
 				<FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="id_elang"/>
@@ -55,7 +55,7 @@
 				<INDEX NAME="begin" UNIQUE="false" FIELDS="begin"/>
 			</INDEXES>
 		</TABLE>
-		
+
 		<TABLE NAME="elang_responses" COMMENT="user's responses" PREVIOUS="elang_cue" NEXT="elang_ask_correction">
 			<FIELDS>
 				<FIELD NAME="idcue" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" NEXT="iduser"/>
@@ -69,7 +69,7 @@
 				<KEY NAME="fuser" TYPE="foreign" FIELDS="iduser" REFTABLE="user" REFFIELDS="id" PREVIOUS="fcue"/>
 			</KEYS>
 		</TABLE>
-		
+
 		<TABLE NAME="elang_ask_correction" COMMENT="if a user ask a cue's correction" PREVIOUS="elang_responses">
 			<FIELDS>
 				<FIELD NAME="idcue" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" NEXT="iduser"/>

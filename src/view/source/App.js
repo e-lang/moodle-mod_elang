@@ -21,14 +21,15 @@ enyo.kind({
 			]},
 			// Sequence list
 			{tag: "div", name: "span6", classes:"span6", components:[
-				{tag: "h1", content: "Liste."}
+				{tag: "h1", content: "Liste."},
+				{kind: "Sequences", style: "height: 200px;"}
 			]}
 		]},
 		// Exercise
 		{tag: "div", name: "footer", classes:"row-fluid", components:[
 			{tag: "div", name: "span12", classes:"span12", components:[
 				{tag: "h1", content: "footer."},
-				{kind: "elang.input", name : "input"}
+				{kind: "elang.input", style: "height: 200px;"}
 			]}
 		]}
 	], 
