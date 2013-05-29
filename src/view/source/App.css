@@ -6,13 +6,11 @@
 	padding: 15px;
 }
 
-<<<<<<< HEAD
 a, a:hover, a:focus {
 	text-decoration: none;
 	color: inherit;
-=======
+
 video {
 	max-width: 100%;
 	height: auto;
->>>>>>> e5090828323c7edae14a390db3dc30a545a028e5
 }
