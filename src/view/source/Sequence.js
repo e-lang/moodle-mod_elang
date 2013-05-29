@@ -61,7 +61,8 @@ enyo.kind({
     },
 	
     sequenceItemTapped:function(inSender,inEvent){
-      //alert("L'id de "+this.datasource[inEvent.index].titre+" est "+this.datasource[inEvent.index].id);
+
+	//alert("L'id de "+this.datasource[inEvent.index].titre+" est "+this.datasource[inEvent.index].id);
 	  alert("test");
     },
 	

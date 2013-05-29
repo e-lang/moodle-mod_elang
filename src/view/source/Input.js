@@ -1,18 +1,18 @@
 enyo.kind({
 	name: "elang.input",
-	classes: "input",
-
-
-		components: [
-		
+		components: [		
 		{classes: "onyx-sample-tools", components:
 			[
-				{kind:"onyx.Button", name:" Text", content: "Text", id:1, ontap:"buttonTapped"},
-				{kind:"onyx.Button", name:" Input", content: "Input", id:2, ontap:"buttonTapped"},
-				{kind:"onyx.Button", name:" Check", content: "Check", id:3, ontap:"buttonTapped"},
-				{kind:"onyx.Button", name:" Help", content: "Help", id:4, ontap:"buttonTapped"},
-				{kind:"onyx.Button", name:" Reset", content: "Reset", id:5, ontap:"buttonTapped"},
-				{kind:"onyx.Button", name:" Render", content: "Render", id:6, ontap:"buttonTapped"}
+				{kind:"Button", classes:"btn", name:" Text", content: "Text", id:1, ontap:"buttonTapped"},
+				{kind:"Button", classes:"btn", name:" Input", content: "Input", id:2, ontap:"buttonTapped"},
+				{kind:"Button", classes:"btn", name:" Check", content: "Check", id:3, ontap:"buttonTapped"},
+				{kind:"Button", classes:"btn", name:" Help", content: "Help", id:4, ontap:"buttonTapped"},
+				{kind:"Button", classes:"btn", name:" Reset", content: "Reset", id:5, ontap:"buttonTapped"},
+				{kind:"Button", classes:"btn", name:" Render", content: "Render", id:6, ontap:"buttonTapped"},
+				{kind:"Button", classes:"btn", name:" ReplaceVideo", content: "Render", id:6, ontap:"buttonTapped"},
+				
+				//{kind:"Button",  content:"Check", onclick:"buttonTapped"}
+				
 			]
 		}/* a supprimper lors du push*/,
 
@@ -22,6 +22,7 @@ enyo.kind({
 	
 	],
 	
+
 	buttonTapped: function(inSender, inEvent) {
 		
 		switch (inSender.id) {
@@ -43,33 +44,85 @@ enyo.kind({
 		case 6 : 
 			this.render();
 			break;		
+		default :
+			alert("autre");
+			break;
 		}
-
 	},
 	
-	addText: function(noSec, txt) {
-		//this.$.result.addContent(text);
-		this.$.result.createComponent({tag:"p", content: txt});
+	addText: function(noSec, text) {
+		this.$.result.createComponent({tag:"p", content: text});
+		this.$.result.render();	
 	},
 	
-	addInput: function(/*noSec, noInp*/) {
-		this.$.result.createComponent({tag:'input'});
+	addInput: function() {
+		this.$.result.createComponent(		
+		{
+			tag:"div", classes:"", id:22, components: [
+				{kind:"Input", id:28, classes:"inputInfo"},
+				{kind:"Button", classes:"btn btn-success", ontap:"checkTapped", id:100, name:"Check", content:"Check"},
+				{kind:"Button", classes:"btn btn-info",  ontap:"checkTapped", id:101, name:"Help", content:"Help"},	
+			]},
+			{owner: this}
+		);
+		this.$.result.render();	
+		//alert(document.getElementById(22).getAttribute('id'));
+		
+		//alert(document.getElementsByClassName('btn btn-success'));
+		//document.getElementsByClassName('btn btn-success').setAttribute('id',121);
+		//alert(document.getElementsByName('Help').getAttribute());
+		this.$.result.render();
 	},
 
 	addTextCheck: function(noSec, text) {
+		this.$.result.createComponent(
+			{tag:"div", classes:"control-group success", components:
+			[
+				{kind:"Input", classes:"inputSuccess", name:"Render", value:text}
+			]}				
+		);
+		
+		//this.$.result.createComponent({tag:"p", classes:"text-success", content: text});
+		this.$.result.render();	
 	},
 	
-	addTextHelp: function(noSec, text) {
+	addTextHelp: function(noSec, text) {	
+		this.$.result.createComponent(
+			{tag:"div",  components:
+			[
+				{kind:"Input", classes:"inputInfo", name:"Render", value:text}
+			]}
+		);
+		this.$.result.render();	
 	},
 	
 	reset: function() {
-		this.$.result.components = [];
-			
+		this.$.result.destroyComponents();	
+		//faire aussi pour ceux créés : 
+		//this.destroyComponents();
 	},
 	
 	render: function() {
 		this.$.result.render();	
-	}	
+	},
+		
+		
+	checkTapped: function(inSender, inEvent) {
+		switch (inSender.id) {
+		case 100 :
+			//document.getElementById(28).setAttribute("enyo-input","control-group success");
+			document.getElementById(22).setAttribute("class", "control-group success");
+			//alert("Check");
+			break;
+		case 101 :
+			alert("Help");
+			break;
+		default:
+			alert("!!!");
+			break;
+		}
+	},
+	
 	
 });
 
