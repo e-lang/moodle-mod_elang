@@ -6,10 +6,9 @@ enyo.kind({
 		// Title and description
 		{tag: "div", name: "header", classes:"row-fluid", components:[
 			{tag: "div", name: "span12", classes:"span12", components:[
-				{tag: "div", name:"test", classes:"well well-small", components:[
-					{tag:'h1', components:[
-						{tag: "a", name:"videoTitle", attributes:{'data-placement' :'right', 'data-toggle' :'tooltip'}}
-					]}
+				{tag: "div", classes:"well well-small", components:[
+					// Video
+					{kind: "Head", name:"head"}
 				]
 				}
 			]}
@@ -37,14 +36,14 @@ enyo.kind({
 		]}
 		]}
 	], 
-		  
+	
 	create: function(){
 		this.inherited(arguments);
-		this.getTitle();
+		this.getData();
 	},
 	
-	// Function to get the title and the description
-	getTitle: function(){
+	// Function to get the video data 
+	getData: function(){
 		// Request creation
 		var request = new enyo.Ajax({
 	    		url: document.URL,
@@ -54,12 +53,12 @@ enyo.kind({
 	    	});	
 
 		//tells Ajax what the callback function is
-        request.response(enyo.bind(this, "getTitleResponse")); 
+        request.response(enyo.bind(this, "getDataResponse")); 
 		//makes the Ajax call with parameters
         request.go({task: 'title'}); 
 	},
 	
-	getTitleResponse: function(inRequest, inResponse){
+	getDataResponse: function(inRequest, inResponse){
 		// If there is nothing in the response then return early.
 		if (!inResponse) { 
 	        alert('There is a problem when I try to get the title, please try again later...');
@@ -67,11 +66,10 @@ enyo.kind({
 	    }
 		// We update the video title with the value in the response
 		var response = JSON.parse(inResponse);
-		var title = response.title;
-		var description = response.description;
-		this.$.videoTitle.content = response.title;
-		this.$.videoTitle.render();
-		$('a').data('tooltip',false).attr('data-original-title', response.description);
-		$("a").tooltip();
+		this.$.head.setHeadTitle(response.title);
+		this.$.head.setHeadDescription(response.description);
+		
+		this.$.head.updateData();
+
 	}
 });
