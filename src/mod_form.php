@@ -30,6 +30,9 @@ class mod_elang_mod_form extends moodleform_mod
 	 */
 	public function definition()
 	{
+		// Get the setting for elang
+		$config = get_config('elang');
+
 		// Get the form
 		$mform = $this->_form;
 
@@ -53,7 +56,7 @@ class mod_elang_mod_form extends moodleform_mod
 		$mform->addHelpButton('name', 'elangname', 'elang');
 
 		// Adding the standard "intro" and "introformat" fields
-		$this->add_intro_editor();
+		$this->add_intro_editor($config->requiremodintro);
 
 		// Adding the rest of elang settings, spreeading all them into this fieldset
 		$mform->addElement('header', 'elangfieldset', get_string('upload', 'elang'));
@@ -62,21 +65,27 @@ class mod_elang_mod_form extends moodleform_mod
 			'videos',
 			get_string('videos', 'elang'),
 			null,
-			array('subdirs' => 0, 'maxbytes' => 5000000000000000000000000000000, 'maxfiles' => 20, 'accepted_types' => array('video'))
+			array('subdirs' => 0, 'maxbytes' => $config->videomaxsize, 'maxfiles' => 20, 'accepted_types' => array('video'))
 		);
 		$mform->addHelpButton('videos', 'videos', 'elang');
+		$mform->addRule('videos', null, 'required', null, 'client');
 
 		$mform->addElement(
-			'filepicker',
+			'filemanager',
 			'subtitle',
 			get_string('subtitle', 'elang'),
 			null,
-			array('maxbytes' => 20000000, 'accepted_types' => array('*.vtt'))
+			array('subdirs' => 0, 'maxbytes' => $config->subtitlemaxsize, 'maxfiles' => 1, 'accepted_types' => array('.vtt'))
 		);
 		$mform->addHelpButton('subtitle', 'subtitle', 'elang');
 		$mform->addRule('subtitle', null, 'required', null, 'client');
 
-		$mform->addElement('filepicker', 'poster', get_string('poster', 'elang'), null, array('maxbytes' => 20000000, 'accepted_types' => array('image')));
+		$mform->addElement(
+			'filemanager',
+			'poster',
+			get_string('poster', 'elang'),
+			null,
+			array('subdirs' => 0, 'maxbytes' => $config->postermaxsize, 'maxfiles' => 1, 'accepted_types' => array('image')));
 		$mform->addHelpButton('poster', 'poster', 'elang');
 
 		// Add standard elements, common to all modules
