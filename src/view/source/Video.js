@@ -39,26 +39,18 @@ enyo.kind({
 			vid.currentTime=this.beginvid;
 		}
 	},
-	getId: function(msg) {
-		alert(msg);
-	},
-	echo:function() {
-		alert('echo');
-		//document.getElementById(this.$.html.getAttribute('id')).addEventListener('pause', function() {alert('echo');});
-	},
+	// echo:function() {
+		// alert('echo');
+		// //document.getElementById(this.$.html.getAttribute('id')).addEventListener('pause', function() {alert('echo');});
+	// },
 	clearSource: function(){
-	},
-	checktime : function(inSender, inEvent) {
-		var myvid=document.getElementById(this.$.html.getAttribute('id'));
-		this.$.btntest.setContent("myvid.currentTime");
 	},
 	initSequence : function(inSender,inEvent){
 		var myvid = document.getElementById(this.$.html.getAttribute('id'));
 		myvid.currentTime=this.beginvid;
-		myvid.play();
+	//	myvid.play();
 	},
-	
-	/*function d'initialisation de la balise*/
+		/*function d'initialisation de la balise*/
 	create : function(){
 		this.inherited(arguments);
 		
