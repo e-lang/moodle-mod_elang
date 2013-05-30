@@ -1,3 +1,4 @@
+//enyo.dispatcher.listen(document, "myEvent");
 // Main application structure
 enyo.kind({
 	name : "App",
@@ -36,7 +37,6 @@ enyo.kind({
 		]}
 		]}
 	], 
-	
 	create: function(){
 		this.inherited(arguments);
 		this.getData();
@@ -70,6 +70,5 @@ enyo.kind({
 		this.$.head.setHeadDescription(response.description);
 		
 		this.$.head.updateData();
-
 	}
 });

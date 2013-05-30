@@ -24,17 +24,18 @@
 		<script type="text/javascript" src="lib/captionator/js/captionator-example-api.js"></script>
 
 		<!-- Video -->
-		<link href="assets/css/video-default.css" rel="stylesheet">
+		<!--<link href="assets/css/video-default.css" rel="stylesheet">
 		<script type="text/javascript" src="assets/js/jquery-1.8.1.min.js"></script>
 		<script type="text/javascript" src="assets/js/jquery.video-ui.js"></script>
-
+	--!>
 		<!-- application (debug) -->
 		<script src="source/package.js" type="text/javascript"></script>
 
 	</head>
-	<body>
+	<body onload="document.getElementById('html').addEventListener('timeupdate',function(e){app.$.video.handleTimeUpdate();},false)">
+	<!-- TODO : set the envent listener in Enyo kinds -->
 		<script>
-			new App().renderInto(document.body);
+		var app=new App().renderInto(document.body);
 		</script>
 	</body>
 </html>
