@@ -4,18 +4,17 @@ var soustitreajax = ["arduino-en.vtt","en_UK"];
 var videoajax = ["mov_bbb.mp4","mov_bbb.mp4"];
 //enyo.dispatcher.listen(document, "myEvent");
 //variable est à true si c'est la première fois que l'on joue la video
-// var myvid=document.getElementById(this.$.html.getAttribute('id'));
+// var myvid=document.getElementById(this.$.myvideo.getAttribute('id'));
 
 //Toute l'application est encapsulée dans ce kind
 
 enyo.kind({
 	name: "Video",
-	kind: "FittableRows",
 	source:videoajax, 
 	sstitre : [soustitreajax],
 	fit: true,
 	components:[
-		{name: "html",
+		{name: "myvideo",
 			tag: "video controls",
 			content: "Your user agent does not support the HTML5 Video element.",
 			components:[
@@ -27,39 +26,37 @@ enyo.kind({
 					}
 				}
 			]
-		},
-		{kind:"onyx.Button", content: "Button Test",name : "btntest", ontap:"initSequence"}
-	],
-	beginvid:3,
-	endvid:5,
-	handleTimeUpdate:function(){
-		var vid=document.getElementById(this.$.html.getAttribute('id'));
-		if (vid.currentTime >= this.endvid){
-			vid.pause();
-			vid.currentTime=this.beginvid;
 		}
-
+	 ],
+	published:{
+		currentSequenceBegin:0,
+		currentSequenceEnd:Infinity
+	},
+	handleTimeUpdate:function(){
+		var vid=document.getElementById(this.$.myvideo.getAttribute('id'));
+		if (vid.currentTime >= this.currentSequenceEnd || vid.currentTime < this.currentSequenceBegin){
+			vid.pause();
+			vid.currentTime=this.currentSequenceBegin;
+		}
 	},
 	// echo:function() {
 		// alert('echo');
-		// //document.getElementById(this.$.html.getAttribute('id')).addEventListener('pause', function() {alert('echo');});
+		// //document.getElementById(this.$.myvideo.getAttribute('id')).addEventListener('pause', function() {alert('echo');});
 	// },
 	clearSource: function(){
 	},
-
-	initSequence : function(inSender,inEvent){
-		var myvid = document.getElementById(this.$.html.getAttribute('id'));
-		myvid.currentTime=this.beginvid;
+	setSequence : function(begin,end){
+		this.currentSequenceBegin=begin;
+		this.currentSequenceEnd=end;
+		var myvid = document.getElementById(this.$.myvideo.getAttribute('id'));
+		myvid.currentTime=this.currentSequenceBegin;
 	//	myvid.play();
 	},
 		/*function d'initialisation de la balise*/
 	create : function(){
 		this.inherited(arguments);
-		
-		//this.$.html.setAttribute("width",this.width);
-		//document.timeupdate=enyo.dispatch;
 		for(var sour in this.source){
-			this.$.html.createComponent({
+			this.$.myvideo.createComponent({
 				tag: "source",
 				attributes:{src:this.source[sour]}
 			});
@@ -69,7 +66,7 @@ enyo.kind({
 		this.$.soustitre.setAttribute("type","text/vtt");
 		this.$.soustitre.setAttribute("default","default");
 		for(var sour =1; sour < this.sstitre.length; sour++){
-			this.$.html.createComponent({
+			this.$.myvideo.createComponent({
 				tag: "track",
 				attributes:{
 					kind:"captions",
@@ -79,7 +76,6 @@ enyo.kind({
 				}
 			});
 		}
-		this.getId("testmsg");
 		}
 		
 });
