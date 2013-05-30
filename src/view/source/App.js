@@ -1,3 +1,4 @@
+//enyo.dispatcher.listen(document, "myEvent");
 // Main application structure
 enyo.kind({
 	name : "App",
@@ -30,11 +31,8 @@ enyo.kind({
 			]}
 		]}
 	], 
-	
 	create: function(){
 		this.inherited(arguments);
-		this.getTitle();
-		
 	},
 	
 	// Function to get the title and the description
@@ -59,8 +57,8 @@ enyo.kind({
 	        alert('There is a problem when I try to get the title, please try again later...');
 	        return;
 	    }
-		// We update the video title with the value in the response
-		var response = JSON.parse(inResponse);
+//We update the video title with the value in the response
+	var response = JSON.parse(inResponse);
 		this.$.title.content = response.title;
 		this.$.title.render();
 	}
