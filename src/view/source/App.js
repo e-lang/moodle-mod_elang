@@ -24,7 +24,7 @@ enyo.kind({
 				// Sequence list
 				{tag: "div", name: "span6", classes:"span6", components:[
 					{tag: "h1", content: "Liste."},
-					{kind: "Sequences", style: "height: 200px;"}
+					{kind: "Sequences", name: "sequences"}
 				]}
 			]},
 			
@@ -32,7 +32,7 @@ enyo.kind({
 		{tag: "div", name: "footer", classes:"row-fluid", components:[
 			{tag: "div", name: "span12", classes:"span12", components:[
 				{tag: "h1", content: "footer."},
-				{kind: "elang.input", style: "height: 200px;"}
+				{kind: "elang.input", name: "input"}
 			]}
 		]}
 		]}
@@ -64,10 +64,16 @@ enyo.kind({
 	        alert('There is a problem when I try to get the title, please try again later...');
 	        return;
 	    }		// We update the video title with the value in the response
+
 		var response = JSON.parse(inResponse);
+		
+		// Broadcast the data to the children fields 
 		this.$.head.setHeadTitle(response.title);
 		this.$.head.setHeadDescription(response.description);
+		// this.$.sequences.setListSequences(response.sequences);
+		// this.$.input.setInputList(response.inputs)
 		
+		// Call the function to update the children
 		this.$.head.updateData();
 	}
 });
