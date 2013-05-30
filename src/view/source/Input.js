@@ -58,7 +58,9 @@ enyo.kind({
 	addInput: function() {
 		this.$.result.createComponent(		
 		{
+
 			tag:"div", classes:"salut", id:22, components: [
+
 				{kind:"Input", id:28, classes:"inputInfo"},
 				{kind:"Button", classes:"btn btn-success", ontap:"checkTapped", id:100, name:"Check", content:"Check"},
 				{kind:"Button", classes:"btn btn-info",  ontap:"checkTapped", id:101, name:"Help", content:"Help"},	
@@ -67,7 +69,9 @@ enyo.kind({
 		);
 		this.$.result.render();	
 		//alert(document.getElementById(22).getAttribute('id'));
+
 		document.getElementById(28).setAttribute("classes","control-group success");
+
 		
 		//alert(document.getElementsByClassName('btn btn-success'));
 		//document.getElementsByClassName('btn btn-success').setAttribute('id',121);
@@ -98,7 +102,13 @@ enyo.kind({
 	},
 	
 	reset: function() {
+
 		this.$.result.destroyComponents();			
+
+		this.$.result.destroyComponents();	
+		//faire aussi pour ceux créés : 
+		//this.destroyComponents();
+
 	},
 	
 	render: function() {
@@ -108,10 +118,13 @@ enyo.kind({
 		
 	checkTapped: function(inSender, inEvent) {
 		switch (inSender.id) {
-		case 100 :			
-			alert("Check");
+
+		case 100 :
+			//document.getElementById(28).setAttribute("enyo-input","control-group success");
+			document.getElementById(22).setAttribute("class", "control-group success");
+			//alert("Check");
 			break;
-		case 101 :			
+		case 101 :
 			alert("Help");
 			break;
 		default:
@@ -119,7 +132,7 @@ enyo.kind({
 			break;
 		}
 	},
-	
+
 	handlers: {
 		onItemTapped : "itemTapped"
 	},

@@ -9,37 +9,35 @@
  * logic, should go to locallib.php. This will help to save some memory when
  * Moodle is performing actions across all modules.
  *
- * @package	mod
- * @subpackage elang
- * @copyright  2013 University of La Rochelle, France
- * @license	http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ * @package     mod
+ * @subpackage  elang
+ * @copyright   2013 University of La Rochelle, France
+ * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-//Include of the subtitles's function
-//(WARNING : if the main page of the module is not displayed,
-//it's because of the require_once) :
-require_once('parseWebVTT.php');
-
-/** example constant */
-//define('NEWMODULE_ULTIMATE_ANSWER', 42);
-
-////////////////////////////////////////////////////////////////////////////////
-// Moodle core API															//
-////////////////////////////////////////////////////////////////////////////////
+// Moodle core API
 
 /**
  * Returns the information on whether the module supports a feature
  *
+ * @param   string  $feature  FEATURE_xx constant for requested feature
+ *
+ * @return  mixed   true if the feature is supported, null if unknown
+ *
  * @see plugin_supports() in lib/moodlelib.php
- * @param string $feature FEATURE_xx constant for requested feature
- * @return mixed true if the feature is supported, null if unknown
  */
-function elang_supports($feature) {
-	switch($feature) {
-		case FEATURE_MOD_INTRO:		 return true;
-		default:						return null;
+function elang_supports($feature)
+{
+	switch ($feature)
+	{
+		case FEATURE_MOD_INTRO:
+			return true;
+		case FEATURE_SHOW_DESCRIPTION:
+			return true;
+		default:
+			return null;
 	}
 }
 
@@ -51,82 +49,88 @@ function elang_supports($feature) {
  * will create a new instance and return the id number
  * of the new instance.
  *
- * @param object $elang An object from the form in mod_form.php
- * @param mod_elang_mod_form $mform
- * @return int The id of the newly inserted elang record
+ * @param   object              $elang  An object from the form in mod_form.php
+ * @param   mod_elang_mod_form  $mform  The form
+ *
+ * @return  int  The id of the newly inserted elang record
  */
-function elang_add_instance(stdClass $elang, mod_elang_mod_form $mform = null) {
+function elang_add_instance(stdClass $elang, mod_elang_mod_form $mform = null)
+{
 	global $CFG, $DB;
-	require_once("$CFG->libdir/resourcelib.php");
-	require_once("$CFG->dirroot/mod/resource/locallib.php");
-   
-	//Init some var :
+	require_once $CFG->libdir . '/resourcelib.php';
+	require_once $CFG->dirroot . '/mod/elang/locallib.php';
+
+	// Init some var :
 	$cmid = $elang->coursemodule;
 	$elang->timemodified = time();
 	$elang->timecreated = time();
-	
-	//Storage of the main table of the module :
+
+	// Storage of the main table of the module :
 	$elang->id = $DB->insert_record('elang', $elang);
-	
-	//Storage of files from the filemanager (videos) :
-	$fs = get_file_storage();
+
+	// Storage of files from the filemanager (videos) :
+/*	$fs = get_file_storage();
 	$cmid = $data->coursemodule;
-	$draftitemid = $data->videos;	
+	$draftitemid = $data->videos;
 	$context = context_module::instance($cmid);
-	if ($draftitemid) {
-		file_save_draft_area_files($draftitemid, $context->id, 'mod_elang', 'videos', 0, array('subdirs'=>true));
+
+	if ($draftitemid)
+	{
+		file_save_draft_area_files($draftitemid, $context->id, 'mod_elang', 'videos', 0, array('subdirs' => true));
 	}
-	
-	//Recuperer le fichier des sous titres de la base de donnees moodle
+
+	// Recuperer le fichier des sous titres de la base de donnees moodle
 	$itemid = file_get_submitted_draft_itemid('subtitle');//recuperer le itemid du fichier
-	$filename=$mform->get_new_filename('subtitle');//recuperer le nom du fichier
+	$filename = $mform->get_new_filename('subtitle');//recuperer le nom du fichier
 	$fs = get_file_storage();//recuperer les fichiers sotckes dans la base moodle
-	
-	// preparer le fichier record object
+
+	// Preparer le fichier record object
 	$fileinfo = array(
-    'component' => 'user',     
-    'filearea' => 'draft',    
-    'itemid' => $itemid ,              
-	'contextid' =>5,
-    'filepath' => '/',           
-    'filename' => $filename); 
- 
+		'component' => 'user',
+		'filearea' => 'draft',
+		'itemid' => $itemid , 
+		'contextid' =>5,
+		'filepath' => '/',
+		'filename' => $filename
+	);
+
 	// Get file
 	$file = $fs->get_file($fileinfo['contextid'],$fileinfo['component'], $fileinfo['filearea'],
 						  $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
-	 
+
 	// lire le contenu du fichier
 	if ($file) {
 		$contents = $file->get_content();
-		//traitement du contenu du fichier 
+		//traitement du contenu du fichier
+		require_once('parseWebVTT.php');
 		$ab =new parsewebvtt\WebVTT($contents);
-		
+
 		$cue = new stdClass();
 		$elang->id= $DB->insert_record('elang', $elang);//recuper id de l exercice aui sera attribue aux sequences
-		
-		foreach($ab->getCueList() as $i => $elt) 
-		
+
+		foreach($ab->getCueList() as $i => $elt)
+
 		{
 			$cue->id_elang=$elang->id;		//recuperer id de l exercice
 			$cue->title	= $elt->getTitle();//le titre
 			$cue->begin	=  $elt->getBegin();//begin
 			$cue->end= $elt->getend();
 			$cue->cuetext=$elt->getText();
-			
+
 			$lastInsertID = $DB->insert_record("elang_cue", $cue);//inserer dans la base
 		}
-		
+
 	} else {
 		print("file doesn't exist - do something");
 	}
-	
+*/
 	//Use this for display out in a debug file :
 	/*ob_start();
 	print_object($elang);
 	echo "test";
 	$result = ob_get_clean();
 	debug($result);*/
-	
+
 	return $elang->id;
 }
 
