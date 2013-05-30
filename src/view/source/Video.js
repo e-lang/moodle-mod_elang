@@ -38,6 +38,7 @@ enyo.kind({
 			vid.pause();
 			vid.currentTime=this.beginvid;
 		}
+
 	},
 	// echo:function() {
 		// alert('echo');
@@ -45,6 +46,7 @@ enyo.kind({
 	// },
 	clearSource: function(){
 	},
+
 	initSequence : function(inSender,inEvent){
 		var myvid = document.getElementById(this.$.html.getAttribute('id'));
 		myvid.currentTime=this.beginvid;
