@@ -63,7 +63,7 @@ enyo.kind({
     sequenceItemTapped:function(inSender,inEvent){
 
 	//alert("L'id de "+this.datasource[inEvent.index].titre+" est "+this.datasource[inEvent.index].id);
-	  alert("test");
+	//  alert("test");
     },
 	
 	createTab: function(title){
@@ -117,7 +117,7 @@ enyo.kind({
 		for(d=0; d<this.datasource.length; d++) { //on rempli le tableau tabSequences avec toutes les séquences
 			this.tabSequences = this.datasource[d];
 		}
-		alert(this.tabSequences.toString());
+		//alert(this.tabSequences.toString());
     },
 	
 	// Function to get the title and the description
