@@ -126,6 +126,16 @@ class mod_elang_mod_form extends moodleform_mod
 				$this->current->id
 			);
 			$default_values['subtitle'] = $draftitemid;
+
+			$draftitemid = file_get_submitted_draft_itemid('poster');
+			file_prepare_draft_area(
+				$draftitemid,
+				$this->context->id,
+				'mod_elang',
+				'poster',
+				$this->current->id
+			);
+			$default_values['poster'] = $draftitemid;
 		}
 	}
 }
