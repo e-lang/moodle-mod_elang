@@ -8,21 +8,26 @@ enyo.kind({
 		{tag: "div", name: "header", classes:"row-fluid", components:[
 			{tag: "div", name: "span12", classes:"span12", components:[
 				{tag: "div", classes:"well well-small", components:[
-					{tag: "h1", name:"title", content: "Vidéo"}
-				]}
+					// Video
+					{kind: "Head", name:"head"}
+				]
+				}
 			]}
 		]},
+		{tag:"div", classes:"well", components:[
 		{tag: "div", name: "body", classes:"row-fluid", components:[
-			{tag: "div", name: "span6", classes:"span6", components:[
-			// Video
-			{kind: "Video", name : "video"},
+				{tag: "div", name: "span6", classes:"span6", components:[
+					// Video
+					{kind: "Video", name : "video"}
+				]},
+			
+				// Sequence list
+				{tag: "div", name: "span6", classes:"span6", components:[
+					{tag: "h1", content: "Liste."},
+					{kind: "Sequences", style: "height: 200px;"}
+				]}
 			]},
-			// Sequence list
-			{tag: "div", name: "span6", classes:"span6", components:[
-				{tag: "h1", content: "Liste."},
-				{kind: "Sequences", style: "height: 200px;"}
-			]}
-		]},
+			
 		// Exercise
 		{tag: "div", name: "footer", classes:"row-fluid", components:[
 			{tag: "div", name: "span12", classes:"span12", components:[
@@ -30,13 +35,15 @@ enyo.kind({
 				{kind: "elang.input", style: "height: 200px;"}
 			]}
 		]}
+		]}
 	], 
 	create: function(){
 		this.inherited(arguments);
+		this.getData();
 	},
 	
-	// Function to get the title and the description
-	getTitle: function(){
+	// Function to get the video data 
+	getData: function(){
 		// Request creation
 		var request = new enyo.Ajax({
 	    		url: document.URL,
@@ -46,21 +53,30 @@ enyo.kind({
 	    	});	
 
 		//tells Ajax what the callback function is
-        request.response(enyo.bind(this, "getTitleResponse")); 
+        request.response(enyo.bind(this, "getDataResponse")); 
 		//makes the Ajax call with parameters
         request.go({task: 'title'}); 
 	},
 	
-	getTitleResponse: function(inRequest, inResponse){
+	getDataResponse: function(inRequest, inResponse){
 		// If there is nothing in the response then return early.
 		if (!inResponse) { 
 	        alert('There is a problem when I try to get the title, please try again later...');
 	        return;
 	    }
+<<<<<<< HEAD
 //We update the video title with the value in the response
 	var response = JSON.parse(inResponse);
 		this.$.title.content = response.title;
 		this.$.title.render();
+=======
+		// We update the video title with the value in the response
+		var response = JSON.parse(inResponse);
+		this.$.head.setHeadTitle(response.title);
+		this.$.head.setHeadDescription(response.description);
+		
+		this.$.head.updateData();
+
+>>>>>>> 804f3efc25ea611e5af781c6cdf5730171d8a1b5
 	}
 });
-
