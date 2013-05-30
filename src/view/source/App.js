@@ -64,19 +64,11 @@ enyo.kind({
 	        alert('There is a problem when I try to get the title, please try again later...');
 	        return;
 	    }
-<<<<<<< HEAD
-//We update the video title with the value in the response
-	var response = JSON.parse(inResponse);
-		this.$.title.content = response.title;
-		this.$.title.render();
-=======
 		// We update the video title with the value in the response
 		var response = JSON.parse(inResponse);
 		this.$.head.setHeadTitle(response.title);
 		this.$.head.setHeadDescription(response.description);
 		
 		this.$.head.updateData();
-
->>>>>>> 804f3efc25ea611e5af781c6cdf5730171d8a1b5
 	}
 });
