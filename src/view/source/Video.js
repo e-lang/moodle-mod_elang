@@ -29,8 +29,8 @@ enyo.kind({
 		}
 	 ],
 	published:{
-		currentSequenceBegin:2,
-		currentSequenceEnd:3
+		currentSequenceBegin:0,
+		currentSequenceEnd:Infinity
 	},
 	handleTimeUpdate:function(){
 		var vid=document.getElementById(this.$.myvideo.getAttribute('id'));
