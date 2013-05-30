@@ -34,18 +34,28 @@ enyo.kind({
 				}
 			]
 		},
-		{kind:"onyx.Button", content: "Button Test", ontap:"buttonTapped"}
-		],
-	
-	buttonTapped: function(){
-	//	alert(this.$.getId.duration);
-	},
+		{kind:"onyx.Button", content: "Button Test", ontap:"initSequence"}
+	],
 	getId: function() {
 		return this.$.html.getAttribute('id');
 	},
 	clearSource: function(){
 	},
-	
+	// buttonTapped: function(){
+	// //	alert(this.$.html.duration);
+		// //alert(document.getElementById(this.$.html.getAttribute('id')).duration);
+		// this.$.initSequence
+	// },
+	initSequence : function(inSender,inEvent){
+		 var begin=2;
+		 var end=7;
+		 var myvid = document.getElementById(this.$.html.getAttribute('id'));
+		 
+		 // On positionne la video au debut de la sequence
+		 myvid.currentTime=begin;
+		// this.$.stopTime=end;
+		myvid.play();
+	},
 	/*function d'initialisation de la balise*/
 	create : function(){
 		this.inherited(arguments);
