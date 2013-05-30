@@ -42,7 +42,7 @@ enyo.kind({
 					break;
 				}				
 			}
-		}		
+		}	
 	},
 	
 
@@ -80,15 +80,13 @@ enyo.kind({
 	
 	addInput: function(noSec, content, ident) {
 		this.$.result.createComponent(		
-		{tag:"div", classes:"input-append", id:ident+100, components: [
-				{tag:"input", id:ident+101, classes: "span8", type:'text'},
+			{tag:"div", classes:"input-append", id:ident+100, components: [
+				{kind:"Input", id:ident+101, classes: "span8",type:'text', value:content},
 				{tag:"button", classes:"btn btn-success", type:"button", ontap:"checkTapped", id:ident+102, name:"Check", content:"Check"},
 				{tag:"button", classes:"btn btn-info",  type:"button", ontap:"checkTapped", id:ident+103, name:"Help", content:"Help"},	
 			]},
 			{owner: this}
 		);
-		this.$.result.render();
-
 		this.$.result.render();
 	},
 

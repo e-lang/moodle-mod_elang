@@ -4,13 +4,11 @@ enyo.kind({
 	name : "App",
 	classes: "container-fluid",
 	style:"height: 150%;",
-
 	handlers: {
 		onSequenceItemTapped : "sequenceTapped",
 		onRenderTapped : "renderTapped",
 		onHelpTapped : "helpTapped",	
 	},
-
 	components:[
 		// Title and description
 		{tag: "div", name: "header", classes:"row-fluid", components:[
@@ -22,17 +20,13 @@ enyo.kind({
 
 			]}
 		]},
-		{tag:"div",classes:"well", components:[
-			{tag: "div", name: "body", classes:"row-fluid", components:[
-				{tag: "div", name: "span6", classes:"span6", components:[
-
 		{tag:"div", classes:"well", components:[
 		{tag: "div", name: "body", classes:"row-fluid", components:[
 				{tag: "div", name: "video_span6", classes:"span6", components:[
-
 					// Video
 					{kind: "Video", name : "video"}
 				]},
+			
 				// Sequence list
 				{tag: "div", name: "list_span6", classes:"span6", components:[
 					{tag: "h1", content: "Liste."},
@@ -45,11 +39,9 @@ enyo.kind({
 			{tag: "div", name: "input_span12", classes:"span12", components:[
 				{tag: "h1", content: "footer."},
 				{kind: "elang.input", name:"input"}
-
 			]}
-		]},
-			
-		
+		]}
+		]}
 	], 
 	sequenceTapped:function(inSender,inEvent){
       alert("sequenceTapped");
@@ -95,17 +87,17 @@ enyo.kind({
 
 		var response = JSON.parse(inResponse);
 		
+		// Broadcast the data to the children fields 
 		this.$.head.setHeadTitle(response.title);
 		this.$.head.setHeadDescription(response.description);
+		// Call the function to update the children
 		this.$.head.updateData();
 		
 		this.$.input.setInputList(response.inputs);
 		this.$.input.updateDataInput();
-
 		
 		//this.$.sequences.setListSequences(response.sequences);
 		this.$.sequences.updateSequences(response.sequences);
-
 
 	}
 
