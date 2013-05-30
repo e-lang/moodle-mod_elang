@@ -1,3 +1,4 @@
+//enyo.dispatcher.listen(document, "myEvent");
 // Main application structure
 enyo.kind({
 	name : "App",
@@ -10,7 +11,6 @@ enyo.kind({
 	components:[
 		// Title and description
 		{tag: "div", name: "header", classes:"row-fluid", components:[
-
 			{tag: "div", name: "title_span12", classes:"span12", components:[
 				{tag: "div", classes:"well well-small", components:[
 					{kind: "Head", name:"head"}
@@ -42,8 +42,6 @@ enyo.kind({
 		]}
 		]}
 	], 
-	
-
 	sequenceTapped:function(inSender,inEvent){
       alert("sequenceTapped");
 	  //this.$.input.setInput();
@@ -58,8 +56,6 @@ enyo.kind({
       alert("renderTapped");
 	  //this.$.sequences.setType();
     },
-	
-
 	create: function(){
 		this.inherited(arguments);
 		this.getData();
@@ -86,12 +82,14 @@ enyo.kind({
 		if (!inResponse) { 
 	        alert('There is a problem when I try to get the title, please try again later...');
 	        return;
-	    }
-		// We update the video title with the value in the response
+	    }		// We update the video title with the value in the response
+
 		var response = JSON.parse(inResponse);
 		
+		// Broadcast the data to the children fields 
 		this.$.head.setHeadTitle(response.title);
 		this.$.head.setHeadDescription(response.description);
+		// Call the function to update the children
 		this.$.head.updateData();
 		
 		//this.$.sequences.setListSequences(response.sequences);

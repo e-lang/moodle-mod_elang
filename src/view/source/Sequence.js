@@ -268,7 +268,6 @@ enyo.kind({
 	
     create: function(){
 		this.inherited(arguments);
-	
 		this.letsGo();
     },
 	
@@ -350,6 +349,23 @@ enyo.kind({
 		},
 		{owner: this});
 	},
+
+	letsGo: function(){
+		nbSequenceDerniereTab = (this.datasource.length%10); //modulo pour savoir combien de sequences seront affichées sur la derniere tab
+		if(nbSequenceDerniereTab==0) { //si il n'y a pas de séquence sur la dernière tab, soit nombre de séquence division par 10 sans reste
+			nbTab = Math.floor(this.datasource.length/10); //alors on ne fait rien
+		}
+		else {
+			nbTab = Math.floor(this.datasource.length/10)+1; //sinon on ajoute une tab pour afficher les dernière séquences
+		}
+		for(t=1; t<=nbTab; t++) { //on créer les tab 
+			this.createTab(t);
+		}
+		for(d=0; d<this.datasource.length; d++) { //on rempli le tableau tabSequences avec toutes les séquences
+			this.tabSequences = this.datasource[d];
+		}
+		//alert(this.tabSequences.toString());
+    },
 	
 	deleteTbody: function(){
 		this.$.TBODY.destroy();
