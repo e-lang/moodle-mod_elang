@@ -54,10 +54,7 @@ enyo.kind({
     },
 	
     setupItem:function(inSender,inEvent) {
-<<<<<<< HEAD
-	//	alert(inEvent.index);
-=======
->>>>>>> 804f3efc25ea611e5af781c6cdf5730171d8a1b5
+
 		this.titre = this.datasource[inEvent.index].titre; 
 		var newtitre = (this.titre.length > 20)?this.titre.substring(0,17)+"...":this.titre;
 		this.$.sequenceItem.addRemoveClass("list-selected", inSender.isSelected(inEvent.index));
