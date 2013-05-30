@@ -3,40 +3,59 @@
 enyo.kind({
 	name : "App",
 	classes: "container-fluid",
+	handlers: {
+		onSequenceItemTapped : "sequenceTapped",
+		onRenderTapped : "renderTapped",
+		onHelpTapped : "helpTapped",	
+	},
 	components:[
 		// Title and description
 		{tag: "div", name: "header", classes:"row-fluid", components:[
-			{tag: "div", name: "span12", classes:"span12", components:[
+			{tag: "div", name: "title_span12", classes:"span12", components:[
 				{tag: "div", classes:"well well-small", components:[
-					// Video
 					{kind: "Head", name:"head"}
 				]
 				}
+
 			]}
 		]},
 		{tag:"div", classes:"well", components:[
 		{tag: "div", name: "body", classes:"row-fluid", components:[
-				{tag: "div", name: "span6", classes:"span6", components:[
+				{tag: "div", name: "video_span6", classes:"span6", components:[
 					// Video
 					{kind: "Video", name : "video"}
 				]},
 			
 				// Sequence list
-				{tag: "div", name: "span6", classes:"span6", components:[
+				{tag: "div", name: "list_span6", classes:"span6", components:[
 					{tag: "h1", content: "Liste."},
-					{kind: "Sequences", name: "sequences"}
+					{kind: "Sequences", name:"sequences"}
 				]}
 			]},
 			
 		// Exercise
 		{tag: "div", name: "footer", classes:"row-fluid", components:[
-			{tag: "div", name: "span12", classes:"span12", components:[
+			{tag: "div", name: "input_span12", classes:"span12", components:[
 				{tag: "h1", content: "footer."},
-				{kind: "elang.input", name: "input"}
+				{kind: "elang.input", name:"input"}
 			]}
 		]}
 		]}
 	], 
+	sequenceTapped:function(inSender,inEvent){
+      alert("sequenceTapped");
+	  //this.$.input.setInput();
+    },
+	
+	helpTapped:function(inSender,inEvent){
+      alert("helpTapped");
+	  //this.$.sequences.setHelp();
+    },
+	
+	renderTapped:function(inSender,inEvent){
+      alert("renderTapped");
+	  //this.$.sequences.setType();
+    },
 	create: function(){
 		this.inherited(arguments);
 		this.getData();
@@ -70,10 +89,12 @@ enyo.kind({
 		// Broadcast the data to the children fields 
 		this.$.head.setHeadTitle(response.title);
 		this.$.head.setHeadDescription(response.description);
-		// this.$.sequences.setListSequences(response.sequences);
-		// this.$.input.setInputList(response.inputs)
-		
 		// Call the function to update the children
 		this.$.head.updateData();
+		
+		//this.$.sequences.setListSequences(response.sequences);
+		this.$.sequences.updateSequences(response.sequences);
+
 	}
+
 });
