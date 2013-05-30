@@ -2,6 +2,7 @@
 enyo.kind({
 	name : "App",
 	classes: "container-fluid",
+	style:"height: 150%;",
 	components:[
 		// Title and description
 		{tag: "div", name: "header", classes:"row-fluid", components:[
@@ -13,27 +14,27 @@ enyo.kind({
 				}
 			]}
 		]},
-		{tag:"div", classes:"well", components:[
-		{tag: "div", name: "body", classes:"row-fluid", components:[
-				{tag: "div", name: "span6", classes:"span6", components:[
-					// Video
-					{kind: "Video", name : "video"}
+		{tag:"div",classes:"well", components:[
+			{tag: "div", name: "body", classes:"row-fluid", components:[
+					{tag: "div", name: "span6", classes:"span6", components:[
+						// Video
+						{kind: "Video", name : "video"}
+					]},
+				
+					// Sequence list
+					{tag: "div", name: "span6", classes:"span6", components:[
+						{tag: "h1", content: "Liste."},
+						{kind: "Sequences", style: "height: 200px;"}
+					]}
 				]},
-			
-				// Sequence list
-				{tag: "div", name: "span6", classes:"span6", components:[
-					{tag: "h1", content: "Liste."},
-					{kind: "Sequences", style: "height: 200px;"}
+				
+			// Exercise
+			{tag: "div", name: "footer", classes:"row-fluid", components:[
+				{tag: "div", name: "span12", classes:"span12", components:[
+					{tag: "h1", content: "footer."},
+					{kind: "elang.input", name:"input", style: "height: 300px;"}
 				]}
-			]},
-			
-		// Exercise
-		{tag: "div", name: "footer", classes:"row-fluid", components:[
-			{tag: "div", name: "span12", classes:"span12", components:[
-				{tag: "h1", content: "footer."},
-				{kind: "elang.input", style: "height: 200px;"}
 			]}
-		]}
 		]}
 	], 
 	
@@ -55,7 +56,7 @@ enyo.kind({
 		//tells Ajax what the callback function is
         request.response(enyo.bind(this, "getDataResponse")); 
 		//makes the Ajax call with parameters
-        request.go({task: 'title'}); 
+        request.go({task: 'data'}); 
 	},
 	
 	getDataResponse: function(inRequest, inResponse){
@@ -66,10 +67,13 @@ enyo.kind({
 	    }
 		// We update the video title with the value in the response
 		var response = JSON.parse(inResponse);
+		
 		this.$.head.setHeadTitle(response.title);
 		this.$.head.setHeadDescription(response.description);
-		
 		this.$.head.updateData();
+		
+		this.$.input.setInputList(response.inputs);
+		this.$.input.updateDataInput();
 
 	}
 });
