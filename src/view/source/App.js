@@ -55,7 +55,7 @@ enyo.kind({
 		//tells Ajax what the callback function is
         request.response(enyo.bind(this, "getDataResponse")); 
 		//makes the Ajax call with parameters
-        request.go({task: 'title'}); 
+        request.go({task: 'data'}); 
 	},
 	
 	getDataResponse: function(inRequest, inResponse){
@@ -63,8 +63,7 @@ enyo.kind({
 		if (!inResponse) { 
 	        alert('There is a problem when I try to get the title, please try again later...');
 	        return;
-	    }
-		// We update the video title with the value in the response
+	    }		// We update the video title with the value in the response
 		var response = JSON.parse(inResponse);
 		this.$.head.setHeadTitle(response.title);
 		this.$.head.setHeadDescription(response.description);

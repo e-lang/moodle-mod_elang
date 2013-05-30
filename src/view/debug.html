@@ -32,7 +32,7 @@
 		<script src="source/package.js" type="text/javascript"></script>
 
 	</head>
-	<body onload="document.getElementById('html').addEventListener('timeupdate',function(e){app.$.video.handleTimeUpdate();},false)">
+	<body onload="document.getElementById(app.$.video.$.myvideo.getAttribute('id')).addEventListener('timeupdate',function(e){app.$.video.handleTimeUpdate();},false)">
 	<!-- TODO : set the envent listener in Enyo kinds -->
 		<script>
 		var app=new App().renderInto(document.body);
