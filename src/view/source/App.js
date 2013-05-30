@@ -1,3 +1,4 @@
+//enyo.dispatcher.listen(document, "myEvent");
 // Main application structure
 enyo.kind({
 	name : "App",
@@ -16,28 +17,27 @@ enyo.kind({
 		]},
 		{tag:"div",classes:"well", components:[
 			{tag: "div", name: "body", classes:"row-fluid", components:[
-					{tag: "div", name: "span6", classes:"span6", components:[
-						// Video
-						{kind: "Video", name : "video"}
-					]},
-				
-					// Sequence list
-					{tag: "div", name: "span6", classes:"span6", components:[
-						{tag: "h1", content: "Liste."},
-						{kind: "Sequences", style: "height: 200px;"}
-					]}
+				{tag: "div", name: "span6", classes:"span6", components:[
+					// Video
+					{kind: "Video", name : "video"}
 				]},
-				
+				// Sequence list
+				{tag: "div", name: "span6", classes:"span6", components:[
+					{tag: "h1", content: "Liste."},
+					{kind: "Sequences", name: "sequences"}
+				]}
+			]},
 			// Exercise
 			{tag: "div", name: "footer", classes:"row-fluid", components:[
 				{tag: "div", name: "span12", classes:"span12", components:[
 					{tag: "h1", content: "footer."},
-					{kind: "elang.input", name:"input", style: "height: 300px;"}
+					{kind: "elang.input", name: "input"}
 				]}
 			]}
-		]}
+		]},
+			
+		
 	], 
-	
 	create: function(){
 		this.inherited(arguments);
 		this.getData();
@@ -64,8 +64,8 @@ enyo.kind({
 		if (!inResponse) { 
 	        alert('There is a problem when I try to get the title, please try again later...');
 	        return;
-	    }
-		// We update the video title with the value in the response
+	    }		// We update the video title with the value in the response
+
 		var response = JSON.parse(inResponse);
 		
 		this.$.head.setHeadTitle(response.title);

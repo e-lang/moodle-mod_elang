@@ -3,14 +3,14 @@ enyo.kind({
 		components: [		
 		{components:
 			[
-				/*{kind:'enyo.Scroller', vertical:'scroll'},
+				{kind:'enyo.Scroller', vertical:'scroll'},
 				{kind:"Button", classes:"btn", name:" Text", content: "Text", id:1, ontap:"buttonTapped"},
 				{kind:"Button", classes:"btn", name:" Input", content: "Input", id:2, ontap:"buttonTapped"},
 				{kind:"Button", classes:"btn", name:" Check", content: "Check", id:3, ontap:"buttonTapped"},
 				{kind:"Button", classes:"btn", name:" Help", content: "Help", id:4, ontap:"buttonTapped"},
 				{kind:"Button", classes:"btn", name:" Reset", content: "Reset", id:5, ontap:"buttonTapped"},
 				{kind:"Button", classes:"btn", name:" Render", content: "Render", id:6, ontap:"buttonTapped"},
-				{kind:"Button", classes:"btn", name:" ReplaceVideo", content: "TestListe", id:6, ontap:"updateDataInput"},*/
+				{kind:"Button", classes:"btn", name:" ReplaceVideo", content: "TestListe", id:6, ontap:"updateDataInput"},
 				
 				//{kind:"Button",  content:"Check", onclick:"buttonTapped"}
 				
@@ -88,6 +88,7 @@ enyo.kind({
 			{owner: this}
 		);
 		this.$.result.render();
+
 		this.$.result.render();
 	},
 
@@ -114,9 +115,13 @@ enyo.kind({
 	},
 	
 	reset: function() {
+
+		this.$.result.destroyComponents();			
+
 		this.$.result.destroyComponents();	
 		//faire aussi pour ceux créés : 
 		//this.destroyComponents();
+
 	},
 	
 	render: function() {
@@ -126,6 +131,7 @@ enyo.kind({
 		
 	checkTapped: function(inSender, inEvent) {
 		switch (inSender.id) {
+
 		case 100 :
 			//document.getElementById(28).setAttribute("enyo-input","control-group success");
 			document.getElementById(22).setAttribute("class", "control-group success");
@@ -139,7 +145,15 @@ enyo.kind({
 			break;
 		}
 	},
-	
+
+	handlers: {
+		onItemTapped : "itemTapped"
+	},
+	itemTapped:function(inSender,inEvent){
+		myContent = inEvent.originator.content;
+		alert(myContent+" button was tapped");
+		//this.addText.setContent(myContent);
+    }
 	
 });
 

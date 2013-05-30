@@ -15,12 +15,13 @@ enyo.kind({
 	updateData: function(){
 		this.$.videoTitle.content = this.headTitle;
 		this.$.videoTitle.render();
-		$('a').data('tooltip',false).attr('data-original-title', this.headDescription);
-		$("a").tooltip();
+		$('#'+this.$.videoTitle.getAttribute('id')).data('tooltip',false).attr('data-original-title', this.headDescription);
+		$('#'+this.$.videoTitle.getAttribute('id')).tooltip();
 	},
 	
 	create:function(){
 		this.inherited(arguments);
+		this.updateData();
 	}
 	
 	
