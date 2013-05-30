@@ -56,19 +56,18 @@ function elang_supports($feature)
  */
 function elang_add_instance(stdClass $elang, mod_elang_mod_form $mform = null)
 {
-	global $CFG, $DB;
-	require_once $CFG->libdir . '/resourcelib.php';
-	require_once $CFG->dirroot . '/mod/elang/locallib.php';
+	global $DB;
 
 	// Init some var :
-	$cmid = $elang->coursemodule;
 	$elang->timemodified = time();
 	$elang->timecreated = time();
 
 	// Storage of the main table of the module :
 	$elang->id = $DB->insert_record('elang', $elang);
 
-	// Storage of files from the filemanager (videos) :
+	// Storage of files
+	elang_save_files($elang);
+
 /*	$fs = get_file_storage();
 	$cmid = $data->coursemodule;
 	$draftitemid = $data->videos;
@@ -134,13 +133,6 @@ function elang_add_instance(stdClass $elang, mod_elang_mod_form $mform = null)
 	return $elang->id;
 }
 
-//This function write a string in a debug file at the root :
-function debug($str)
-{
-	$debug = fopen('/debug.txt', 'a');
-	fputs($debug,  $str . "\n");
-}
-
 /**
  * Updates an instance of the elang in the database
  *
@@ -152,15 +144,71 @@ function debug($str)
  * @param mod_elang_mod_form $mform
  * @return boolean Success/Fail
  */
-function elang_update_instance(stdClass $elang, mod_elang_mod_form $mform = null) {
+function elang_update_instance(stdClass $elang, mod_elang_mod_form $mform = null)
+{
 	global $DB;
 
 	$elang->timemodified = time();
 	$elang->id = $elang->instance;
 
-	# You may have to add extra stuff in here #
+	if ($DB->update_record('elang', $elang))
+	{
+		// Storage of files
+		elang_save_files($elang);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
 
-	return $DB->update_record('elang', $elang);
+/**
+ * Save files for an instance
+ */
+function elang_save_files(stdClass $elang) {
+	$id = $elang->id;
+	$cmid = $elang->coursemodule;
+	$context = context_module::instance($cmid);
+
+	// Storage of files from the filemanager (videos):
+	$draftitemid = $elang->videos;
+	if ($draftitemid)
+	{
+		file_save_draft_area_files(
+			$draftitemid,
+			$context->id,
+			'mod_elang',
+			'videos',
+			$id
+		);
+	}
+
+	// Storage of files from the filemanager (subtitle):
+	$draftitemid = $elang->subtitle;
+	if ($draftitemid)
+	{
+		file_save_draft_area_files(
+			$draftitemid,
+			$context->id,
+			'mod_elang',
+			'subtitle',
+			$id
+		);
+	}
+
+	// Storage of files from the filemanager (poster):
+	$draftitemid = $elang->poster;
+	if ($draftitemid)
+	{
+		file_save_draft_area_files(
+			$draftitemid,
+			$context->id,
+			'mod_elang',
+			'poster',
+			$id
+		);
+	}
 }
 
 /**
