@@ -40,12 +40,14 @@ enyo.kind({
 			//Remplissage du tableau des séquences (tabSequences)
 			for (i in listSequences){
 				this.tabSequences[i]=this.createComponent(
-						{kind:"Sequence",
-					id:listSequences[i].id,
-					titre:listSequences[i].titre,
-					debut:listSequences[i].debut,
-					fin:listSequences[i].fin,
-					 type:"notVerified"},
+					{
+						kind:"Sequence",
+						id:listSequences[i].id,
+						titre:listSequences[i].titre,
+						debut:listSequences[i].debut,
+						fin:listSequences[i].fin,
+						type: "notVerified"
+					},
 					{owner: this.tabSequences}
 				);
 			}
@@ -88,8 +90,9 @@ enyo.kind({
 				{
 					//Element cliquable
 					tag: "a",
+					classes: 'btn-link',
 					attributes: {
-						href:'#'
+						href:''
 					},
 					content: title,
 					ontap: 'changeTab'
@@ -121,6 +124,11 @@ enyo.kind({
 					tag:'td',
 					components: [
 						{
+							tag: "a",
+							classes: 'btn-link',
+							attributes: {
+								href:''
+							},
 							content: title
 						}
 					]
