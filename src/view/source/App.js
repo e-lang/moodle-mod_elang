@@ -3,7 +3,7 @@
 enyo.kind({
 	name : "App",
 	classes: "container-fluid",
-	style:"height: 200%;",
+	 style:"overflow:auto;",
 	handlers: {
 		onSequenceItemTapped : "sequenceTapped",
 		onRenderTapped : "renderTapped",
@@ -21,26 +21,26 @@ enyo.kind({
 			]}
 		]},
 		{tag:"div", classes:"well", components:[
-		{tag: "div", name: "body", classes:"row-fluid", components:[
-				{tag: "div", name: "video_span6", classes:"span6", components:[
-					// Video
-					{kind: "Video", name : "video"}
+			{tag: "div", name: "body", classes:"row-fluid", components:[
+					{tag: "div", name: "video_span6", classes:"span6", components:[
+						// Video
+						{kind: "Video", name : "video"}
+					]},
+				
+					// Sequence list
+					{tag: "div", name: "list_span6", classes:"span6", components:[
+						{tag: "h1", content: "Liste."},
+						{kind: "Sequences", name:"sequences"}
+					]}
 				]},
-			
-				// Sequence list
-				{tag: "div", name: "list_span6", classes:"span6", components:[
-					{tag: "h1", content: "Liste."},
-					{kind: "Sequences", name:"sequences"}
+				
+			// Exercise
+			{tag: "div", name: "footer", classes:"row-fluid", components:[
+				{tag: "div", name: "input_span12", classes:"span12", components:[
+					{tag: "h1", content: "footer."},
+					{kind: "elang.input", name:"input"}
 				]}
-			]},
-			
-		// Exercise
-		{tag: "div", name: "footer", classes:"row-fluid", components:[
-			{tag: "div", name: "input_span12", classes:"span12", components:[
-				{tag: "h1", content: "footer."},
-				{kind: "elang.input", name:"input"}
 			]}
-		]}
 		]}
 	], 
 	sequenceTapped:function(inSender,inEvent){
