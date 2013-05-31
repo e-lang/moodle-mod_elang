@@ -44,8 +44,10 @@ enyo.kind({
 		]}
 	], 
 	sequenceTapped:function(inSender,inEvent){
-		alert("Sequence n° "+this.$.sequences.getIdSequenceCourante());
-		//this.$.input.displaySequence(this.$.sequences.getIdSequenceCourante());
+		/*alert("Sequence id "+this.$.sequences.getIdSequenceCourante()+
+		" de "+this.$.sequences.getDebutSequenceCourante()+" a "+this.$.sequences.getFinSequenceCourante());*/
+		this.$.video.setSequence(this.$.sequences.getDebutSequenceCourante(),this.$.sequences.getFinSequenceCourante());
+		this.$.input.displaySequence(this.$.sequences.getIdSequenceCourante());	
     },
 	
 	helpTapped:function(inSender,inEvent){
