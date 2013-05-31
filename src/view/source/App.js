@@ -58,8 +58,7 @@ enyo.kind({
 		]}
 	], 
 	sequenceTapped:function(inSender,inEvent){
-		alert("Sequence n° "+this.$.sequences.getIdSequenceCourante());
-		//this.$.input.displaySequence(this.$.sequences.getIdSequenceCourante());
+		this.$.input.displaySequence(this.$.sequences.getIdSequenceCourante());
     },
 	
 	helpTapped:function(inSender,inEvent){
@@ -109,7 +108,11 @@ enyo.kind({
 		
 		// Call the function to update the children
 		this.$.head.updateData();
-		this.$.input.updateDataInput();
+
+		
+		this.$.input.setInputList(response.inputs);
+		// this.$.input.updateDataInput();
+
 		
 		this.$.sequences.updateSequences(response.sequences);
 
