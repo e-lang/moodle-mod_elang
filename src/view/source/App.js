@@ -91,7 +91,7 @@ enyo.kind({
 		this.$.head.setHeadDescription(response.description);
 		// Call the function to update the children
 		this.$.head.updateData();
-		
+	
 		//this.$.sequences.setListSequences(response.sequences);
 		this.$.sequences.updateSequences(response.sequences);
 
