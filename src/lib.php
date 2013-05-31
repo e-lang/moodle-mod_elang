@@ -474,7 +474,20 @@ function elang_pluginfile($course, $cm, $context, $filearea, array $args, $force
 
 	require_login($course, true, $cm);
 
-	send_file_not_found();
+	if (!has_capability('mod/elang:view', $context))
+	{
+		send_file_not_found();
+	}
+
+    $fs = get_file_storage();
+    $relativepath = implode('/', $args);
+    $fullpath = rtrim('/' . $context->id . '/mod_elang/' . $filearea . '/' . $relativepath, '/');
+    $file = $fs->get_file_by_hash(sha1($fullpath));
+    if (!$file)
+    {
+		send_file_not_found();
+    }
+	send_stored_file($file, 86400, 0, $forcedownload, $options);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
