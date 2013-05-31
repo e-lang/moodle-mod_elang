@@ -6,7 +6,7 @@ enyo.kind({
 	style:"overflow: auto;",
 	handlers: {
 		onSequenceItemTapped : "sequenceTapped",
-		onRenderTapped : "renderTapped",
+		//onRenderTapped : "renderTapped",
 		onHelpTapped : "helpTapped",	
 	},
 	components:[
@@ -50,14 +50,14 @@ enyo.kind({
 	
 	helpTapped:function(inSender,inEvent){
       alert("helpTapped");
-	  //this.$.sequences.setHelp();
+	  //this.$.sequences.setType('help');
     },
 	
-	renderTapped:function(inSender,inEvent){
-      alert("renderTapped");
-	  //this.$.sequences.setType();
+	// renderTapped:function(inSender,inEvent){
+      // alert("renderTapped");
+	  // //this.$.sequences.setType('verified');
 	  
-    },
+    // },
 	create: function(){
 		this.inherited(arguments);
 		this.getData();
