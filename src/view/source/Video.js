@@ -39,11 +39,11 @@ enyo.kind({
 			vid.currentTime=this.currentSequenceBegin;
 		}
 	},
-	// updateSubtitles:function(sequenceID,sequenceText){
-		// var vid=document.getElementById(this.$.myvideo.getAttribute('id'));
-		// var tracks=vid.textTracks;
-		// tracks[0].cues[sequenceID].text.processedCue=sequenceText;		
-	// },
+	updateSubtitles:function(sequenceID,sequenceText){
+		var vid=document.getElementById(this.$.myvideo.getAttribute('id'));
+		var tracks=vid.textTracks;
+		tracks[0].cues[sequenceID].text.processedCue=sequenceText;		
+	},
 	clearSource: function(){
 	},
 	setSequence : function(begin,end){
@@ -66,17 +66,6 @@ enyo.kind({
 		this.$.soustitre.setAttribute("srclang",this.sstitre[0][1]);
 		this.$.soustitre.setAttribute("type","text/vtt");
 		this.$.soustitre.setAttribute("default","default");
-		// for(var sour =1; sour < this.sstitre.length; sour++){
-			// this.$.myvideo.createComponent({
-				// tag: "track",
-				// attributes:{
-					// kind:"captions",
-					// src:this.sstitre[sour][0],
-					// type:"text/vtt",
-					// srclang:this.sstitre[sour][1]
-				// }
-			// });
-		// }
 		}
-		
+
 });
