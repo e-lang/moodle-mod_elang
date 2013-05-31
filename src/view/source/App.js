@@ -6,7 +6,7 @@ enyo.kind({
 	style:"overflow: auto;",
 	handlers: {
 		onSequenceItemTapped : "sequenceTapped",
-		onRenderTapped : "renderTapped",
+		//onRenderTapped : "renderTapped",
 		onHelpTapped : "helpTapped",	
 	},
 	components:[
@@ -58,19 +58,20 @@ enyo.kind({
 		]}
 	], 
 	sequenceTapped:function(inSender,inEvent){
-      alert("sequenceTapped");
-	  //this.$.input.setInput();
+		alert("Sequence n° "+this.$.sequences.getIdSequenceCourante());
+		//this.$.input.displaySequence(this.$.sequences.getIdSequenceCourante());
     },
 	
 	helpTapped:function(inSender,inEvent){
       alert("helpTapped");
-	  //this.$.sequences.setHelp();
+	  //this.$.sequences.setType('help');
     },
 	
-	renderTapped:function(inSender,inEvent){
-      alert("renderTapped");
-	  //this.$.sequences.setType();
-    },
+	// renderTapped:function(inSender,inEvent){
+      // alert("renderTapped");
+	  // //this.$.sequences.setType('verified');
+	  
+    // },
 	create: function(){
 		this.inherited(arguments);
 		this.getData();
@@ -97,7 +98,7 @@ enyo.kind({
 		if (!inResponse) { 
 			$('.modal').modal('toggle');
 	        return;
-	    }		
+	    }
 
 		var response = JSON.parse(inResponse);
 		
