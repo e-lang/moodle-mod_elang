@@ -6,7 +6,7 @@ enyo.kind({
 	style:"overflow: auto;",
 	handlers: {
 		onSequenceItemTapped : "sequenceTapped",
-		//onRenderTapped : "renderTapped",
+		onValidSequence : "sequenceValidated",
 		onHelpTapped : "helpTapped",	
 	},
 	components:[
@@ -29,7 +29,7 @@ enyo.kind({
 			
 				// Sequence list
 				{tag: "div", name: "list_span6", classes:"span6", components:[
-					{tag: "h1", content: "Liste."},
+					{tag: "h1", content: "Liste des séquences"},
 					{kind: "Sequences", name:"sequences"}
 				]}
 			]},
@@ -37,7 +37,7 @@ enyo.kind({
 		// Exercise
 		{tag: "div", name: "footer", classes:"row-fluid", components:[
 			{tag: "div", name: "input_span12", classes:"span12", components:[
-				{tag: "h1", content: "footer."},
+				{tag: "h1", content: "Exercice"},
 				{kind: "elang.input", name:"input"}
 			]}
 		]}
@@ -62,15 +62,14 @@ enyo.kind({
     },
 	
 	helpTapped:function(inSender,inEvent){
-      alert("helpTapped");
-	  //this.$.sequences.setType('help');
+	  this.$.sequences.setType('help');
     },
 	
-	// renderTapped:function(inSender,inEvent){
-      // alert("renderTapped");
-	  // //this.$.sequences.setType('verified');
-	  
-    // },
+	sequenceValidated:function(inSender,inEvent)
+	{
+      this.$.sequences.setType('verified');
+	},
+	
 	create: function(){
 		this.inherited(arguments);
 		this.getData();
@@ -111,8 +110,7 @@ enyo.kind({
 
 		
 		this.$.input.setInputList(response.inputs);
-		// this.$.input.updateDataInput();
-
+		
 		
 		this.$.sequences.updateSequences(response.sequences);
 

@@ -3,14 +3,14 @@ enyo.kind({
 		components: [		
 		{components:
 			[
-				{kind:'enyo.Scroller', vertical:'scroll'},
-				{kind:"Button", classes:"btn", name:" Text", content: "Text", id:1, ontap:"buttonTapped"},
-				{kind:"Button", classes:"btn", name:" Input", content: "Input", id:2, ontap:"buttonTapped"},
-				{kind:"Button", classes:"btn", name:" Check", content: "Check", id:3, ontap:"buttonTapped"},
-				{kind:"Button", classes:"btn", name:" Help", content: "Help", id:4, ontap:"buttonTapped"},
-				{kind:"Button", classes:"btn", name:" Reset", content: "Reset", id:5, ontap:"reset"},
-				{kind:"Button", classes:"btn", name:" Render", content: "Render", id:6, ontap:"buttonTapped"},
-				{kind:"Button", classes:"btn", name:" ReplaceVideo", content: "TestListe", id:6, ontap:"updateDataInput"},
+				// {kind:'enyo.Scroller', vertical:'scroll'},
+				// {kind:"Button", classes:"btn", name:" Text", content: "Text", id:1, ontap:"buttonTapped"},
+				// {kind:"Button", classes:"btn", name:" Input", content: "Input", id:2, ontap:"buttonTapped"},
+				// {kind:"Button", classes:"btn", name:" Check", content: "Check", id:3, ontap:"buttonTapped"},
+				// {kind:"Button", classes:"btn", name:" Help", content: "Help", id:4, ontap:"buttonTapped"},
+				// {kind:"Button", classes:"btn", name:" Reset", content: "Reset", id:5, ontap:"reset"},
+				// {kind:"Button", classes:"btn", name:" Render", content: "Render", id:6, ontap:"buttonTapped"},
+				// {kind:"Button", classes:"btn", name:" ReplaceVideo", content: "TestListe", id:6, ontap:"updateDataInput"},
 				
 				//{kind:"Button",  content:"Check", onclick:"buttonTapped"}
 				
@@ -26,8 +26,7 @@ enyo.kind({
 		gblID: '',
 		inputCpt: 0,
 		IdinputHelp:'',
-		totalCheck: 0,
-		totalHelp: 0
+		totalCheck: 0
 	},
 	
 
@@ -35,6 +34,7 @@ enyo.kind({
 	
 	displaySequence: function(id)
 	{
+		this.reset();
 		for (x in this.inputList)
 		{
 			sequence = this.inputList[x];
@@ -85,7 +85,6 @@ enyo.kind({
 		this.setInputCpt(0);
 		this.setIdinputHelp('');
 		this.setTotalCheck(0);
-		this.setTotalHelp(0);
 		
 		this.createComponent(
 			{ name:"result", components:[]}
@@ -136,7 +135,8 @@ enyo.kind({
 		//alert('i : ' + i + ', j : ' + j+ ', k : ' + k);
 		//alert(document.getElementById(id).getAttribute('value') + ' ? = ' + this.inputList[i].content[j].content);
 		//alert(gblID);		
-		this.help(i, k);		
+		this.help(i, k);
+		this.bubble('onHelpTapped');
 	},	
 	
 
@@ -200,6 +200,11 @@ enyo.kind({
 		//alert(response.check+"		base : "+response.answer+"	rep reçue:"+response.answer_received);
 		if(isOk == 'true')
 		{
+			this.totalCheck = this.totalCheck + 1;
+			if (this.totalCheck == this.inputCpt)
+			{
+				this.bubble('onValidSequence');
+			}
 			document.getElementById('d' + gblID).setAttribute('class', 'control-group success');
 			//On bloque également lorsque le check est OK
 			var child = document.getElementById('d' + gblID).firstChild;
