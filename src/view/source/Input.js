@@ -8,7 +8,7 @@ enyo.kind({
 				{kind:"Button", classes:"btn", name:" Input", content: "Input", id:2, ontap:"buttonTapped"},
 				{kind:"Button", classes:"btn", name:" Check", content: "Check", id:3, ontap:"buttonTapped"},
 				{kind:"Button", classes:"btn", name:" Help", content: "Help", id:4, ontap:"buttonTapped"},
-				{kind:"Button", classes:"btn", name:" Reset", content: "Reset", id:5, ontap:"buttonTapped"},
+				{kind:"Button", classes:"btn", name:" Reset", content: "Reset", id:5, ontap:"reset"},
 				{kind:"Button", classes:"btn", name:" Render", content: "Render", id:6, ontap:"buttonTapped"},
 				{kind:"Button", classes:"btn", name:" ReplaceVideo", content: "TestListe", id:6, ontap:"updateDataInput"},
 				
@@ -17,8 +17,8 @@ enyo.kind({
 			]
 		}/* a supprimper lors du push*/,
 		
-		{name:"result", kind: enyo.Control, components:[]}		
-	
+		{ name:"result", components:[]}		
+		//{kind: enyo.Control, name:"result", components:[]}	
 	],
 	
 	published: {
@@ -32,24 +32,6 @@ enyo.kind({
 	
 
 	
-	updateDataInput: function()
-	{
-		// for (i = 0; i < this.inputList.length; i++) 
-		// {
-			// for (j = 0; j < this.inputList[i].content.length; j++) 
-			// {
-				// switch(this.inputList[i].content[j].type) {
-				// case 'text' :
-					// this.addText(i, this.inputList[i].content[j].content);
-					// break;
-				// case 'input' :
-					// this.addInput(i, '', j, this.inputCpt);
-					// this.inputCpt = this.inputCpt + 1;
-					// break;
-				// }				
-			// }
-		// }	
-	},
 	
 	displaySequence: function(id)
 	{
@@ -64,10 +46,10 @@ enyo.kind({
 					switch(seq_content.type)
 					{
 						case 'text' :
-							this.addText(id, seq_content.content);
+							this.addText(id-1, seq_content.content);
 							break;
 						case 'input' :
-							this.addInput(id, '', y, this.inputCpt);
+							this.addInput(id-1, '', y, this.inputCpt);
 							this.inputCpt = this.inputCpt + 1;
 							break;
 					}
@@ -83,7 +65,7 @@ enyo.kind({
 	
 	addInput: function(noSec, content, ident, input_cpt) {
 		this.$.result.createComponent(		
-			{tag:"div", classes:"input-append", id: 'd'+ noSec + '_' + ident, components: [
+			{tag:'div', name :"divseq" ,classes:"input-append", id: 'd'+ noSec + '_' + ident, components: [
 				{kind:"Input", id:noSec + '_' + ident + '_' + input_cpt ,  name:"Render", value:content},
 				{tag:"button", classes:"btn btn-success", type:"button", ontap:"checkTapped", id:'c' + noSec + '_' + ident+ '_' + input_cpt, name:"Check", content:"Check"},
 				{tag:"button", classes:"btn btn-info",    type:"button", ontap:"helpTapped", id: 'h' + noSec + '_' + ident+ '_' + input_cpt, name:"Help",  content:"Help"},	
@@ -95,10 +77,22 @@ enyo.kind({
 
 	
 	reset: function() {
-		this.$.result.destroyComponents();		
-		//faire aussi pour ceux créés : 
-		this.destroyComponents();
+		//alert(this.$.result.getC);
+		
+		this.$.result.destroy();
+		
+		this.setGblID('');
+		this.setInputCpt(0);
+		this.setIdinputHelp('');
+		this.setTotalCheck(0);
+		this.setTotalHelp(0);
+		
+		this.createComponent(
+			{ name:"result", components:[]}
+		);
 		this.render();
+		
+		
 
 	},		
 		
@@ -116,10 +110,9 @@ enyo.kind({
 		//alert(document.getElementById(id).getAttribute('value') + ' ? = ' + this.inputList[i].content[j].content);
 		//alert(gblID);
 		//alert(document.getElementById(id).getAttribute('value'));
-		
-		alert(document.getElementById(id).getAttribute('value'));
+	
 		this.verify(document.getElementById(id).getAttribute('value'), i, k);
-		
+				
 		/*if(document.getElementById(id).getAttribute('value') == this.inputList[i].content[j].content)
 		{
 			document.getElementById('d'+id).setAttribute('class', 'control-group success');
@@ -140,10 +133,10 @@ enyo.kind({
 		var j = tabID[1];
 		var k = tabID[2];
 		gblID = i + '_' + j;
-		//alert('i : ' + i + ', j : ' + j);
+		//alert('i : ' + i + ', j : ' + j+ ', k : ' + k);
 		//alert(document.getElementById(id).getAttribute('value') + ' ? = ' + this.inputList[i].content[j].content);
 		//alert(gblID);		
-		this.help(document.getElementById(id).getAttribute('value'), i, k);		
+		this.help(i, k);		
 	},	
 	
 
@@ -172,11 +165,12 @@ enyo.kind({
         request.response(enyo.bind(this, "getVerifyResponse")); 
 		//makes the Ajax call with parameters
 		//alert(rep+"  "+seqId+" 	"+inputId);
-
+			
+		
 		request.go({task: 'check', answer:rep, seq_id:seqId, input_id:inputId}); 
 	},
 	
-	help: function(rep, seqId, inputId){
+	help: function(seqId, inputId){
 		// Request creation
 		var request = new enyo.Ajax({
 	    		url: document.URL,
@@ -210,7 +204,7 @@ enyo.kind({
 			//On bloque également lorsque le check est OK
 			var child = document.getElementById('d' + gblID).firstChild;
 			child.disabled = 'true';
-			while(child.nextSibling.toString() != null)
+			while(child.nextSibling != null)
 			{
 				child = child.nextSibling;
 				child.disabled = 'true';
@@ -241,7 +235,7 @@ enyo.kind({
 		{	
 			child.value=reponsehelp;
 			child.disabled = 'true';
-			while(child.nextSibling.toString() != null)
+			while(child.nextSibling != null)
 			{
 				child = child.nextSibling;
 				child.disabled = 'true';
