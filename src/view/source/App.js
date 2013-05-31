@@ -96,8 +96,7 @@ enyo.kind({
 		this.$.input.setInputList(response.inputs);
 		this.$.input.updateDataInput();
 		
-		//this.$.sequences.setListSequences(response.sequences);
-		//this.$.sequences.updateSequences(response.sequences);
+		this.$.sequences.updateSequences(response.sequences);
 
 	}
 
