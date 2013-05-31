@@ -15,3 +15,7 @@ A moodle module for learning language published under the [CeCILL-B licence](htt
   and you should find that this elang has been added to the list of
   installed modules.
 
+Licenses
+--------
+
+* Icon designed by Benjamin D. Esham (Public domain), via [Wikimedia Commons] (http://commons.wikimedia.org/wiki/File:Chat_bubbles.svg)

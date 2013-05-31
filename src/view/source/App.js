@@ -3,6 +3,7 @@
 enyo.kind({
 	name : "App",
 	classes: "container-fluid",
+	style:"height: 200%;",
 	handlers: {
 		onSequenceItemTapped : "sequenceTapped",
 		onRenderTapped : "renderTapped",
@@ -91,9 +92,12 @@ enyo.kind({
 		this.$.head.setHeadDescription(response.description);
 		// Call the function to update the children
 		this.$.head.updateData();
-	
+		
+		this.$.input.setInputList(response.inputs);
+		this.$.input.updateDataInput();
+		
 		//this.$.sequences.setListSequences(response.sequences);
-		this.$.sequences.updateSequences(response.sequences);
+		//this.$.sequences.updateSequences(response.sequences);
 
 	}
 

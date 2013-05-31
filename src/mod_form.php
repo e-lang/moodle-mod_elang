@@ -6,10 +6,10 @@
  * It uses the standard core Moodle formslib. For more info about them, please
  * visit: http://docs.moodle.org/en/Development:lib/formslib.php
  *
- * @package     mod
+ * @package	 mod
  * @subpackage  elang
  * @copyright   2013 University of La Rochelle, France
- * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ * @license	 http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -85,7 +85,8 @@ class mod_elang_mod_form extends moodleform_mod
 			'poster',
 			get_string('poster', 'elang'),
 			null,
-			array('subdirs' => 0, 'maxbytes' => $config->postermaxsize, 'maxfiles' => 1, 'accepted_types' => array('image')));
+			array('subdirs' => 0, 'maxbytes' => $config->postermaxsize, 'maxfiles' => 1, 'accepted_types' => array('image'))
+		);
 		$mform->addHelpButton('poster', 'poster', 'elang');
 
 		// Add standard elements, common to all modules
@@ -93,5 +94,48 @@ class mod_elang_mod_form extends moodleform_mod
 
 		// Add standard buttons, common to all modules
 		$this->add_action_buttons();
+	}
+
+	/**
+	 * Preprocess data before creating form
+	 *
+	 * @param   array  &$default_values  Array of default values
+	 *
+	 * @return  void
+	 */
+	public function data_preprocessing(&$default_values)
+	{
+		if ($this->current->instance)
+		{
+			$draftitemid = file_get_submitted_draft_itemid('videos');
+			file_prepare_draft_area(
+				$draftitemid,
+				$this->context->id,
+				'mod_elang',
+				'videos',
+				$this->current->id
+			);
+			$default_values['videos'] = $draftitemid;
+
+			$draftitemid = file_get_submitted_draft_itemid('subtitle');
+			file_prepare_draft_area(
+				$draftitemid,
+				$this->context->id,
+				'mod_elang',
+				'subtitle',
+				$this->current->id
+			);
+			$default_values['subtitle'] = $draftitemid;
+
+			$draftitemid = file_get_submitted_draft_itemid('poster');
+			file_prepare_draft_area(
+				$draftitemid,
+				$this->context->id,
+				'mod_elang',
+				'poster',
+				$this->current->id
+			);
+			$default_values['poster'] = $draftitemid;
+		}
 	}
 }
