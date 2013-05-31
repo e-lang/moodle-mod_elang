@@ -22,7 +22,9 @@ enyo.kind({
 	],
 	
 	published: {
-		inputList: ''
+		inputList: '',
+		gblID: '',
+		inputCpt: 0
 	},
 	
 
@@ -38,111 +40,66 @@ enyo.kind({
 					this.addText(i, this.inputList[i].content[j].content);
 					break;
 				case 'input' :
-					this.addInput(i, this.inputList[i].content[j].content, this.inputList[i].content[j].id);
+					this.addInput(i, '', j, this.inputCpt);
+					this.inputCpt = this.inputCpt + 1;
 					break;
 				}				
 			}
 		}	
 	},
 	
-
-	buttonTapped: function(inSender, inEvent) {
-		
-		switch (inSender.id) {
-		case 1 : 
-			this.addText(10,"The button was tapped");
-			break;
-		case 2 : 
-			this.addInput();
-			break;
-		case 3 : 
-			this.addTextCheck(11, "check");
-			break;
-		case 4 : 
-			this.addTextHelp(12, "help");
-			break;
-		case 5 : 
-			this.reset();
-			break;		
-		case 6 : 
-			this.render();
-			break;		
-		default :
-			alert("autre");
-			break;
-		}
-	},
 	
 	addText: function(noSec, text) {
 		this.$.result.createComponent({tag:"p", content: text });
 		this.$.result.render();	
 	},
 	
-	addInput: function(noSec, content, ident) {
+	addInput: function(noSec, content, ident, input_cpt) {
 		this.$.result.createComponent(		
-			{tag:"div", classes:"input-append", id:ident+100, components: [
-				{kind:"Input", id:ident+101, classes: "span8",type:'text', value:content},
-				{tag:"button", classes:"btn btn-success", type:"button", ontap:"checkTapped", id:ident+102, name:"Check", content:"Check"},
-				{tag:"button", classes:"btn btn-info",  type:"button", ontap:"checkTapped", id:ident+103, name:"Help", content:"Help"},	
+			{tag:"div", classes:"input-append", id: 'd'+ noSec + '_' + ident, components: [
+				{kind:"Input", id:noSec + '_' + ident + '_' + input_cpt ,  name:"Render", value:content},
+				{tag:"button", classes:"btn btn-success", type:"button", ontap:"checkTapped", id:'c' + noSec + '_' + ident+ '_' + input_cpt, name:"Check", content:"Check"},
+				{tag:"button", classes:"btn btn-info",    type:"button", ontap:"helpTapped", id: 'h' + noSec + '_' + ident+ '_' + input_cpt, name:"Help",  content:"Help"},	
 			]},
 			{owner: this}
 		);
 		this.$.result.render();
 	},
 
-	addTextCheck: function(noSec, text) {
-		this.$.result.createComponent(
-			{tag:"div", classes:"control-group success", components:
-			[
-				{kind:"Input", classes:"inputSuccess", name:"Render", value:text}
-			]}				
-		);
-		
-		//this.$.result.createComponent({tag:"p", classes:"text-success", content: text});
-		this.$.result.render();	
-	},
-	
-	addTextHelp: function(noSec, text) {	
-		this.$.result.createComponent(
-			{tag:"div",  components:
-			[
-				{kind:"Input", classes:"inputInfo", name:"Render", value:text}
-			]}
-		);
-		this.$.result.render();	
-	},
 	
 	reset: function() {
-
-		this.$.result.destroyComponents();			
-
-		this.$.result.destroyComponents();	
+		this.$.result.destroyComponents();		
 		//faire aussi pour ceux créés : 
-		//this.destroyComponents();
+		this.destroyComponents();
+		this.render();
 
+	},		
+		
+	checkTapped: function(inSender, inEvent) {		
+		var id = inSender.id.substr(1);//supprimer le c
+		var tabID = id.split("_");
+		var i = tabID[0];
+		var j = tabID[1];
+		var k = tabID[2];
+		gblID = i + '_' + j;
+		//alert('i : ' + i + ', j : ' + j);
+		//alert(document.getElementById(id).getAttribute('value') + ' ? = ' + this.inputList[i].content[j].content);
+		//alert(gblID);
+		this.verify(document.getElementById(id).getAttribute('value'), i, k);
+		/*if(document.getElementById(id).getAttribute('value') == this.inputList[i].content[j].content)
+		{
+			document.getElementById('d'+id).setAttribute('class', 'control-group success');
+		}
+		else
+		{
+			document.getElementById('d'+id).setAttribute('class', 'control-group error');
+			this.bubble(onCheckTapped);
+		}*/
+		
 	},
 	
-	render: function() {
-		this.$.result.render();	
-	},
-		
-		
-	checkTapped: function(inSender, inEvent) {
-		switch (inSender.id) {
-
-		case 100 :
-			//document.getElementById(28).setAttribute("enyo-input","control-group success");
-			document.getElementById(22).setAttribute("class", "control-group success");
-			//alert("Check");
-			break;
-		case 101 :
-			alert("Help");
-			break;
-		default:
-			alert("Pas encore traité");
-			break;
-		}
-	},
+	
+	
 
 	handlers: {
 		onItemTapped : "itemTapped"
@@ -151,7 +108,45 @@ enyo.kind({
 		myContent = inEvent.originator.content;
 		alert(myContent+" button was tapped");
 		//this.addText.setContent(myContent);
-    }
+    },
+	
+	// Function to get the video data 
+	verify: function(rep, seqId, inputId){
+		// Request creation
+		var request = new enyo.Ajax({
+	    		url: document.URL,
+				// url = "serveur.php";
+	    		method: "POST", //"GET" or "POST"
+	    		handleAs: "text", //"json", "text", or "xml"
+	    	});	
+
+		//tells Ajax what the callback function is
+        request.response(enyo.bind(this, "getVerifyResponse")); 
+		//makes the Ajax call with parameters
+		//alert(rep+"  "+seqId+" 	"+inputId);
+		request.go({task: 'check', answer:rep, seq_id:seqId, input_id:inputId}); 
+	},
+	
+	getVerifyResponse: function(inRequest, inResponse){
+		// If there is nothing in the response then return early.
+		if (!inResponse) { 
+	        alert('There is a problem, please try again later...');
+	        return;
+	    }		
+		
+		//TODO gestion reponse
+		var response = JSON.parse(inResponse);
+		
+		// Broadcast the data to the children fields 
+		var isOk = (response.check);
+		//alert(response.check+"		base : "+response.answer+"	rep reçue:"+response.answer_received);
+		if(isOk == 'true')
+			document.getElementById('d' + gblID).setAttribute('class', 'control-group success');
+		else
+			document.getElementById('d' + gblID).setAttribute('class', 'control-group error');
+			
+
+	}
 	
 });
 
