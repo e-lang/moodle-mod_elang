@@ -44,8 +44,7 @@ enyo.kind({
 		]}
 	], 
 	sequenceTapped:function(inSender,inEvent){
-		alert("Sequence n° "+this.$.sequences.getIdSequenceCourante());
-		//this.$.input.displaySequence(this.$.sequences.getIdSequenceCourante());
+		this.$.input.displaySequence(this.$.sequences.getIdSequenceCourante());
     },
 	
 	helpTapped:function(inSender,inEvent){
@@ -95,7 +94,7 @@ enyo.kind({
 		this.$.head.updateData();
 		
 		this.$.input.setInputList(response.inputs);
-		this.$.input.updateDataInput();
+		// this.$.input.updateDataInput();
 		
 		this.$.sequences.updateSequences(response.sequences);
 

@@ -34,23 +34,47 @@ enyo.kind({
 	
 	updateDataInput: function()
 	{
-		for (i = 0; i < this.inputList.length; i++) 
-		{
-			for (j = 0; j < this.inputList[i].content.length; j++) 
-			{
-				switch(this.inputList[i].content[j].type) {
-				case 'text' :
-					this.addText(i, this.inputList[i].content[j].content);
-					break;
-				case 'input' :
-					this.addInput(i, '', j, this.inputCpt);
-					this.inputCpt = this.inputCpt + 1;
-					break;
-				}				
-			}
-		}	
+		// for (i = 0; i < this.inputList.length; i++) 
+		// {
+			// for (j = 0; j < this.inputList[i].content.length; j++) 
+			// {
+				// switch(this.inputList[i].content[j].type) {
+				// case 'text' :
+					// this.addText(i, this.inputList[i].content[j].content);
+					// break;
+				// case 'input' :
+					// this.addInput(i, '', j, this.inputCpt);
+					// this.inputCpt = this.inputCpt + 1;
+					// break;
+				// }				
+			// }
+		// }	
 	},
 	
+	displaySequence: function(id)
+	{
+		for (x in this.inputList)
+		{
+			sequence = this.inputList[x];
+			if (sequence.seq_id == id)
+			{
+				for ( y in sequence.content)
+				{
+					seq_content = sequence.content[y];
+					switch(seq_content.type)
+					{
+						case 'text' :
+							this.addText(id, seq_content.content);
+							break;
+						case 'input' :
+							this.addInput(id, '', y, this.inputCpt);
+							this.inputCpt = this.inputCpt + 1;
+							break;
+					}
+				}
+			}
+		}
+	},
 	
 	addText: function(noSec, text) {
 		this.$.result.createComponent({tag:"p", content: text });
@@ -79,6 +103,8 @@ enyo.kind({
 	},		
 		
 	checkTapped: function(inSender, inEvent) {		
+	
+		//alert(inSender.id);
 		var id = inSender.id.substr(1);//supprimer le c
 		var tabID = id.split("_");
 		var i = tabID[0];
@@ -90,6 +116,8 @@ enyo.kind({
 		//alert(document.getElementById(id).getAttribute('value') + ' ? = ' + this.inputList[i].content[j].content);
 		//alert(gblID);
 		//alert(document.getElementById(id).getAttribute('value'));
+		
+		alert(document.getElementById(id).getAttribute('value'));
 		this.verify(document.getElementById(id).getAttribute('value'), i, k);
 		
 		/*if(document.getElementById(id).getAttribute('value') == this.inputList[i].content[j].content)
