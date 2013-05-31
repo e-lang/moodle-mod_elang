@@ -159,11 +159,16 @@ enyo.kind({
 			if(this.tabSequences[i].id ==this.idSequenceCourante)
 			{
 				this.tabSequences[i].type=type;
+				
+				var status;
+				if(type=='notVerified') {status = 'error';}
+				else if(type=='verified')  {status = 'success';}
+				else if(type=='help')  {status = 'warning';}		
+		
+				var ligne = document.getElementById('app_sequences_'+this.tabSequences[i].id);
+				ligne.className = status;
 			}
 		}
-		// verified, help
-		this.render();
-		// mettre à jour
 	}
 });
 
