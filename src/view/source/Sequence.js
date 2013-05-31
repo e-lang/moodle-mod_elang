@@ -5,9 +5,8 @@ enyo.kind({
 
 	
 	published:{
-		idSequence : [],//sequence courante
 		tabSequences : [],
-		elementCourant : null
+		idSequenceCourante : null // id sequence courante
 	},
 	components: [
 	{
@@ -48,9 +47,8 @@ enyo.kind({
 	},
 
     sequenceItemTapped:function(inSender,inEvent){
+		this.idSequenceCourante = inSender.name;
 		this.bubble("onSequenceItemTapped",inEvent);
-		elementCourant = inSender;
-		//alert(inEvent.originator);
     },
 	
 	createTab: function(title){
@@ -140,7 +138,7 @@ enyo.kind({
 				if (typeof (this.tabSequences[nbId]) != 'undefined') {
 					this.titre = this.tabSequences[nbId].titre;	
 					this.newtitre = (this.titre.length > 100)?this.titre.substring(0,97)+"...":this.titre;
-					this.createSequence('id'+s, this.newtitre, this.tabSequences[nbId].type);
+					this.createSequence(this.tabSequences[nbId].id, this.newtitre, this.tabSequences[nbId].type);
 				}
 			}
 			this.render();
@@ -148,7 +146,13 @@ enyo.kind({
 	
 	setType: function(type)
 	{
-		elementCourant.$.type=type;
+		for (i in this.tabSequences)
+		{
+			if(this.tabSequences[i].id ==this.idSequenceCourante)
+			{
+				this.tabSequences[i].type=type;
+			}
+		}
 		// verified, help
 		this.render();
 		// mettre à jour

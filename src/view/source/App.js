@@ -45,6 +45,7 @@ enyo.kind({
 	], 
 	sequenceTapped:function(inSender,inEvent){
       alert("sequenceTapped");
+	 this.$.sequences.setType('verified');
 	  //this.$.input.setInput();
     },
 	
@@ -56,6 +57,7 @@ enyo.kind({
 	renderTapped:function(inSender,inEvent){
       alert("renderTapped");
 	  //this.$.sequences.setType();
+	  
     },
 	create: function(){
 		this.inherited(arguments);
@@ -97,7 +99,7 @@ enyo.kind({
 		this.$.input.updateDataInput();
 		
 		//this.$.sequences.setListSequences(response.sequences);
-		//this.$.sequences.updateSequences(response.sequences);
+		this.$.sequences.updateSequences(response.sequences);
 
 	}
 
