@@ -21,9 +21,12 @@
         <script src="lib/bootstrap/js/bootstrap-modal.js" type="text/javascript"></script>
 		
 		<!-- Include Captionator -->
+		
 		<script type="text/javascript" src="lib/captionator/js/captionator.js"></script>
 		<script type="text/javascript" src="lib/captionator/js/captionator-example-api.js"></script>
-		
+		<script type="text/javascript">
+			
+		</script>
 		<!-- Video -->
 		<!--<link href="assets/css/video-default.css" rel="stylesheet">
 		<script type="text/javascript" src="assets/js/jquery-1.8.1.min.js"></script>
@@ -33,10 +36,10 @@
 		<script src="source/package.js" type="text/javascript"></script>
 
 	</head>
-	<body onload="document.getElementById(app.$.video.$.myvideo.getAttribute('id')).addEventListener('timeupdate',function(e){app.$.video.handleTimeUpdate();},false)">
+	<body onload="captionator.captionify();document.getElementById(app.$.video.$.myvideo.getAttribute('id')).addEventListener('timeupdate',function(e){app.$.video.handleTimeUpdate();},false);">
 	<!-- TODO : set the envent listener in Enyo kinds -->
 		<script>
-		var app=new App().renderInto(document.body);
+			var app=new App().renderInto(document.body);
 		</script>
 	</body>
 </html>
