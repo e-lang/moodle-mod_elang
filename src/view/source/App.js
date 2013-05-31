@@ -3,7 +3,7 @@
 enyo.kind({
 	name : "App",
 	classes: "container-fluid",
-	style:"height: 200%;",
+	style:"overflow: auto;",
 	handlers: {
 		onSequenceItemTapped : "sequenceTapped",
 		onRenderTapped : "renderTapped",
