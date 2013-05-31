@@ -33,12 +33,14 @@ enyo.kind({
 			
 			for (i in listSequences){
 				this.tabSequences[i]=this.createComponent(
-						{kind:"Sequence",
-					id:listSequences[i].id,
-					titre:listSequences[i].titre,
-					debut:listSequences[i].debut,
-					fin:listSequences[i].fin,
-					 type:"notVerified"},
+					{
+						kind:"Sequence",
+						id:listSequences[i].id,
+						titre:listSequences[i].titre,
+						debut:listSequences[i].debut,
+						fin:listSequences[i].fin,
+						type: "notVerified"
+					},
 					{owner: this.tabSequences}
 				);
 			}
@@ -59,8 +61,9 @@ enyo.kind({
 			components: [
 				{
 					tag: "a",
+					classes: 'btn-link',
 					attributes: {
-						href:'#'
+						href:''
 					},
 					content: title,
 					ontap: 'changeTab'
@@ -86,6 +89,11 @@ enyo.kind({
 					tag:'td',
 					components: [
 						{
+							tag: "a",
+							classes: 'btn-link',
+							attributes: {
+								href:''
+							},
 							content: title
 						}
 					]
@@ -151,11 +159,16 @@ enyo.kind({
 			if(this.tabSequences[i].id ==this.idSequenceCourante)
 			{
 				this.tabSequences[i].type=type;
+				
+				var status;
+				if(type=='notVerified') {status = 'error';}
+				else if(type=='verified')  {status = 'success';}
+				else if(type=='help')  {status = 'warning';}		
+		
+				var ligne = document.getElementById('app_sequences_'+this.tabSequences[i].id);
+				ligne.className = status;
 			}
 		}
-		// verified, help
-		this.render();
-		// mettre à jour
 	}
 });
 
