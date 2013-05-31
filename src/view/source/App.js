@@ -44,9 +44,8 @@ enyo.kind({
 		]}
 	], 
 	sequenceTapped:function(inSender,inEvent){
-      alert("sequenceTapped");
-	 this.$.sequences.setType('verified');
-	  //this.$.input.setInput();
+		alert("Sequence n° "+this.$.sequences.getIdSequenceCourante());
+		//this.$.input.displaySequence(this.$.sequences.getIdSequenceCourante());
     },
 	
 	helpTapped:function(inSender,inEvent){
@@ -85,7 +84,7 @@ enyo.kind({
 		if (!inResponse) { 
 	        alert('There is a problem when I try to get the title, please try again later...');
 	        return;
-	    }		// We update the video title with the value in the response
+	    }
 
 		var response = JSON.parse(inResponse);
 		
@@ -98,7 +97,6 @@ enyo.kind({
 		this.$.input.setInputList(response.inputs);
 		this.$.input.updateDataInput();
 		
-		//this.$.sequences.setListSequences(response.sequences);
 		this.$.sequences.updateSequences(response.sequences);
 
 	}
