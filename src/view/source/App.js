@@ -114,8 +114,8 @@ enyo.kind({
 		
 		this.$.input.setInputList(response.inputs);
 		
-		
-		this.$.sequences.updateSequences(response.sequences);
+		// Construct sequences object
+		this.$.sequences.createSequences(response.sequences);
 
 		// Construct video object
 		for (var source in response.sources)

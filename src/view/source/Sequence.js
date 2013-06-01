@@ -34,23 +34,20 @@ enyo.kind({
 	Méthode permettant l'initialisation des séquences 
 	et le remplissage du tableau des séquences (tabSequences)
 	*/
-	updateSequences:function(listSequences){
-		if(typeof(listSequences)!='undefined')
-		{
+	createSequences: function(list) {
 			//Remplissage du tableau des séquences (tabSequences)
-			for (i in listSequences){
+			for (var i in list){
 				this.tabSequences[i]=this.createComponent(
 					{
-						kind:"Sequence",
-						id:listSequences[i].id,
-						titre:listSequences[i].titre,
-						debut:listSequences[i].debut,
-						fin:listSequences[i].fin,
+						kind:"Elang.Sequence",
+						id:list[i].id,
+						titre:list[i].titre,
+						debut:list[i].debut,
+						fin:list[i].fin,
 						type: "notVerified"
 					},
 					{owner: this.tabSequences}
 				);
-			}
 		}
 		
 		//Initialisation des séquences et du tableau
@@ -85,7 +82,7 @@ enyo.kind({
 	
 		this.$.listPagination.createComponent({
 			tag:'li',
-			class:'active',
+			classes:'active',
 			components: [
 				{
 					//Element cliquable
@@ -220,7 +217,7 @@ enyo.kind({
 });
 
 enyo.kind({
-	name:"Sequence",
+	name:"Elang.Sequence",
 	published:{
 		id : null,
 		titre : null,

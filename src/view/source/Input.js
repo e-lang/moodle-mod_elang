@@ -31,6 +31,7 @@ enyo.kind({
 			sequence = this.inputList[x];
 			if (sequence.seq_id == id)// lors qu'on se positonne sur la bonne
 			{
+				this.setTitle();
 				for (y in sequence.content)
 				{
 					// On traite chaque contenu en fonction de son type
@@ -50,6 +51,62 @@ enyo.kind({
 				}
 			}
 		}
+	},
+
+	setTitle: function () {
+		this.$.result.createComponent(
+		    {
+		    	tag: 'span',
+		    	classes: 'btn-toolbar',
+		    	components: [
+		    		{
+						classes: 'btn-group',
+						components: [
+							{
+								tag: 'a',
+								ontap: 'essai',
+								classes: 'btn',
+								attributes: {
+									href: '#'
+								},
+								components: [
+									{
+										tag: 'i',
+										classes: 'icon-play'
+									}
+								]
+							},
+							{
+								tag: 'a',
+								classes: 'btn',
+								attributes: {
+									href: '#'
+								},
+								components: [
+									{
+										tag: 'i',
+										classes: 'icon-pause'
+									},
+								]
+							},
+							{
+								tag: 'a',
+								classes: 'btn',
+								attributes: {
+									href: '#'
+								},
+								components: [
+									{
+										tag: 'i',
+										classes: 'icon-repeat'
+									},
+								]
+							}
+			    		]
+			    	}
+		    	]
+		    }
+		);
 	},
 	
 	// Fonction utilisée pour ajouter du texte au résult
