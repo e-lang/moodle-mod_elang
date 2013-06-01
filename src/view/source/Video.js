@@ -1,71 +1,104 @@
-//enyo.dispatcher.listen(document, "timeupdate",function(){alert("ok");});
-var ajaxRequest = [[2.1,16.1],[16.1,20.1],[20.1,29.0],[30.1,38.306],[38.5,44.5],[49.5,55]];
-var soustitreajax = ["arduino-en.vtt","en_UK"];
-var videoajax = ["http://captionatorjs.com/git/video/arduino.ogv"];//
-//var videoajax=["mov_bbb.mp4","mov_bbb.mp4"];
-//enyo.dispatcher.listen(document, "myEvent");
-//variable est à true si c'est la première fois que l'on joue la video
-// var myvid=document.getElementById(this.$.myvideo.getAttribute('id'));
-
-//Toute l'application est encapsulée dans ce kind
+/**
+ * Kind video
+ */
 enyo.kind({
-	name: "Video",
-	source:videoajax, 
-	sstitre : [soustitreajax],
-	fit: true,
-	components:[
-	{name: "myvideo",
-			tag: "video controls",
-			content: "Your user agent does not support the HTML5 Video element.",
-			components:[
-				{
-					name:"soustitre",
-					tag: "track",
-					attributes:{
-						kind:"captions"
-					}
-				}	
-			]
-		}
-	],
-	published:{
+	name: "Elang.Video",
+
+	published: {
+		poster: '',
+		track: '',
+		language: '',
 		currentSequenceBegin:0,
-		currentSequenceEnd:Infinity
+		end:Infinity
 	},
+
+	tag: "video",
+
+	content: "Your user agent does not support the HTML5 Video element.",
+
+	attributes: {controls: "controls"},
+
+	classes: "elang",
+
+	components:[
+		{
+			name:"track",
+			tag: "track",
+			attributes:{
+				kind: 'captions',
+				type: 'text/vtt',
+				default: 'default'
+			}
+		}	
+	],
+
 	handleTimeUpdate:function(){
-		var vid=document.getElementById(this.$.myvideo.getAttribute('id'));
-		if (vid.currentTime >= this.currentSequenceEnd || vid.currentTime < this.currentSequenceBegin){
+		var vid=document.getElementById(this.getAttribute('id'));
+		if (vid.currentTime >= this.end || vid.currentTime < this.currentSequenceBegin){
 			vid.pause();
 			vid.currentTime=this.currentSequenceBegin;
 		}
 	},
+
+	play: function() {
+		this.end = Infinity;
+	},
+
 	updateSubtitles:function(sequenceID,sequenceText){
-		var vid=document.getElementById(this.$.myvideo.getAttribute('id'));
+		var vid=document.getElementById(this.getAttribute('id'));
 		var tracks=vid.textTracks;
 		tracks[0].cues[sequenceID].text.processedCue=sequenceText;		
 	},
-	clearSource: function(){
+
+	clearSource: function() {
 	},
+
 	setSequence : function(begin,end){
 		this.currentSequenceBegin=begin;
-		this.currentSequenceEnd=end;
-		var myvid = document.getElementById(this.$.myvideo.getAttribute('id'));
+		this.end=end;
+		var myvid = document.getElementById(this.getAttribute('id'));
 		myvid.currentTime=this.currentSequenceBegin;
 	//	myvid.play();
 	},
-		/*function d'initialisation de la balise*/
-	create : function(){
-		this.inherited(arguments);
-		for(var sour in this.source){
-			this.$.myvideo.createComponent({
-				tag: "source",
-				attributes:{src:this.source[sour]}
-			});
-		}
-		this.$.soustitre.setAttribute("src",this.sstitre[0][0]);
-		this.$.soustitre.setAttribute("srclang",this.sstitre[0][1]);
-		this.$.soustitre.setAttribute("type","text/vtt");
-		this.$.soustitre.setAttribute("default","default");
-		}
 
+	/**
+	 * Method to add a source to the video object
+	 *
+	 * @param   src   string  URL of the source
+	 * @param   type  string  Mime type of the source
+	 */
+	addSource: function(src, type) {
+		this.createComponent({
+			tag: "source",
+			attributes: {src: src, type: type}
+		});
+		return this;
+	},
+
+	/**
+	 * Method to detect a change in the poster property
+	 *
+	 * @param   oldValue  string  The poster old value
+	 */
+	posterChanged: function (oldValue) {
+		this.setAttribute('poster', this.poster);
+	},
+
+	/**
+	 * Method to detect a change in the track source
+	 *
+	 * @param   oldValue  string  The track source old value
+	 */
+	trackChanged: function (oldValue) {
+		this.$.track.setAttribute('src', this.track);
+	},
+
+	/**
+	 * Method to detect a change in the track language
+	 *
+	 * @param   oldValue  string  The track language old value
+	 */
+	languageChanged: function (oldValue) {
+		this.$.track.setAttribute('srclang', this.language);
+	}
 });
