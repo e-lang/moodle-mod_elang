@@ -24,7 +24,7 @@ enyo.kind({
 		{tag: "div", name: "body", classes:"row-fluid", components:[
 				{tag: "div", name: "video_span6", classes:"span6", components:[
 					// Video
-					{kind: "Video", name : "video"}
+					{kind: "Elang.Video", name : "video"}
 				]},
 			
 				// Sequence list
@@ -83,7 +83,7 @@ enyo.kind({
 	getData: function(){
 		// Request creation
 		var request = new enyo.Ajax({
-	    		url: document.URL,
+	    		url: 'server.php', //document.URL,
 	    		method: "POST", //"GET" or "POST"
 	    		handleAs: "text", //"json", "text", or "xml"
 	    	});	
@@ -117,6 +117,19 @@ enyo.kind({
 		
 		this.$.sequences.updateSequences(response.sequences);
 
+		// Construct video object
+		for (var source in response.sources)
+		{
+			this.$.video.addSource(response.sources[source].url, response.sources[source].type);
+		}
+		this.$.video.render();
+
+		if (response.poster)
+		{
+			this.$.video.setPoster(response.poster);
+		}
+		this.$.video.setTrack(response.track);
+		this.$.video.setLanguage(response.language);
 	}
 
 });
