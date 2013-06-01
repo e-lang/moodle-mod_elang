@@ -4,7 +4,8 @@
 enyo.kind({
 	name: "Elang.Video",
 
-	published: {
+	published:
+	{
 		poster: '',
 		track: '',
 		language: '',
@@ -20,11 +21,13 @@ enyo.kind({
 
 	classes: "elang",
 
-	components:[
+	components:
+	[
 		{
 			name:"track",
 			tag: "track",
-			attributes:{
+			attributes:
+			{
 				kind: 'captions',
 				type: 'text/vtt',
 				default: 'default'
@@ -32,28 +35,34 @@ enyo.kind({
 		}	
 	],
 
-	handleTimeUpdate:function(){
+	handleTimeUpdate:function()
+	{
 		var vid=document.getElementById(this.getAttribute('id'));
-		if (vid.currentTime >= this.end || vid.currentTime < this.currentSequenceBegin){
+		if (vid.currentTime >= this.end || vid.currentTime < this.currentSequenceBegin)
+		{
 			vid.pause();
 			vid.currentTime=this.currentSequenceBegin;
 		}
 	},
 
-	play: function() {
+	play: function()
+	{
 		this.end = Infinity;
 	},
 
-	updateSubtitles:function(sequenceID,sequenceText){
+	updateSubtitles:function(sequenceID,sequenceText)
+	{
 		var vid=document.getElementById(this.getAttribute('id'));
 		var tracks=vid.textTracks;
 		tracks[0].cues[sequenceID].text.processedCue=sequenceText;		
 	},
 
-	clearSource: function() {
+	clearSource: function()
+	{
 	},
 
-	setSequence : function(begin,end){
+	setSequence : function(begin,end)
+	{
 		this.currentSequenceBegin=begin;
 		this.end=end;
 		var myvid = document.getElementById(this.getAttribute('id'));
@@ -67,11 +76,14 @@ enyo.kind({
 	 * @param   src   string  URL of the source
 	 * @param   type  string  Mime type of the source
 	 */
-	addSource: function(src, type) {
-		this.createComponent({
-			tag: "source",
-			attributes: {src: src, type: type}
-		});
+	addSource: function(src, type)
+	{
+		this.createComponent(
+			{
+				tag: "source",
+				attributes: {src: src, type: type}
+			}
+		);
 		return this;
 	},
 
@@ -80,7 +92,8 @@ enyo.kind({
 	 *
 	 * @param   oldValue  string  The poster old value
 	 */
-	posterChanged: function (oldValue) {
+	posterChanged: function (oldValue)
+	{
 		this.setAttribute('poster', this.poster);
 	},
 
@@ -89,7 +102,8 @@ enyo.kind({
 	 *
 	 * @param   oldValue  string  The track source old value
 	 */
-	trackChanged: function (oldValue) {
+	trackChanged: function (oldValue)
+	{
 		this.$.track.setAttribute('src', this.track);
 	},
 
@@ -98,7 +112,8 @@ enyo.kind({
 	 *
 	 * @param   oldValue  string  The track language old value
 	 */
-	languageChanged: function (oldValue) {
+	languageChanged: function (oldValue)
+	{
 		this.$.track.setAttribute('srclang', this.language);
 	}
 });
