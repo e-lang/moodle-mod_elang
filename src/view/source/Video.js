@@ -1,86 +1,112 @@
 /**
- * Kind video
+ * Video kind
+ *
+ * @package     mod
+ * @subpackage  elang
+ * @copyright   2013 University of La Rochelle, France
+ * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  */
 enyo.kind({
-	name: "Elang.Video",
+	name: 'Elang.Video',
 
 	published:
 	{
 		poster: '',
 		track: '',
 		language: '',
-		currentSequenceBegin:0,
+		time:0,
 		end:Infinity
 	},
 
-	tag: "video",
+	handlers:
+	{
+		ontimeupdate: 'handleTimeUpdate',
+	},
 
-	content: "Your user agent does not support the HTML5 Video element.",
+	tag: 'video',
 
-	attributes: {controls: "controls"},
+	content: 'Your user agent does not support the HTML5 Video element.',
 
-	classes: "elang",
+	attributes:
+	{
+		controls: 'controls'
+	},
+
+	classes: 'elang',
 
 	components:
 	[
 		{
-			name:"track",
-			tag: "track",
+			name: 'track',
+			tag: 'track',
 			attributes:
 			{
 				kind: 'captions',
 				type: 'text/vtt',
-				default: 'default'
+				default: 'default',
+				srclang: 'en-GB'
 			}
 		}	
 	],
 
-	handleTimeUpdate:function()
+	create: function ()
+	{
+		this.inherited(arguments);
+
+		enyo.ready(
+			function () {
+				// Captionify the document when it is loaded
+				enyo.ready(function () {captionator.captionify();});
+
+				// Listen for video events
+				enyo.dispatcher.listen(document.getElementById(this.getAttribute('id')), 'timeupdate');
+			},
+			this
+		);
+	},
+
+	handleTimeUpdate:function (inSender, inEvent)
 	{
 		var vid=document.getElementById(this.getAttribute('id'));
-		if (vid.currentTime >= this.end || vid.currentTime < this.currentSequenceBegin)
+		if (vid.currentTime >= this.end)
 		{
 			vid.pause();
-			vid.currentTime=this.currentSequenceBegin;
+			this.end = Infinity;
 		}
 	},
 
-	play: function()
+	play: function ()
 	{
-		this.end = Infinity;
+		document.getElementById(this.getAttribute('id')).play();
 	},
 
-	updateSubtitles:function(sequenceID,sequenceText)
+	pause: function ()
+	{
+		document.getElementById(this.getAttribute('id')).pause();
+	},
+
+	updateSubtitles:function (sequenceID,sequenceText)
 	{
 		var vid=document.getElementById(this.getAttribute('id'));
 		var tracks=vid.textTracks;
 		tracks[0].cues[sequenceID].text.processedCue=sequenceText;		
 	},
 
-	clearSource: function()
+	clearSource: function ()
 	{
-	},
-
-	setSequence : function(begin,end)
-	{
-		this.currentSequenceBegin=begin;
-		this.end=end;
-		var myvid = document.getElementById(this.getAttribute('id'));
-		myvid.currentTime=this.currentSequenceBegin;
-	//	myvid.play();
 	},
 
 	/**
-	 * Method to add a source to the video object
+	 * Add a source to the video object
 	 *
 	 * @param   src   string  URL of the source
 	 * @param   type  string  Mime type of the source
 	 */
-	addSource: function(src, type)
+	addSource: function (src, type)
 	{
 		this.createComponent(
 			{
-				tag: "source",
+				tag: 'source',
 				attributes: {src: src, type: type}
 			}
 		);
@@ -88,7 +114,7 @@ enyo.kind({
 	},
 
 	/**
-	 * Method to detect a change in the poster property
+	 * Detect a change in the poster property
 	 *
 	 * @param   oldValue  string  The poster old value
 	 */
@@ -98,7 +124,7 @@ enyo.kind({
 	},
 
 	/**
-	 * Method to detect a change in the track source
+	 * Detect a change in the track source
 	 *
 	 * @param   oldValue  string  The track source old value
 	 */
@@ -108,12 +134,30 @@ enyo.kind({
 	},
 
 	/**
-	 * Method to detect a change in the track language
+	 * Detect a change in the track language
 	 *
 	 * @param   oldValue  string  The track language old value
 	 */
 	languageChanged: function (oldValue)
 	{
 		this.$.track.setAttribute('srclang', this.language);
+	},
+
+	/**
+	 * Detect a change in the time property
+	 *
+	 * @param   oldValue  number  The end property old value
+	 */
+	timeChanged: function (oldValue)
+	{
+		document.getElementById(this.getAttribute('id')).currentTime = this.time;
+	},
+
+	/**
+	 * Get the current time
+	 */
+	getTime: function ()
+	{
+		return document.getElementById(this.getAttribute('id')).currentTime;
 	}
 });

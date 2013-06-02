@@ -60,7 +60,8 @@ enyo.kind({
 	sequenceTapped:function(inSender,inEvent){
 		/*alert("Sequence id "+this.$.sequences.getIdSequenceCourante()+
 		" de "+this.$.sequences.getDebutSequenceCourante()+" a "+this.$.sequences.getFinSequenceCourante());*/
-		this.$.video.setSequence(this.$.sequences.getDebutSequenceCourante(),this.$.sequences.getFinSequenceCourante());
+		this.$.video.setTime(this.$.sequences.getDebutSequenceCourante());
+		this.$.video.setEnd(this.$.sequences.getFinSequenceCourante());
 		this.$.input.displaySequence(this.$.sequences.getIdSequenceCourante());	
     },
 	
@@ -128,8 +129,8 @@ enyo.kind({
 		{
 			this.$.video.setPoster(response.poster);
 		}
-		this.$.video.setTrack(response.track);
 		this.$.video.setLanguage(response.language);
+		this.$.video.setTrack(response.track);
 	}
 
 });

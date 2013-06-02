@@ -48,11 +48,11 @@ add_to_log($course->id, 'elang', 'view', 'view.php?id=' . $cm->id, $elang->id, $
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 		
 		<!-- enyo (debug) -->
-		<script src="view/enyo/enyo.js"></script>
+		<script src="view/enyo/enyo.js" type="text/javascript"></script>
 
 		<!-- Bootstrap -->
 		<link href="view/lib/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
-		<script src="view/lib/jquery/jquery.min.js"></script>
+		<script src="view/lib/jquery/jquery.min.js" type="text/javascript"></script>
         <link rel="stylesheet" type="text/css" href="view/lib/bootstrap/css/bootstrap.css"/>
         <script src="view/lib/bootstrap/js/bootstrap-tooltip.js" type="text/javascript"></script>
         <script src="view/lib/bootstrap/js/bootstrap-modal.js" type="text/javascript"></script>
@@ -61,9 +61,7 @@ add_to_log($course->id, 'elang', 'view', 'view.php?id=' . $cm->id, $elang->id, $
 		
 		<script type="text/javascript" src="view/lib/captionator/js/captionator.js"></script>
 		<script type="text/javascript" src="view/lib/captionator/js/captionator-example-api.js"></script>
-		<script type="text/javascript">
-			
-		</script>
+
 		<!-- Video -->
 		<!--<link href="assets/css/video-default.css" rel="stylesheet">
 		<script type="text/javascript" src="assets/js/jquery-1.8.1.min.js"></script>
@@ -73,13 +71,9 @@ add_to_log($course->id, 'elang', 'view', 'view.php?id=' . $cm->id, $elang->id, $
 		<script src="view/source/package.js" type="text/javascript"></script>
 
 	</head>
-	<body onload="captionator.captionify();
-		document.getElementById(app.$.video.getAttribute('id')).addEventListener('timeupdate',function(e){app.$.video.handleTimeUpdate();},false);
-		document.getElementById(app.$.video.getAttribute('id')).addEventListener('play',function(e){app.$.video.play();},false);
-		">
-	<!-- TODO : set the envent listener in Enyo kinds -->
+	<body>
 		<script>
-			var app=new App().renderInto(document.body);
+			var app=new App().renderInto(document.body);	
 		</script>
 	</body>
 </html>
