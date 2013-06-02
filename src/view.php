@@ -73,7 +73,9 @@ add_to_log($course->id, 'elang', 'view', 'view.php?id=' . $cm->id, $elang->id, $
 	</head>
 	<body>
 		<script>
-			var app=new App().renderInto(document.body);	
+			var app=new App(
+				<?php echo json_encode(array('url' => (string) new moodle_url('/mod/elang/server.php', array('id' => $cm->id, 'timeout' => 3000))));?>
+			).renderInto(document.body);
 		</script>
 	</body>
 </html>

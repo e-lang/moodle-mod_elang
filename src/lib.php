@@ -49,7 +49,7 @@ function elang_supports($feature)
  * will create a new instance and return the id number
  * of the new instance.
  *
- * @param   object              $elang  An object from the form in mod_form.php
+ * @param   object			  $elang  An object from the form in mod_form.php
  * @param   mod_elang_mod_form  $mform  The form
  *
  * @return  int  The id of the newly inserted elang record
@@ -67,68 +67,6 @@ function elang_add_instance(stdClass $elang, mod_elang_mod_form $mform = null)
 
 	// Storage of files
 	elang_save_files($elang);
-
-/*	$fs = get_file_storage();
-	$cmid = $data->coursemodule;
-	$draftitemid = $data->videos;
-	$context = context_module::instance($cmid);
-
-	if ($draftitemid)
-	{
-		file_save_draft_area_files($draftitemid, $context->id, 'mod_elang', 'videos', 0, array('subdirs' => true));
-	}
-
-	// Recuperer le fichier des sous titres de la base de donnees moodle
-	$itemid = file_get_submitted_draft_itemid('subtitle');//recuperer le itemid du fichier
-	$filename = $mform->get_new_filename('subtitle');//recuperer le nom du fichier
-	$fs = get_file_storage();//recuperer les fichiers sotckes dans la base moodle
-
-	// Preparer le fichier record object
-	$fileinfo = array(
-		'component' => 'user',
-		'filearea' => 'draft',
-		'itemid' => $itemid , 
-		'contextid' =>5,
-		'filepath' => '/',
-		'filename' => $filename
-	);
-
-	// Get file
-	$file = $fs->get_file($fileinfo['contextid'],$fileinfo['component'], $fileinfo['filearea'],
-						  $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
-
-	// lire le contenu du fichier
-	if ($file) {
-		$contents = $file->get_content();
-		//traitement du contenu du fichier
-		require_once('parseWebVTT.php');
-		$ab =new parsewebvtt\WebVTT($contents);
-
-		$cue = new stdClass();
-		$elang->id= $DB->insert_record('elang', $elang);//recuper id de l exercice aui sera attribue aux sequences
-
-		foreach($ab->getCueList() as $i => $elt)
-
-		{
-			$cue->id_elang=$elang->id;		//recuperer id de l exercice
-			$cue->title	= $elt->getTitle();//le titre
-			$cue->begin	=  $elt->getBegin();//begin
-			$cue->end= $elt->getend();
-			$cue->cuetext=$elt->getText();
-
-			$lastInsertID = $DB->insert_record("elang_cue", $cue);//inserer dans la base
-		}
-
-	} else {
-		print("file doesn't exist - do something");
-	}
-*/
-	//Use this for display out in a debug file :
-	/*ob_start();
-	print_object($elang);
-	echo "test";
-	$result = ob_get_clean();
-	debug($result);*/
 
 	return $elang->id;
 }
@@ -166,7 +104,9 @@ function elang_update_instance(stdClass $elang, mod_elang_mod_form $mform = null
 /**
  * Save files for an instance
  */
-function elang_save_files(stdClass $elang) {
+function elang_save_files(stdClass $elang)
+{
+	global $DB;
 	$id = $elang->id;
 	$cmid = $elang->coursemodule;
 	$context = context_module::instance($cmid);
@@ -208,6 +148,33 @@ function elang_save_files(stdClass $elang) {
 			'poster',
 			$id
 		);
+	}
+
+	$DB->delete_records('elang_cue', array('id_elang' => $id));
+	$fs = get_file_storage();
+	$files = $fs->get_area_files($context->id, 'mod_elang', 'subtitle', $id);
+	foreach ($files as $file)
+	{
+		if ($file->get_source())
+		{
+			$contents = $file->get_content();
+			//traitement du contenu du fichier
+			require_once('parseWebVTT.php');
+			$vtt = new parsewebvtt\WebVTT($contents);
+
+			$cue = new stdClass();
+
+			foreach($vtt->getCueList() as $i => $elt)
+			{
+				$cue->id_elang = $id;
+				$cue->title	= $elt->getTitle();
+				$cue->begin	=  $elt->getBegin();
+				$cue->end = $elt->getend();
+				$cue->text = json_encode(preg_split('/(\[[^\]]*\])/', strip_tags($elt->getText()), -1, PREG_SPLIT_DELIM_CAPTURE));
+
+				$DB->insert_record('elang_cue', $cue);
+			}
+		}
 	}
 }
 
@@ -325,91 +292,6 @@ function elang_get_extra_capabilities() {
 	return array();
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Gradebook API															  //
-////////////////////////////////////////////////////////////////////////////////
-
-/**
- * Is a given scale used by the instance of elang?
- *
- * This function returns if a scale is being used by one elang
- * if it has support for grading and scales. Commented code should be
- * modified if necessary. See forum, glossary or journal modules
- * as reference.
- *
- * @param int $elangid ID of an instance of this module
- * @return bool true if the scale is used by the given elang instance
- */
-function elang_scale_used($elangid, $scaleid) {
-	global $DB;
-
-	/** @example */
-	if ($scaleid and $DB->record_exists('elang', array('id' => $elangid, 'grade' => -$scaleid))) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-/**
- * Checks if scale is being used by any instance of elang.
- *
- * This is used to find out if scale used anywhere.
- *
- * @param $scaleid int
- * @return boolean true if the scale is used by any elang instance
- */
-function elang_scale_used_anywhere($scaleid) {
-	global $DB;
-
-	/** @example */
-	if ($scaleid and $DB->record_exists('elang', array('grade' => -$scaleid))) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-/**
- * Creates or updates grade item for the give elang instance
- *
- * Needed by grade_update_mod_grades() in lib/gradelib.php
- *
- * @param stdClass $elang instance object with extra cmidnumber and modname property
- * @return void
- */
-function elang_grade_item_update(stdClass $elang) {
-	global $CFG;
-	require_once($CFG->libdir.'/gradelib.php');
-
-	/** @example */
-	$item = array();
-	$item['itemname'] = clean_param($elang->name, PARAM_NOTAGS);
-	$item['gradetype'] = GRADE_TYPE_VALUE;
-	$item['grademax']  = $elang->grade;
-	$item['grademin']  = 0;
-
-	grade_update('mod/elang', $elang->course, 'mod', 'elang', $elang->id, 0, null, $item);
-}
-
-/**
- * Update elang grades in the gradebook
- *
- * Needed by grade_update_mod_grades() in lib/gradelib.php
- *
- * @param stdClass $elang instance object with extra cmidnumber and modname property
- * @param int $userid update grade of specific user only, 0 means all participants
- * @return void
- */
-function elang_update_grades(stdClass $elang, $userid = 0) {
-	global $CFG, $DB;
-	require_once($CFG->libdir.'/gradelib.php');
-
-	/** @example */
-	$grades = array(); // populate array of grade objects indexed by userid
-
-	grade_update('mod/elang', $elang->course, 'mod', 'elang', $elang->id, 0, $grades);
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 // File API																   //
@@ -479,15 +361,79 @@ function elang_pluginfile($course, $cm, $context, $filearea, array $args, $force
 		send_file_not_found();
 	}
 
-    $fs = get_file_storage();
-    $relativepath = implode('/', $args);
-    $fullpath = rtrim('/' . $context->id . '/mod_elang/' . $filearea . '/' . $relativepath, '/');
-    $file = $fs->get_file_by_hash(sha1($fullpath));
-    if (!$file)
-    {
-		send_file_not_found();
-    }
-	send_stored_file($file, 86400, 0, $forcedownload, $options);
+	if ($filearea == 'subtitle')
+	{
+		require_once 'parseWebVTT.php';
+		$vtt = new parsewebvtt\WebVTT;
+		$cue = new parsewebvtt\Cue;
+
+        $records = $DB->get_records('elang_cue', array('id_elang' => reset($args)), 'begin ASC');
+        foreach ($records as $record)
+        {
+			$cue = new parsewebvtt\Cue;
+			$cue->setTitle($record->id);
+			$cue->setBegin($record->begin);
+			$cue->setEnd($record->end);
+			$text = json_decode($record->text);
+			//var_dump($text);
+			foreach ($text as &$element)
+			{
+				if ($element[0] == '[' && $element[strlen($element) - 1] == ']')
+				{
+					$element = str_repeat('_', ((int) (strlen($element) / 10) + 1) * 10);
+				}
+			}
+			$cue->setText(implode($text));
+			$vtt->addCue($cue);
+        }
+
+		send_file((string) $vtt, end($args), 0 , 0, true, false, 'text/vtt');
+	}
+	else
+	{
+		$fs = get_file_storage();
+		$relativepath = implode('/', $args);
+		$fullpath = rtrim('/' . $context->id . '/mod_elang/' . $filearea . '/' . $relativepath, '/');
+		$file = $fs->get_file_by_hash(sha1($fullpath));
+		if (!$file)
+		{
+			send_file_not_found();
+		}
+		send_stored_file($file, 86400, 0, $forcedownload, $options);
+	}
+}
+
+/**
+ * Given a course_module object, this function returns any
+ * "extra" information that may be needed when printing
+ * this activity in a course listing.
+ *
+ * See {@link get_array_of_activities()} in course/lib.php
+ *
+ * @param object $coursemodule
+ * @return object info
+ */
+function elang_get_coursemodule_info($coursemodule)
+{
+	global $DB;
+
+	$elang = $DB->get_record('elang', array('id' => $coursemodule->instance));
+	if (!$elang)
+	{
+		return null;
+	}
+
+	$info = new cached_cm_info();
+	$info->name = $elang->name;
+	$info->onclick = "window.open('" . new moodle_url('/mod/elang/view.php', array('id' => $coursemodule->id)) ."'); return false;";
+
+	if ($coursemodule->showdescription)
+	{
+		// Convert intro to html. Do not filter cached version, filters run at display time.
+		$info->content = format_module_intro('elang', $elang, $coursemodule->id, false);
+	}
+
+	return $info;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

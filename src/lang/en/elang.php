@@ -29,6 +29,7 @@ $string['pluginname'] = 'E-Lang';
 $string['poster_help'] = "Upload a picture (or screenshot...) which represent the video.";
 $string['postermaxsize'] = 'Maximum poster size';
 $string['poster'] = 'Poster';
+$string['language'] = 'Language';
 $string['subtitle_help'] = "Upload a file in text mod.";
 $string['subtitlemaxsize'] = 'Maximum subtitle size';
 $string['subtitle'] = 'Subtitle';

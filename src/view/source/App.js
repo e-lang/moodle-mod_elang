@@ -4,6 +4,11 @@ enyo.kind({
 	name : "App",
 	classes: "container-fluid",
 	style:"overflow: auto;",
+	published:
+	{
+		url: '',
+		timeout:''
+	},
 	handlers: {
 		onSequenceItemTapped : "sequenceTapped",
 		onValidSequence : "sequenceValidated",
@@ -14,7 +19,7 @@ enyo.kind({
 		{tag: "div", name: "header", classes:"row-fluid", components:[
 			{tag: "div", name: "title_span12", classes:"span12", components:[
 				{tag: "div", classes:"well well-small", components:[
-					{kind: "Head", name:"head"}
+					{kind: "Elang.Head", name:"head"}
 				]
 				}
 
@@ -22,13 +27,13 @@ enyo.kind({
 		]},
 		{tag:"div", classes:"well", components:[
 		{tag: "div", name: "body", classes:"row-fluid", components:[
-				{tag: "div", name: "video_span6", classes:"span6", components:[
+				{tag: "div", name: "video_span6", classes:"span8", components:[
 					// Video
 					{kind: "Elang.Video", name : "video"}
 				]},
 			
 				// Sequence list
-				{tag: "div", name: "list_span6", classes:"span6", components:[
+				{tag: "div", name: "list_span6", classes:"span4", components:[
 					{tag: "h1", content: "Liste des séquences"},
 					{kind: "Sequences", name:"sequences"}
 				]}
@@ -84,53 +89,63 @@ enyo.kind({
 	getData: function(){
 		// Request creation
 		var request = new enyo.Ajax({
-	    		url: 'server.php', //document.URL,
+	    		url: this.url, //document.URL,
 	    		method: "POST", //"GET" or "POST"
-	    		handleAs: "text", //"json", "text", or "xml"
+	    		//handleAs: "json", //"json", "text", or "xml"
+	    		timeout: this.timeout
 	    	});	
 
 		//tells Ajax what the callback function is
-        request.response(enyo.bind(this, "getDataResponse")); 
+        request.response(enyo.bind(this, "handleDataResponse"));
+
+		request.error(enyo.bind(this, 'fail'));
 		//makes the Ajax call with parameters
         request.go({task: 'data'}); 
 	},
+
+	fail: function (inRequest, inError)
+	{
+		alert(inRequest + inError);
+		inRequest.fail(inError);
+	},
 	
-	getDataResponse: function(inRequest, inResponse){
+	handleDataResponse: function(inRequest, inResponse){
 		// If there is nothing in the response then return early.
 		if (!inResponse) { 
 			$('.modal').modal('toggle');
 	        return;
 	    }
 
-		var response = JSON.parse(inResponse);
+		//var response = JSON.parse(inResponse);
 		
 		// Broadcast the data to the children fields 
-		this.$.head.setHeadTitle(response.title);
-		this.$.head.setHeadDescription(response.description);
-		this.$.input.setInputList(response.inputs);
+		this.$.head.setHeadTitle(inResponse.title);
+		this.$.head.setHeadDescription(inResponse.description);
+		this.$.input.setInputList(inResponse.inputs);
 		
 		// Call the function to update the children
 		this.$.head.updateData();
 
 		
-		this.$.input.setInputList(response.inputs);
+		this.$.input.setInputList(inResponse.inputs);
 		
 		// Construct sequences object
-		this.$.sequences.createSequences(response.sequences);
+		this.$.sequences.createSequences(inResponse.sequences);
 
 		// Construct video object
-		for (var source in response.sources)
+		for (var source in inResponse.sources)
 		{
-			this.$.video.addSource(response.sources[source].url, response.sources[source].type);
+			this.$.video.addSource(inResponse.sources[source].url, inResponse.sources[source].type);
 		}
 		this.$.video.render();
 
-		if (response.poster)
+		if (inResponse.poster)
 		{
-			this.$.video.setPoster(response.poster);
+			this.$.video.setPoster(inResponse.poster);
 		}
-		this.$.video.setLanguage(response.language);
-		this.$.video.setTrack(response.track);
+		this.$.video.setLanguage(inResponse.language);
+		this.$.video.setTrack(inResponse.track);
+		captionator.captionify(document.getElementById(this.$.video.getAttribute('id')));
 	}
 
 });

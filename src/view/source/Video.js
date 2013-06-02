@@ -55,9 +55,6 @@ enyo.kind({
 
 		enyo.ready(
 			function () {
-				// Captionify the document when it is loaded
-				enyo.ready(function () {captionator.captionify();});
-
 				// Listen for video events
 				enyo.dispatcher.listen(document.getElementById(this.getAttribute('id')), 'timeupdate');
 			},

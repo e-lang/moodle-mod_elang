@@ -1,6 +1,153 @@
 <?php
 
-$task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
+/**
+ * Server for ajax request of elang
+ *
+ * You can have a rather longer description of the file as well,
+ * if you like, and it can span multiple lines.
+ *
+ * @package     mod
+ * @subpackage  elang
+ * @copyright   2013 University of La Rochelle, France
+ * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ */
+
+require_once dirname(dirname(dirname(__FILE__))) . '/config.php';
+require_once dirname(__FILE__) . '/lib.php';
+
+$task = optional_param('task', '', PARAM_ALPHA);
+$id = optional_param('id', 0, PARAM_INT);
+
+// Detect if there is no course module id
+if ($id == 0)
+{
+	header('HTTP/1.1 400 Bad Request');
+	die;
+}
+
+// Get the course module, the elang instance and the context
+$cm = get_coursemodule_from_id('elang', $id, 0, false);
+
+// Detect if the course module exists
+if (!$cm)
+{
+	header('HTTP/1.1 404 Not Found');
+	die;
+}
+
+// Detect if the user is logged in
+if (!isloggedin())
+{
+	header('HTTP/1.1 401 Unauthorized');
+	die;
+}
+
+
+// Get the context
+$context = context_module::instance($cm->id);
+
+// Detect if the user has the capability to view this course module
+if (!has_capability('mod/elang:view', $context))
+{
+	header('HTTP/1.1 403 Forbidden');
+	die;
+}
+
+// Get the elang instance and the course
+$course = $DB->get_record('course', array('id' => $cm->course), '*');
+$elang = $DB->get_record('elang', array('id' => $cm->instance), '*');
+
+// Detect an internal server error
+if (!$course || !$elang)
+{
+	header('HTTP/1.1 500 Internal Server Error');
+	die;
+}
+
+// Log action
+add_to_log($course->id, 'elang', 'view', 'server.php?id=' . $cm->id . '&task=' . $task, $elang->id, $cm->id);
+
+switch ($task)
+{
+	case 'data':
+		header('Content-type: application/json');
+		$fs = get_file_storage();
+		$files = $fs->get_area_files($context->id, 'mod_elang', 'videos', $elang->id);
+		$sources = array();
+		
+		foreach ($files as $file)
+		{
+			if ($file->get_source())
+			{
+				$sources[] = array(
+					'url' => (string) moodle_url::make_pluginfile_url(
+						$file->get_contextid(),
+						$file->get_component(),
+						$file->get_filearea(),
+						$file->get_itemid(),
+						$file->get_filepath(),
+						$file->get_filename()
+					),
+					'type' => $file->get_mimetype()
+				);
+			}
+		}
+
+		$files = $fs->get_area_files($context->id, 'mod_elang', 'poster', $elang->id);
+		$poster = '';
+
+		foreach ($files as $file)
+		{
+			if ($file->get_source())
+			{
+				$poster = (string) moodle_url::make_pluginfile_url(
+					$file->get_contextid(),
+					$file->get_component(),
+					$file->get_filearea(),
+					$file->get_itemid(),
+					$file->get_filepath(),
+					$file->get_filename()
+				);
+				break;
+			}
+		}
+
+		$files = $fs->get_area_files($context->id, 'mod_elang', 'subtitle', $elang->id);
+		$subtitle = '';
+
+		foreach ($files as $file)
+		{
+			if ($file->get_source())
+			{
+				$subtitle = (string) moodle_url::make_pluginfile_url(
+					$file->get_contextid(),
+					$file->get_component(),
+					$file->get_filearea(),
+					$file->get_itemid(),
+					$file->get_filepath(),
+					$file->get_filename()
+				);
+				break;
+			}
+		}
+
+		echo json_encode(array(
+			'title' => $elang->name,
+			'description' => $elang->intro,
+			'sequences' => array(),
+			'inputs' => array(),
+			'sources' => $sources,
+			'poster' => $poster,
+			'track' => $subtitle,
+			'language' => $elang->language
+		));
+		die;
+		break;
+	default:
+		header('HTTP/1.1 400 Bad Request');
+		die;
+		break;
+}
 
 $sequence1 = array('id'=>'1', 'titre'=>"Titre sequence 1 4343", 'debut'=>'1', 'fin'=>'3');
 $text1A = array('type'=>'text','content'=>'I thought I would save time by purchasing my airline ticket online and');
@@ -68,6 +215,13 @@ switch ($task)
 		// break;
 
 	case 'data' :
+//header('HTTP/1.1 404 Not Found');
+//header('HTTP/1.1 403 Forbidden');
+//header('HTTP/1.1 400 Bad Request');
+//header('HTTP/1.1 401 Unauthorized');
+//header('HTTP/1.1 500 Internal Server Error');
+//header('HTTP/1.1 501 Not Implemented');
+//header('HTTP/1.1 503 Service Unavailable');
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 		header('Content-type: application/json');
@@ -76,6 +230,7 @@ switch ($task)
 		$description='Ma description';
 		$sequences = array($sequence1,$sequence2,$sequence3);
 		$inputs = array($text1,$text2,$text3);
+		
 		echo json_encode(array(
 			'title'=>$title,
 			'description'=>$description,
