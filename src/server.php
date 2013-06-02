@@ -86,7 +86,7 @@ switch ($task)
 			),
 			'poster' => 'icon.png',
 			'track' => 'arduino-en.vtt',
-			'language' => 'en_UK'
+			'language' => 'en-UK'
 		));
 		break;
 		
