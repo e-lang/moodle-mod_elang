@@ -131,10 +131,16 @@ switch ($task)
 			}
 		}
 
+		$sequences = array();
+        $records = $DB->get_records('elang_cue', array('id_elang' => $elang->id), 'begin ASC');
+        foreach ($records as $record)
+        {
+        	$sequences[] = array('id'=> $record->id, 'titre'=> $record->title, 'debut'=>$record->begin / 1000, 'fin'=>$record->end / 1000);
+        }
 		echo json_encode(array(
 			'title' => $elang->name,
 			'description' => $elang->intro,
-			'sequences' => array(),
+			'sequences' => $sequences,
 			'inputs' => array(),
 			'sources' => $sources,
 			'poster' => $poster,

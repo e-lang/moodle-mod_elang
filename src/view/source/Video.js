@@ -68,6 +68,7 @@ enyo.kind({
 		if (vid.currentTime >= this.end)
 		{
 			vid.pause();
+			vid.currentTime = this.end;
 			this.end = Infinity;
 		}
 	},

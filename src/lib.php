@@ -150,7 +150,11 @@ function elang_save_files(stdClass $elang)
 		);
 	}
 
+	// Delete old records
 	$DB->delete_records('elang_cue', array('id_elang' => $id));
+	$DB->delete_records('elang_responses', array('id_elang' => $id));
+	$DB->delete_records('elang_ask_correction', array('id_elang' => $id));
+
 	$fs = get_file_storage();
 	$files = $fs->get_area_files($context->id, 'mod_elang', 'subtitle', $id);
 	foreach ($files as $file)
@@ -170,7 +174,7 @@ function elang_save_files(stdClass $elang)
 				$cue->title	= $elt->getTitle();
 				$cue->begin	=  $elt->getBegin();
 				$cue->end = $elt->getend();
-				$cue->text = json_encode(preg_split('/(\[[^\]]*\])/', strip_tags($elt->getText()), -1, PREG_SPLIT_DELIM_CAPTURE));
+				$cue->json = json_encode(preg_split('/(\[[^\]]*\])/', strip_tags($elt->getText()), -1, PREG_SPLIT_DELIM_CAPTURE));
 
 				$DB->insert_record('elang_cue', $cue);
 			}
@@ -365,7 +369,6 @@ function elang_pluginfile($course, $cm, $context, $filearea, array $args, $force
 	{
 		require_once 'parseWebVTT.php';
 		$vtt = new parsewebvtt\WebVTT;
-		$cue = new parsewebvtt\Cue;
 
         $records = $DB->get_records('elang_cue', array('id_elang' => reset($args)), 'begin ASC');
         foreach ($records as $record)
@@ -374,7 +377,7 @@ function elang_pluginfile($course, $cm, $context, $filearea, array $args, $force
 			$cue->setTitle($record->id);
 			$cue->setBegin($record->begin);
 			$cue->setEnd($record->end);
-			$text = json_decode($record->text);
+			$text = json_decode($record->json);
 			//var_dump($text);
 			foreach ($text as &$element)
 			{
