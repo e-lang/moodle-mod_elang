@@ -16,6 +16,7 @@ defined('MOODLE_INTERNAL') || die;
 
 if ($ADMIN->fulltree)
 {
+	require_once dirname(__FILE__) . '/lib.php';
 	require_once $CFG->libdir . '/resourcelib.php';
 
 	// General settings
@@ -82,6 +83,16 @@ if ($ADMIN->fulltree)
 			get_string('timeout_config', 'elang'),
 			3000,
 			PARAM_INT
+		)
+	);
+	$languages = elang_get_languages();
+	$settings->add(
+		new admin_setting_configmultiselect(
+			'elang/language',
+			get_string('language', 'elang'),
+			get_string('language_config', 'elang'),
+			array_keys($languages),
+			$languages
 		)
 	);
 	$settings->add(

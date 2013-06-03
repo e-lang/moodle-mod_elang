@@ -60,7 +60,17 @@ class mod_elang_mod_form extends moodleform_mod
 
 		// Adding the rest of elang settings, spreeading all them into this fieldset
 		$mform->addElement('header', 'elangfieldset', get_string('upload', 'elang'));
-		$mform->addElement('select', 'language', get_string('language', 'elang'), elang_get_languages())->setSelected('en-GB');
+		$languages = elang_get_languages();
+		$options = array();
+		foreach (explode(',', $config->language) as $key)
+		{
+			$options[$key] = $languages[$key];
+		}
+		$element = $mform->addElement('select', 'language', get_string('language', 'elang'), $options);
+		if ($options['en-GB'])
+		{
+			$element->setSelected('en-GB');
+		}
 		$mform->addRule('language', null, 'required', null, 'client');
 		$mform->addElement(
 			'filemanager',

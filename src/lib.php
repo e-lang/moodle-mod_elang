@@ -464,7 +464,7 @@ function elang_get_languages()
 		'et-EE' => 'Estonian',
 		'eu-ES' => 'Euskara (Basque)',
 		'fi-FI' => 'Finnish (Suomi)',
-		'fr-FR" selected="selected' => 'Fran&ccedil;ais (Fr)',
+		'fr-FR' => 'Français (Fr)',
 		'gl-ES' => 'Galician (Galiza)',
 		'de-DE' => 'German (DE-CH-AT)',
 		'el-GR' => 'Greek',

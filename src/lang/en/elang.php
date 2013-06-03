@@ -19,6 +19,7 @@ $string['elangfieldset'] = 'Custom example fieldset';
 $string['elangname_help'] = 'This is the content of the help tooltip associated with the elangname field. Markdown syntax is supported.';
 $string['elangname'] = "Video's title";
 $string['formatname'] = '%s [%s]';
+$string['language_config'] = 'Select the list of possible languages for the moodle site';
 $string['language'] = 'Language';
 $string['modulename'] = 'E-Lang';
 $string['modulename_help'] = 'Use the E-Lang module for...';
