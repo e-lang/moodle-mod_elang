@@ -32,7 +32,7 @@ if ($ADMIN->fulltree)
 		new admin_setting_configtext(
 			'elang/videomaxsize',
 			get_string('videomaxsize', 'elang'),
-			get_string('configvideomaxsize', 'elang'),
+			get_string('videomaxsize_config', 'elang'),
 			10000000,
 			PARAM_INT
 		)
@@ -42,7 +42,7 @@ if ($ADMIN->fulltree)
 		new admin_setting_configtext(
 			'elang/postermaxsize',
 			get_string('postermaxsize', 'elang'),
-			get_string('configpostermaxsize', 'elang'),
+			get_string('postermaxsize_config', 'elang'),
 			1000000,
 			PARAM_INT
 		)
@@ -52,9 +52,44 @@ if ($ADMIN->fulltree)
 		new admin_setting_configtext(
 			'elang/subtitlemaxsize',
 			get_string('subtitlemaxsize', 'elang'),
-			get_string('configsubtitlemaxsize', 'elang'),
+			get_string('subtitlemaxsize_config', 'elang'),
 			100000,
 			PARAM_INT
+		)
+	);
+	$settings->add(
+		new admin_setting_configtext(
+			'elang/repeatedunderscore',
+			get_string('repeatedunderscore', 'elang'),
+			get_string('repeatedunderscore_config', 'elang'),
+			10,
+			PARAM_INT
+		)
+	);
+	$settings->add(
+		new admin_setting_configtext(
+			'elang/titlelength',
+			get_string('titlelength', 'elang'),
+			get_string('titlelength_config', 'elang'),
+			100,
+			PARAM_INT
+		)
+	);
+	$settings->add(
+		new admin_setting_configtext(
+			'elang/timeout',
+			get_string('timeout', 'elang'),
+			get_string('timeout_config', 'elang'),
+			3000,
+			PARAM_INT
+		)
+	);
+	$settings->add(
+		new admin_setting_configcheckbox(
+			'elang/showlanguage',
+			get_string('showlanguage', 'elang'),
+			get_string('showlanguage_config', 'elang'),
+			1
 		)
 	);
 }

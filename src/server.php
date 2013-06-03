@@ -137,6 +137,7 @@ switch ($task)
         {
         	$sequences[] = array('id'=> $record->id, 'titre'=> $record->title, 'debut'=>$record->begin / 1000, 'fin'=>$record->end / 1000);
         }
+
 		echo json_encode(array(
 			'title' => $elang->name,
 			'description' => $elang->intro,

@@ -34,12 +34,24 @@ $context = context_module::instance($cm->id);
 require_capability('mod/elang:view', $context);
 
 add_to_log($course->id, 'elang', 'view', 'view.php?id=' . $cm->id, $elang->id, $cm->id);
+
+$languages = elang_get_languages();
+$options = json_decode($elang->options, true);
+$config = get_config('elang');
+if ($options['showlanguage'])
+{
+	$name = sprintf(get_string('formatname', 'elang'), $elang->name, $languages[$elang->language]);
+}
+else
+{
+	$name = $elang->name;
+}
 ?>
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<title><?php echo format_string($elang->name); ?></title>
+		<title><?php echo format_string($name); ?></title>
 	
 		<link rel="shortcut icon" href="assets/favicon.ico"/>
 		<!-- -->
@@ -74,7 +86,7 @@ add_to_log($course->id, 'elang', 'view', 'view.php?id=' . $cm->id, $elang->id, $
 	<body>
 		<script>
 			var app=new App(
-				<?php echo json_encode(array('url' => (string) new moodle_url('/mod/elang/server.php', array('id' => $cm->id, 'timeout' => 3000))));?>
+				<?php echo json_encode(array('url' => (string) new moodle_url('/mod/elang/server.php', array('id' => $cm->id)), 'timeout' => $config->timeout));?>
 			).renderInto(document.body);
 		</script>
 	</body>

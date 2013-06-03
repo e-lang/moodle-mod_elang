@@ -60,80 +60,7 @@ class mod_elang_mod_form extends moodleform_mod
 
 		// Adding the rest of elang settings, spreeading all them into this fieldset
 		$mform->addElement('header', 'elangfieldset', get_string('upload', 'elang'));
-		$mform->addElement(
-			'select',
-			'language',
-			get_string('language', 'elang'),
-			array(
-				'af-ZA' => 'Afrikaans (South Africa)',
-				'ar-AA' => 'Arabic Unitag (العربية الموحدة)',
-				'hy-AM' => 'Armenian',
-				'az-AZ' => 'Azeri-Azərbaycanca (Azərbaycan)',
-				'id-ID' => 'Bahasa Indonesia',
-				'be-BY' => 'Belarusian-Беларуская (Беларусь)',
-				'bn-BD' => 'Bengali (Bangladesh)',
-				'bs-BA' => 'Bosanski (Bosnia)',
-				'bg-BG' => 'Bulgarian (Български)',
-				'ca-ES' => 'Catalan',
-				'zh-CN' => 'Chinese Simplified 简体中文',
-				'zh-TW' => 'Chinese Traditional (Taiwan)',
-				'hr-HR' => 'Croatian',
-				'cs-CZ' => 'Czech (Czech republic)',
-				'da-DK' => 'Danish (DK)',
-				'en-AU' => 'English (Australia)',
-				'en-GB' => 'English (United Kingdom)',
-				'en-US' => 'English (United States)',
-				'eo-XX' => 'Esperanto',
-				'et-EE' => 'Estonian',
-				'eu-ES' => 'Euskara (Basque)',
-				'fi-FI' => 'Finnish (Suomi)',
-				'fr-FR" selected="selected' => 'Fran&ccedil;ais (Fr)',
-				'gl-ES' => 'Galician (Galiza)',
-				'de-DE' => 'German (DE-CH-AT)',
-				'el-GR' => 'Greek',
-				'gu-IN' => 'Gujarati (India)',
-				'he-IL' => 'Hebrew (Israel)',
-				'hi-IN' => 'Hindi-हिंदी (India)',
-				'hu-HU' => 'Hungarian (Magyar)',
-				'it-IT' => 'Italian (Italy)',
-				'ja-JP' => 'Japanese 日本語',
-				'km-KH' => 'Khmer (Cambodia)',
-				'ko-KR' => 'Korean (Republic of Korea)',
-				'ckb-IQ' => 'Kurdish Soran&icirc; (کوردى)',
-				'lo-LA' => 'Lao-ລາວ(ພາສາລາວ)',
-				'lv-LV' => 'Latvian (LV)',
-				'lt-LT' => 'Lithuanian',
-				'mk-MK' => 'Macedonian-Македонски',
-				'ml-IN' => 'Malayalam-മലയാളം(India)',
-				'mn-MN' => 'Mongolian-Монгол (Монгол Улс)',
-				'nl-NL' => 'Nederlands nl-NL',
-				'nb-NO' => 'Norsk bokm&aring;l (Norway)',
-				'nn-NO' => 'Norsk nynorsk (Norway)',
-				'fa-IR' => 'Persian (پارسی)',
-				'pl-PL' => 'Polski (Polska)',
-				'pt-BR' => 'Portugu&ecirc;s (Brasil)',
-				'pt-PT' => 'Portugu&ecirc;s (pt-PT)',
-				'ro-RO' => 'Rom&acirc;nă (Rom&acirc;nia)',
-				'ru-RU' => 'Russian-Русский (CIS)',
-				'gd-GB' => 'Scottish Gaelic (GB)',
-				'sr-RS' => 'Serbian (Cyrilic)',
-				'sr-YU' => 'Serbian (Latin)',
-				'sq-AL' => 'Shqip-AL',
-				'sk-SK' => 'Slovak (Slovenčina)',
-				'es-ES' => 'Spanish (Espa&ntilde;ol)',
-				'sv-SE' => 'Svenska (Sverige)',
-				'sw-KE' => 'Swahili',
-				'sy-IQ' => 'Syriac (Iraq)',
-				'ta-IN' => 'Tamil-தமிழ் (India)',
-				'th-TH' => 'Thai-ไทย (ภาษาไทย)',
-				'tr-TR' => 'T&uuml;rk&ccedil;e (T&uuml;rkiye)',
-				'uk-UA' => 'Ukrainian-Українська (Україна)',
-				'ur-PK' => 'Urdu Pakistan (اردو)',
-				'ug-CN' => 'Uyghur (ئۇيغۇرچە)',
-				'vi-VN' => 'Vietnamese (Vietnam)',
-				'cy-GB' => 'Welsh (United Kingdom)'
-			)
-		)->setSelected('en-GB');
+		$mform->addElement('select', 'language', get_string('language', 'elang'), elang_get_languages())->setSelected('en-GB');
 		$mform->addRule('language', null, 'required', null, 'client');
 		$mform->addElement(
 			'filemanager',
@@ -163,6 +90,17 @@ class mod_elang_mod_form extends moodleform_mod
 			array('subdirs' => 0, 'maxbytes' => $config->postermaxsize, 'maxfiles' => 1, 'accepted_types' => array('image'))
 		);
 		$mform->addHelpButton('poster', 'poster', 'elang');
+
+		// Adding the "general" fieldset, where all the common settings are showed
+		$mform->addElement('header', 'setting', get_string('settings', 'elang'));
+		$mform->addElement('checkbox', 'showlanguage', get_string('showlanguage', 'elang'));
+		$mform->addHelpButton('showlanguage', 'showlanguage', 'elang');
+		$mform->addElement('text', 'repeatedunderscore', get_string('repeatedunderscore', 'elang'));
+		$mform->addHelpButton('repeatedunderscore', 'repeatedunderscore', 'elang');
+		$mform->addRule('repeatedunderscore', get_string('repeatedunderscore_error', 'elang'), 'numeric', null, 'client');
+		$mform->addElement('text', 'titlelength', get_string('titlelength', 'elang'));
+		$mform->addHelpButton('titlelength', 'titlelength', 'elang');
+		$mform->addRule('titlelength', get_string('titlelength_error', 'elang'), 'numeric', null, 'client');
 
 		// Add standard elements, common to all modules
 		$this->standard_coursemodule_elements();
@@ -211,6 +149,17 @@ class mod_elang_mod_form extends moodleform_mod
 				$this->current->id
 			);
 			$default_values['poster'] = $draftitemid;
+			$options = json_decode(isset($default_values['options']) ? $default_values['options'] : '{}', true);
+			$default_values['showlanguage'] = $options['showlanguage'];
+			$default_values['repeatedunderscore'] = $options['repeatedunderscore'];
+			$default_values['titlelength'] = $options['titlelength'];
+		}
+		else
+		{
+			$config = get_config('elang');
+			$default_values['repeatedunderscore'] = $config->repeatedunderscore;
+			$default_values['showlanguage'] = $config->showlanguage;
+			$default_values['titlelength'] = $config->titlelength;
 		}
 	}
 }

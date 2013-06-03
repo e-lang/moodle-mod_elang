@@ -106,8 +106,8 @@ class WebVTT implements \Iterator{
 	const WEBVTT_STATE_TIME = 1;
 	const WEBVTT_STATE_TEXT = 2;
 	
-	const REGEXP_TIME1 = "/^[0-9]{2}:[0-9]{2}.[0-9]{3}/";
-	const REGEXP_TIME2 = "/^[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}/";
+	const REGEXP_TIME1 = "/^[0-9]{2}:[0-9]{2}[.,][0-9]{3}/";
+	const REGEXP_TIME2 = "/^[0-9]{2}:[0-9]{2}:[0-9]{2}[,.][0-9]{3}/";
 	
 	
 	function __construct(){

@@ -89,7 +89,7 @@ enyo.kind({
 					tag: "a",
 					classes: 'btn-link',
 					attributes: {
-						href:''
+						href:'#'
 					},
 					content: title,
 					ontap: 'changeTab'

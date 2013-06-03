@@ -61,6 +61,10 @@ function elang_add_instance(stdClass $elang, mod_elang_mod_form $mform = null)
 	// Init some var :
 	$elang->timemodified = time();
 	$elang->timecreated = time();
+	$elang->options = json_encode(array(
+		'showlanguage' => isset($elang->showlanguage) ? 1 : 0,
+		'repeatedunderscore' => isset($elang->repeatedunderscore) ? $elang->repeatedunderscore : 10,
+	));
 
 	// Storage of the main table of the module :
 	$elang->id = $DB->insert_record('elang', $elang);
@@ -88,6 +92,11 @@ function elang_update_instance(stdClass $elang, mod_elang_mod_form $mform = null
 
 	$elang->timemodified = time();
 	$elang->id = $elang->instance;
+	$elang->options = json_encode(array(
+		'showlanguage' => isset($elang->showlanguage) ? 1 : 0,
+		'repeatedunderscore' => isset($elang->repeatedunderscore) ? $elang->repeatedunderscore : 10,
+		'titlelength' => isset($elang->titlelength) ? $elang->titlelength : 100,
+	));
 
 	if ($DB->update_record('elang', $elang))
 	{
@@ -168,13 +177,31 @@ function elang_save_files(stdClass $elang)
 
 			$cue = new stdClass();
 
+			$options = $elang->titlelength;
 			foreach($vtt->getCueList() as $i => $elt)
 			{
 				$cue->id_elang = $id;
-				$cue->title	= $elt->getTitle();
+				$title = $elt->getTitle();
+				$text = strip_tags($elt->getText());
+				if (is_numeric($title))
+				{
+					$title = preg_replace('/(\[[^\]]*\])/', '...', $text);
+					if (mb_strlen($title) > $elang->titlelength)
+					{
+						$cue->title = preg_replace('/ [^ ]*$/', ' ...', mb_substr($title, 0, $elang->titlelength));
+					}
+					else
+					{
+						$cue->title = $title;
+					}
+				}
+				else
+				{
+					$cue->title	= $title;
+				}
 				$cue->begin	=  $elt->getBegin();
 				$cue->end = $elt->getend();
-				$cue->json = json_encode(preg_split('/(\[[^\]]*\])/', strip_tags($elt->getText()), -1, PREG_SPLIT_DELIM_CAPTURE));
+				$cue->json = json_encode(preg_split('/(\[[^\]]*\])/', $text, -1, PREG_SPLIT_DELIM_CAPTURE));
 
 				$DB->insert_record('elang_cue', $cue);
 			}
@@ -370,7 +397,11 @@ function elang_pluginfile($course, $cm, $context, $filearea, array $args, $force
 		require_once 'parseWebVTT.php';
 		$vtt = new parsewebvtt\WebVTT;
 
-        $records = $DB->get_records('elang_cue', array('id_elang' => reset($args)), 'begin ASC');
+		$idlang = reset($args);
+        $records = $DB->get_records('elang_cue', array('id_elang' => $idlang), 'begin ASC');
+        $elang = $DB->get_record('elang', array('id' => $idlang));
+        $options = json_decode($elang->options, true);
+        $repeatedunderscore = isset($options['repeatedunderscore']) ? $options['repeatedunderscore'] : 10;
         foreach ($records as $record)
         {
 			$cue = new parsewebvtt\Cue;
@@ -383,7 +414,7 @@ function elang_pluginfile($course, $cm, $context, $filearea, array $args, $force
 			{
 				if ($element[0] == '[' && $element[strlen($element) - 1] == ']')
 				{
-					$element = str_repeat('_', ((int) (strlen($element) / 10) + 1) * 10);
+					$element = str_repeat('_', ((int) ((mb_strlen($element, 'UTF-8') - 1) / $repeatedunderscore) + 1) * $repeatedunderscore);
 				}
 			}
 			$cue->setText(implode($text));
@@ -407,6 +438,81 @@ function elang_pluginfile($course, $cm, $context, $filearea, array $args, $force
 }
 
 /**
+ */
+function elang_get_languages()
+{
+	return array(
+		'af-ZA' => 'Afrikaans (South Africa)',
+		'ar-AA' => 'Arabic Unitag (العربية الموحدة)',
+		'hy-AM' => 'Armenian',
+		'az-AZ' => 'Azeri-Azərbaycanca (Azərbaycan)',
+		'id-ID' => 'Bahasa Indonesia',
+		'be-BY' => 'Belarusian-Беларуская (Беларусь)',
+		'bn-BD' => 'Bengali (Bangladesh)',
+		'bs-BA' => 'Bosanski (Bosnia)',
+		'bg-BG' => 'Bulgarian (Български)',
+		'ca-ES' => 'Catalan',
+		'zh-CN' => 'Chinese Simplified 简体中文',
+		'zh-TW' => 'Chinese Traditional (Taiwan)',
+		'hr-HR' => 'Croatian',
+		'cs-CZ' => 'Czech (Czech republic)',
+		'da-DK' => 'Danish (DK)',
+		'en-AU' => 'English (Australia)',
+		'en-GB' => 'English (United Kingdom)',
+		'en-US' => 'English (United States)',
+		'eo-XX' => 'Esperanto',
+		'et-EE' => 'Estonian',
+		'eu-ES' => 'Euskara (Basque)',
+		'fi-FI' => 'Finnish (Suomi)',
+		'fr-FR" selected="selected' => 'Fran&ccedil;ais (Fr)',
+		'gl-ES' => 'Galician (Galiza)',
+		'de-DE' => 'German (DE-CH-AT)',
+		'el-GR' => 'Greek',
+		'gu-IN' => 'Gujarati (India)',
+		'he-IL' => 'Hebrew (Israel)',
+		'hi-IN' => 'Hindi-हिंदी (India)',
+		'hu-HU' => 'Hungarian (Magyar)',
+		'it-IT' => 'Italian (Italy)',
+		'ja-JP' => 'Japanese 日本語',
+		'km-KH' => 'Khmer (Cambodia)',
+		'ko-KR' => 'Korean (Republic of Korea)',
+		'ckb-IQ' => 'Kurdish Soran&icirc; (کوردى)',
+		'lo-LA' => 'Lao-ລາວ(ພາສາລາວ)',
+		'lv-LV' => 'Latvian (LV)',
+		'lt-LT' => 'Lithuanian',
+		'mk-MK' => 'Macedonian-Македонски',
+		'ml-IN' => 'Malayalam-മലയാളം(India)',
+		'mn-MN' => 'Mongolian-Монгол (Монгол Улс)',
+		'nl-NL' => 'Nederlands nl-NL',
+		'nb-NO' => 'Norsk bokm&aring;l (Norway)',
+		'nn-NO' => 'Norsk nynorsk (Norway)',
+		'fa-IR' => 'Persian (پارسی)',
+		'pl-PL' => 'Polski (Polska)',
+		'pt-BR' => 'Portugu&ecirc;s (Brasil)',
+		'pt-PT' => 'Portugu&ecirc;s (pt-PT)',
+		'ro-RO' => 'Rom&acirc;nă (Rom&acirc;nia)',
+		'ru-RU' => 'Russian-Русский (CIS)',
+		'gd-GB' => 'Scottish Gaelic (GB)',
+		'sr-RS' => 'Serbian (Cyrilic)',
+		'sr-YU' => 'Serbian (Latin)',
+		'sq-AL' => 'Shqip-AL',
+		'sk-SK' => 'Slovak (Slovenčina)',
+		'es-ES' => 'Spanish (Espa&ntilde;ol)',
+		'sv-SE' => 'Svenska (Sverige)',
+		'sw-KE' => 'Swahili',
+		'sy-IQ' => 'Syriac (Iraq)',
+		'ta-IN' => 'Tamil-தமிழ் (India)',
+		'th-TH' => 'Thai-ไทย (ภาษาไทย)',
+		'tr-TR' => 'T&uuml;rk&ccedil;e (T&uuml;rkiye)',
+		'uk-UA' => 'Ukrainian-Українська (Україна)',
+		'ur-PK' => 'Urdu Pakistan (اردو)',
+		'ug-CN' => 'Uyghur (ئۇيغۇرچە)',
+		'vi-VN' => 'Vietnamese (Vietnam)',
+		'cy-GB' => 'Welsh (United Kingdom)'
+	);
+}
+
+/**
  * Given a course_module object, this function returns any
  * "extra" information that may be needed when printing
  * this activity in a course listing.
@@ -426,8 +532,17 @@ function elang_get_coursemodule_info($coursemodule)
 		return null;
 	}
 
+	$elang->options = json_decode($elang->options, true);
 	$info = new cached_cm_info();
-	$info->name = $elang->name;
+	$languages = elang_get_languages();
+	if ($elang->options['showlanguage'])
+	{
+		$info->name = sprintf(get_string('formatname', 'elang'), $elang->name, $languages[$elang->language]);
+	}
+	else
+	{
+		$info->name = $elang->name;
+	}
 	$info->onclick = "window.open('" . new moodle_url('/mod/elang/view.php', array('id' => $coursemodule->id)) ."'); return false;";
 
 	if ($coursemodule->showdescription)
