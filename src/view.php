@@ -48,12 +48,12 @@ else
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html<?php echo get_html_lang(); ?>>
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<title><?php echo format_string($name); ?></title>
 	
-		<link rel="shortcut icon" href="assets/favicon.ico"/>
+		<link rel="shortcut icon" href="pix/icon.ico"/>
 		<!-- -->
 		<meta http-equiv="Content-Type" content="text/html; charset=utf8"/>
 		<meta name="apple-mobile-web-app-capable" content="yes"/>

@@ -49,7 +49,7 @@ enyo.kind({
 			components:
 			[
 				{
-					classes: 'span7',
+					classes: 'span6',
 					components:
 					[
 						// Video
@@ -72,15 +72,12 @@ enyo.kind({
 								}
 							]
 						},
-						{
-							// Input
-							classes: '',
-							components: [{kind: 'Elang.Input', name: 'input'}]
-						}						
+						// Input
+						{kind: 'Elang.Input', name: 'input'}						
 					]
 				},
 				{
-					classes: 'span5',
+					classes: 'span6',
 					components:
 					[
 						// Sequence list
@@ -219,12 +216,11 @@ enyo.kind({
 
 		// Construct the header
 		this.$.head.setTitle(inResponse.title);
-		this.$.head.setDescription(inResponse.description);
 		this.$.head.setNumber(inResponse.number);
 		this.$.head.setSuccess(inResponse.success);
 		this.$.head.setError(inResponse.error);
 		this.$.head.setHelp(inResponse.help);
-		this.$.head.update();
+		this.$.head.render();
 
 		// Construct the sequences object
 		this.$.sequences.setSequences(inResponse.sequences).setPage(inResponse.page);

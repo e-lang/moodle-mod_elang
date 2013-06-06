@@ -1,10 +1,7 @@
 enyo.kind({
 	name: "Elang.Input",
 
-	components:
-	[
-		{tag: 'p', name: 'content'}
-	],
+	components: [{tag: 'p', name: 'content'}],
 
 	published: {sequence: null, url: null, timeout: null},
 
@@ -30,6 +27,15 @@ enyo.kind({
 				case 'success':
 					this.$.content.createComponents(
 						[
+							{tag: 'span', classes: 'alert-success', 'content': this.sequence.elements[i].content},
+							{tag: 'span', 'content': ' '},
+						],
+						{owner: this}
+					);
+ 					break;
+				case 'help':
+					this.$.content.createComponents(
+						[
 							{tag: 'span', classes: 'alert-info', 'content': this.sequence.elements[i].content},
 							{tag: 'span', 'content': ' '},
 						],
@@ -47,7 +53,7 @@ enyo.kind({
 										kind: 'Input',
 										name: i,
 										classes: element.size > 50 ? 'input-xxlarge' : element.size > 40 ? 'input-xlarge' : element.size > 30 ? 'input-large' : '',
-										onchange: 'checkTapped',
+										onchange: 'textChanged',
 										attributes: {type: 'text'}
 									},
 									{
@@ -69,7 +75,7 @@ enyo.kind({
 		this.render();
 	},
 
-	checkTapped: function (inSender, inEvent)
+	textChanged: function (inSender, inEvent)
 	{
 		// Request creation. The handleAs parameter is 'json' by default
 		var request = new enyo.Ajax(
@@ -124,10 +130,12 @@ enyo.kind({
 		switch (inResponse.status)
 		{
 			case 'success':
-//				this.$[inRequest.inputNumber].parent.removeClass('error');
-//				this.$[inRequest.inputNumber].parent.addClass('success');
-//				this.$[inRequest.inputNumber].setAttribute('value', inResponse.text);
-//				this.$[inRequest.inputNumber] = new enyo.Control({content: inResponse.text});
+				this.sequence.elements[inRequest.inputNumber] = {content: inResponse.text, type: 'success'};
+				this.sequenceChanged();
+				this.render();
+				this.doCueChanged({number: this.sequence.number, text: inResponse.cue});
+				break;
+			case 'failure':
 				this.sequence.elements[inRequest.inputNumber] = {content: inResponse.text, type: 'success'};
 				this.sequenceChanged();
 				this.render();

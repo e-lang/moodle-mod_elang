@@ -11,15 +11,14 @@ enyo.kind({
 					tag: 'h1',
 					components:
 					[
+						{tag: 'span', name: 'title'},
+						{tag: 'span', content: ' '},
 						{
 							tag: 'a',
-							name: 'title',
-							attributes:
-							{
-								href: '#',
-								'data-toggle': 'tooltip',
-								'data-placement': 'right'
-							}
+							classes: 'btn btn-primary',
+							attributes: {href: '#'},
+							ontap: 'printTapped',
+							components: [{tag :'i', classes: 'icon-print icon-white'}, {tag: 'span', content: $L(' Get a pdf version')}]
 						}
 					]
 				}
@@ -39,7 +38,6 @@ enyo.kind({
 	published:
 	{
 		title: '',
-		description: '',
 		number: 0,
 		success: 0,
 		help: 0,
@@ -85,10 +83,8 @@ enyo.kind({
 		this.errorChanged(this.error);
 	},
 
-	update: function ()
+	printTapped: function (inSender, inEvent)
 	{
-		this.$.title.render();
-		$('#'+this.$.title.id).tooltip({html: true, title: this.description});
+		alert('ici');
 	},
-
 });

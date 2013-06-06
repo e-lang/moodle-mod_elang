@@ -3,14 +3,6 @@
 	This way, you can minify your application, and just remove the "source" folder for production
 */
 
-#app_head a,
-#app_head a:hover,
-#app_head a:focus
-{
-	text-decoration: none;
-	color: inherit;
-}
-
 ::cue(.help)
 {
 	color: blue;

@@ -49,7 +49,7 @@ function elang_supports($feature)
  * will create a new instance and return the id number
  * of the new instance.
  *
- * @param   object			  $elang  An object from the form in mod_form.php
+ * @param   object              $elang  An object from the form in mod_form.php
  * @param   mod_elang_mod_form  $mform  The form
  *
  * @return  int  The id of the newly inserted elang record
@@ -112,10 +112,17 @@ function elang_update_instance(stdClass $elang, mod_elang_mod_form $mform = null
 
 /**
  * Save files for an instance
+ *
+ * @param   object  $elang  An object from the form in mod_form.php
+ *
+ * @return void
  */
 function elang_save_files(stdClass $elang)
 {
 	global $DB;
+
+	require_once dirname(__FILE__) . '/locallib.php';
+
 	$id = $elang->id;
 	$cmid = $elang->coursemodule;
 	$context = context_module::instance($cmid);
@@ -171,9 +178,7 @@ function elang_save_files(stdClass $elang)
 		if ($file->get_source())
 		{
 			$contents = $file->get_content();
-			//traitement du contenu du fichier
-			require_once('parseWebVTT.php');
-			$vtt = new parsewebvtt\WebVTT($contents);
+			$vtt = new Elang\WebVTT($contents);
 
 			$cue = new stdClass();
 
@@ -216,8 +221,9 @@ function elang_save_files(stdClass $elang)
  * this function will permanently delete the instance
  * and any data that depends on it.
  *
- * @param int $id Id of the module instance
- * @return boolean Success/Failure
+ * @param   int  $id  Id of the module instance
+ *
+ * @return  boolean   Success/Failure
  */
 function elang_delete_instance($id) {
 	global $DB;
@@ -226,9 +232,11 @@ function elang_delete_instance($id) {
 		return false;
 	}
 
-	# Delete any dependent records here #
-
+	// Delete any dependent records
 	$DB->delete_records('elang', array('id' => $elang->id));
+	$DB->delete_records('elang_ask_correction', array('id' => $elang->id));
+	$DB->delete_records('elang_cue', array('id' => $elang->id));
+	$DB->delete_records('elang_responses', array('id' => $elang->id));
 
 	return true;
 }
@@ -242,8 +250,8 @@ function elang_delete_instance($id) {
  *
  * @return stdClass|null
  */
-function elang_user_outline($course, $user, $mod, $elang) {
-
+function elang_user_outline($course, $user, $mod, $elang)
+{
 	$return = new stdClass();
 	$return->time = 0;
 	$return->info = '';
@@ -260,7 +268,8 @@ function elang_user_outline($course, $user, $mod, $elang) {
  * @param stdClass $elang the module instance record
  * @return void, is supposed to echp directly
  */
-function elang_user_complete($course, $user, $mod, $elang) {
+function elang_user_complete($course, $user, $mod, $elang)
+{
 }
 
 /**
@@ -270,7 +279,8 @@ function elang_user_complete($course, $user, $mod, $elang) {
  *
  * @return boolean
  */
-function elang_print_recent_activity($course, $viewfullnames, $timestart) {
+function elang_print_recent_activity($course, $viewfullnames, $timestart)
+{
 	return false;  //  True if anything was printed, otherwise false
 }
 
@@ -290,7 +300,8 @@ function elang_print_recent_activity($course, $viewfullnames, $timestart) {
  * @param int $groupid check for a particular group's activity only, defaults to 0 (all groups)
  * @return void adds items into $activities and increases $index
  */
-function elang_get_recent_mod_activity(&$activities, &$index, $timestart, $courseid, $cmid, $userid=0, $groupid=0) {
+function elang_get_recent_mod_activity(&$activities, &$index, $timestart, $courseid, $cmid, $userid=0, $groupid=0)
+{
 }
 
 /**
@@ -298,7 +309,8 @@ function elang_get_recent_mod_activity(&$activities, &$index, $timestart, $cours
 
  * @return void
  */
-function elang_print_recent_mod_activity($activity, $courseid, $detail, $modnames, $viewfullnames) {
+function elang_print_recent_mod_activity($activity, $courseid, $detail, $modnames, $viewfullnames)
+{
 }
 
 /**
@@ -309,7 +321,8 @@ function elang_print_recent_mod_activity($activity, $courseid, $detail, $modname
  * @return boolean
  * @todo Finish documenting this function
  **/
-function elang_cron () {
+function elang_cron ()
+{
 	return true;
 }
 
@@ -319,14 +332,10 @@ function elang_cron () {
  * @example return array('moodle/site:accessallgroups');
  * @return array
  */
-function elang_get_extra_capabilities() {
+function elang_get_extra_capabilities()
+{
 	return array();
 }
-
-
-////////////////////////////////////////////////////////////////////////////////
-// File API																   //
-////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Returns the lists of all browsable file areas within the given module context
@@ -339,7 +348,8 @@ function elang_get_extra_capabilities() {
  * @param stdClass $context
  * @return array of [(string)filearea] => (string)description
  */
-function elang_get_file_areas($course, $cm, $context) {
+function elang_get_file_areas($course, $cm, $context)
+{
 	return array();
 }
 
@@ -360,7 +370,8 @@ function elang_get_file_areas($course, $cm, $context) {
  * @param string $filename
  * @return file_info instance or null if not found
  */
-function elang_get_file_info($browser, $areas, $course, $cm, $context, $filearea, $itemid, $filepath, $filename) {
+function elang_get_file_info($browser, $areas, $course, $cm, $context, $filearea, $itemid, $filepath, $filename)
+{
 	return null;
 }
 
@@ -378,10 +389,14 @@ function elang_get_file_info($browser, $areas, $course, $cm, $context, $filearea
  * @param bool $forcedownload whether or not force download
  * @param array $options additional options affecting the file serving
  */
-function elang_pluginfile($course, $cm, $context, $filearea, array $args, $forcedownload, array $options=array()) {
+function elang_pluginfile($course, $cm, $context, $filearea, array $args, $forcedownload, array $options=array())
+{
 	global $DB, $CFG;
 
-	if ($context->contextlevel != CONTEXT_MODULE) {
+	require_once dirname(__FILE__) . '/locallib.php';
+
+	if ($context->contextlevel != CONTEXT_MODULE)
+	{
 		send_file_not_found();
 	}
 
@@ -394,18 +409,18 @@ function elang_pluginfile($course, $cm, $context, $filearea, array $args, $force
 
 	if ($filearea == 'subtitle')
 	{
-		require_once 'parseWebVTT.php';
-		$vtt = new parsewebvtt\WebVTT;
+		$vtt = new Elang\WebVTT;
 
 		$idlang = reset($args);
         $records = $DB->get_records('elang_cue', array('id_elang' => $idlang), 'begin ASC');
         $elang = $DB->get_record('elang', array('id' => $idlang));
         $options = json_decode($elang->options, true);
         $repeatedunderscore = isset($options['repeatedunderscore']) ? $options['repeatedunderscore'] : 10;
+        $i = 0;
         foreach ($records as $record)
         {
-			$cue = new parsewebvtt\Cue;
-			$cue->setTitle($record->id);
+			$cue = new Elang\Cue;
+			$cue->setTitle($i++ + 1);
 			$cue->setBegin($record->begin);
 			$cue->setEnd($record->end);
 			$text = json_decode($record->json);
@@ -437,6 +452,9 @@ function elang_pluginfile($course, $cm, $context, $filearea, array $args, $force
 }
 
 /**
+ * Get the list of all languages
+ *
+ * @return  array  Map array of the form tag => Language name
  */
 function elang_get_languages()
 {
@@ -567,7 +585,8 @@ function elang_get_coursemodule_info($coursemodule)
  * @param stdClass $module
  * @param cm_info $cm
  */
-function elang_extend_navigation(navigation_node $navref, stdclass $course, stdclass $module, cm_info $cm) {
+function elang_extend_navigation(navigation_node $navref, stdclass $course, stdclass $module, cm_info $cm)
+{
 }
 
 /**
@@ -579,5 +598,6 @@ function elang_extend_navigation(navigation_node $navref, stdclass $course, stdc
  * @param settings_navigation $settingsnav {@link settings_navigation}
  * @param navigation_node $elangnode {@link navigation_node}
  */
-function elang_extend_settings_navigation(settings_navigation $settingsnav, navigation_node $elangnode=null) {
+function elang_extend_settings_navigation(settings_navigation $settingsnav, navigation_node $elangnode=null)
+{
 }
