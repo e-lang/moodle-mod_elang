@@ -7,6 +7,12 @@ Description
 -----------
 A moodle module for learning language published under the [CeCILL-B licence](http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license)
 
+* Launch `git submodule init`, then `git submodule update`
+
+* Download [jquery](code.jquery.com/jquery.js) in `view/lib` folder
+
+* Download and unzip [bootstrap](http://twitter.github.io/bootstrap/assets/bootstrap.zip) in `view/lib` folder
+
 * Place the src folder into the /mod/elang folder of the moodle directory and change the version number in version.php.
 
 * Visit Settings > Site Administration > Notifications, you should find the module's tables successfully created
