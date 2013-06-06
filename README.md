@@ -9,13 +9,15 @@ A moodle module for learning language published under the [CeCILL-B licence](htt
 
 * Launch `git submodule init`, then `git submodule update`
 
-* Launch `mkdir view/lib`
+* Launch `mkdir src/view/lib`
 
-* Download [jquery](code.jquery.com/jquery.js) in `view/lib` folder
+* Download [jquery](code.jquery.com/jquery.js) in `src/view/lib` folder
 
-* Download and unzip [bootstrap](http://twitter.github.io/bootstrap/assets/bootstrap.zip) in `view/lib` folder
+* Download and unzip [bootstrap](http://twitter.github.io/bootstrap/assets/bootstrap.zip) in `src/view/lib` folder
 
-* Place the src folder into the `mod/elang` folder of the moodle directory.
+* Launch `cd src/view; tools/deploy.sh; cd ../..`
+
+* Place the `src` folder into the `mod/elang` folder of the moodle directory.
 
 * Visit Settings > Site Administration > Notifications, you should find the module's tables successfully created
 
