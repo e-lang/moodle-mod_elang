@@ -6,10 +6,10 @@
  * You can have a rather longer description of the file as well,
  * if you like, and it can span multiple lines.
  *
- * @package     mod
+ * @package	 mod
  * @subpackage  elang
  * @copyright   2013 University of La Rochelle, France
- * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ * @license	 http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  */
 
 require_once dirname(dirname(dirname(__FILE__))) . '/config.php';
@@ -26,7 +26,7 @@ if ($id)
 }
 else
 {
-    error('You must specify a course_module ID');
+	error('You must specify a course_module ID');
 }
 
 require_login($course, true, $cm);
@@ -52,35 +52,22 @@ else
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<title><?php echo format_string($name); ?></title>
-	
+
 		<link rel="shortcut icon" href="pix/icon.ico"/>
-		<!-- -->
+
 		<meta http-equiv="Content-Type" content="text/html; charset=utf8"/>
 		<meta name="apple-mobile-web-app-capable" content="yes"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-		
-		<!-- enyo (debug) -->
+
+<?php if (file_exists(dirname(__FILE__) . '/view/build')): ?>
+		<link href="view/build/enyo.css" rel="stylesheet"/>
+		<link href="view/build/app.css" rel="stylesheet"/>
+		<script src="view/build/enyo.js"></script>
+		<script src="view/build/app.js"></script>
+<?php else: ?>
 		<script src="view/enyo/enyo.js" type="text/javascript"></script>
-
-		<!-- Bootstrap -->
-		<link href="view/lib/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
-		<script src="view/lib/jquery/jquery.min.js" type="text/javascript"></script>
-        <link rel="stylesheet" type="text/css" href="view/lib/bootstrap/css/bootstrap.css"/>
-        <script src="view/lib/bootstrap/js/bootstrap-tooltip.js" type="text/javascript"></script>
-        <script src="view/lib/bootstrap/js/bootstrap-modal.js" type="text/javascript"></script>
-		
-		<!-- Include Captionator -->
-		
-		<script type="text/javascript" src="view/lib/captionator/js/captionator.js"></script>
-		<script type="text/javascript" src="view/lib/captionator/js/captionator-example-api.js"></script>
-
-		<!-- Video -->
-		<!--<link href="assets/css/video-default.css" rel="stylesheet">
-		<script type="text/javascript" src="assets/js/jquery-1.8.1.min.js"></script>
-		<script type="text/javascript" src="assets/js/jquery.video-ui.js"></script>-->
-
-		<!-- application (debug) -->
 		<script src="view/source/package.js" type="text/javascript"></script>
+<?php endif; ?>
 
 	</head>
 	<body>

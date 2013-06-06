@@ -133,10 +133,4 @@ enyo.kind({
 	{
 		return document.getElementById(this.id).currentTime;
 	},
-
-	update: function ()
-	{
-		this.render();
-		captionator.captionify(document.getElementById(this.id));
-	}
 });

@@ -1,4 +1,8 @@
 enyo.depends(
+	"$lib/jquery.js",
+	"$lib/bootstrap/js/bootstrap.js",
+	"$lib/bootstrap/css/bootstrap.css",
+	"$lib/bootstrap/css/bootstrap-responsive.css",
 	"App.js",
 	"Video.js",
 	"Head.js",
@@ -6,7 +10,6 @@ enyo.depends(
 	"Input.js",
 	"Progressbar.js",
 	"Reload.js",
-	"Input.css",
 	"Sequences.js",
 	"App.css",
 	"Video.css"

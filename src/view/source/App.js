@@ -241,6 +241,6 @@ enyo.kind({
 		}
 		this.$.video.setLanguage(inResponse.language);
 		this.$.video.setTrack(inResponse.track);
-		this.$.video.update();
+		this.$.video.render();
 	}
 });

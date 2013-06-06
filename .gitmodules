@@ -1,13 +1,4 @@
 [submodule "src/view/enyo"]
 	path = src/view/enyo
 	url = https://github.com/enyojs/enyo.git
-[submodule "src/view/lib/onyx"]
-	path = src/view/lib/onyx
-	url = https://github.com/enyojs/onyx.git
-[submodule "src/view/lib/layout"]
-	path = src/view/lib/layout
-	url = https://github.com/enyojs/layout.git
-[submodule "src/view/lib/captionator"]
-	path = src/view/lib/captionator
-	url = https://github.com/cgiffard/Captionator.git
 
