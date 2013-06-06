@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '/../src/parseWebVTT.php';
+require __DIR__ . '/../src/locallib.php';
 /**
  * Test parseWebVTT class
  *
@@ -85,14 +85,14 @@ class WebVTTTest extends PHPUnit_Framework_TestCase
 	public function testParseVtt($title, $duration, $text, $expected_title, $expected_duration, $expected_text)
 	{
 		$str = "WEBVTT\n\n" . ($title ? $title . " \n" : '') . $duration . "\n" . $text . "\n";
-		$wev = new parsewebvtt\WebVTT($str);
+		$wev = new Elang\WebVTT($str);
 		//Test title equals
 		$this->assertEquals (
 			$wev->current()->getTitle(),
 			$expected_title
 		);
 		//Test duration (string) equals
-		$time = parsewebvtt\Cue::formatMSString($wev->current()->getbegin()).' --> '.parsewebvtt\Cue::formatMSString($wev->current()->getEnd());
+		$time = Elang\Cue::formatMSString($wev->current()->getbegin()).' --> '.Elang\Cue::formatMSString($wev->current()->getEnd());
 		$this->assertEquals (
 			$time,
 			$expected_duration
@@ -139,7 +139,7 @@ class WebVTTTest extends PHPUnit_Framework_TestCase
 	{
 		//simulaiton de fichier vtt
 		$str = "WEBVTT\n\n" . ($title ? $title . " \n" : '') . $duration . "\n" . $text . "\n";
-		$webvtt = new parsewebvtt\WebVTT($str);
+		$webvtt = new Elang\WebVTT($str);
 		$this->assertEquals (
 			$webvtt->current()->__toString(),
 			$expected_title."\n". $expected_duration."\n".$expected_text."\n"
@@ -160,19 +160,19 @@ class WebVTTTest extends PHPUnit_Framework_TestCase
 	*/
 	public function testAddCue()
 	{
-		$cue1 = new parsewebvtt\Cue();
+		$cue1 = new Elang\Cue();
 		$cue1->setTitle("title1");
 		$cue1->setBegin("3500");
 		$cue1->setEnd("4000");
 		$cue1->setText("This is the teext of Cue 1");
 		
-		$cue2 = new parsewebvtt\Cue();
+		$cue2 = new Elang\Cue();
 		$cue2->setTitle("title2");
 		$cue2->setBegin("4001");
 		$cue2->setEnd("4500");
 		$cue2->setText("This is the teext of Cue 2");
 		
-		$webVtt = new parsewebvtt\WebVTT;
+		$webVtt = new Elang\WebVTT;
 		$webVtt->addCue($cue1);
 		$webVtt->addCue($cue2);
 		
