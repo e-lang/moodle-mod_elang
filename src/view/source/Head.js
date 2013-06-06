@@ -1,34 +1,94 @@
 enyo.kind({
 	name : "Elang.Head",
-	tag: 'h1',
+
 	components:
 	[
 		{
-			tag: 'a',
-			name: 'videoTitle',
-			attributes:
-			{
-				'data-toggle': 'tooltip',
-				'data-placement': 'bottom'
-			}
+			classes: 'page-header',
+			components:
+			[
+				{
+					tag: 'h1',
+					components:
+					[
+						{
+							tag: 'a',
+							name: 'title',
+							attributes:
+							{
+								href: '#',
+								'data-toggle': 'tooltip',
+								'data-placement': 'right'
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			classes: 'progress',
+			components:
+			[
+				{name: 'success', classes: 'bar bar-success', style: 'width: 0%;'},
+				{name: 'help', classes: 'bar bar-info', style: 'width: 0%;'},
+				{name: 'error', classes: 'bar bar-danger', style: 'width: 0%;'}
+			]
 		}
-	], 
-	
+	],
+
 	published:
 	{
-		headTitle: '',
-		headDescription: ''
+		title: '',
+		description: '',
+		number: 0,
+		success: 0,
+		help: 0,
+		error: 0
 	},
 
-	updateData: function(){
-		this.$.videoTitle.content = this.headTitle;
-		this.$.videoTitle.render();
-		$('#'+this.$.videoTitle.getAttribute('id')).data('tooltip',false).attr('data-original-title', this.headDescription);
-		$('#'+this.$.videoTitle.getAttribute('id')).tooltip({html: true});
+	titleChanged: function (oldValue)
+	{
+		this.$.title.content = this.title;
 	},
-	
-	create:function(){
-		this.inherited(arguments);
-		this.updateData();
-	}
+
+	successChanged: function (oldValue)
+	{
+		if (this.number > 0)
+		{
+			var width = ((this.success / this.number) * 100) | 0;
+		}
+		this.$.success.applyStyle('width', width + '%');
+	},
+
+	helpChanged: function (oldValue)
+	{
+		if (this.number > 0)
+		{
+			var width = ((this.help / this.number) * 100) | 0;
+		}
+		this.$.help.applyStyle('width', width + '%');
+	},
+
+	errorChanged: function (oldValue)
+	{
+		if (this.number > 0)
+		{
+			var width = ((this.error / this.number) * 100) | 0;
+		}
+		this.$.error.applyStyle('width', width + '%');
+	},
+
+	numberChanged: function (oldValue)
+	{
+		this.successChanged(this.success);
+		this.helpChanged(this.help);
+		this.errorChanged(this.error);
+	},
+
+	update: function ()
+	{
+		this.$.title.render();
+		$('#'+this.$.title.id).tooltip({html: true, title: this.description});
+	},
+
 });

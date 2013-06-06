@@ -1,197 +1,177 @@
 enyo.kind({
-    name: "Sequences",
-	tag: "div", 
-	classes:"pagination",
+    name: 'Elang.Sequences',
 
-	published:{
-		tabSequences : [],
-		idSequenceCourante : null, // id séquence courante
-		debutSequenceCourante : null, // début de la séquence courante
-		finSequenceCourante : null // fin de la séquence courante
-	},
-	components: [
+	published:
 	{
-		components: [
-		{ //liste de la pagination
-			name: "listPagination", 
-			tag: "ul"
-		},
-		{ //tableau des séquences
-			name: "tableauSequences",
-			tag: "table",
-			
-			//table-bordered -> tableau avec des bordures
-			//table-condensed -> lignes du tableau réduites
-			classes: "table table-bordered table-condensed"			
-		}]
-	}],
-	
-    create: function(){
-		this.inherited(arguments);
-    },
-	
-	/*
-	Méthode permettant l'initialisation des séquences 
-	et le remplissage du tableau des séquences (tabSequences)
-	*/
-	createSequences: function(list) {
-			//Remplissage du tableau des séquences (tabSequences)
-			for (var i in list){
-				this.tabSequences[i]=this.createComponent(
-					{
-						kind:"Elang.Sequence",
-						id:list[i].id,
-						titre:list[i].titre,
-						debut:list[i].debut,
-						fin:list[i].fin,
-						type: "notVerified"
-					},
-					{owner: this.tabSequences}
-				);
-		}
-		
-		//Initialisation des séquences et du tableau
-		this.letsGo();
+		sequences: [],
+		page: 10
 	},
 
-	// Evenement : lorsque l'on clique sur une ligne <tr> du tableau
-    sequenceItemTapped:function(inSender,inEvent){
-		//Récupération de l'id de la séquence qui est le nom (name) de la ligne 
-		this.idSequenceCourante = inSender.name; 
-		
-		//On cherche la séquence courante (dans tabSequences)
-		for (i in this.tabSequences)
+	events: {onSequenceTapped: ''},
+
+	components:
+	[
 		{
-			if(this.tabSequences[i].id ==this.idSequenceCourante)
-			{
-				//On récupère le début et la fin de la séquence courante
-				this.finSequenceCourante = this.tabSequences[i].fin;
-				this.debutSequenceCourante = this.tabSequences[i].debut;
-			}
-		}
-		
-		/*
-		On envoie un événement dans le bus pour le/les conteneur(s) parent(s) 
-		(App.js récupérera l'événement)
-		*/
-		this.bubble("onSequenceItemTapped",inEvent);
-    },
-	
-	//Méthode pour ajouter d'une page dans la liste de pagination
-	createTab: function(title){
-	
-		this.$.listPagination.createComponent({
-			tag:'li',
-			classes:'active',
-			components: [
-				{
-					//Element cliquable
-					tag: "a",
-					classes: 'btn-link',
-					attributes: {
-						href:'#'
-					},
-					content: title,
-					ontap: 'changeTab'
-				}
-			]
+			// Pagination
+			classes: 'pagination pagination-centered',
+			components: [{name: 'pagination', tag: 'ul'}]
 		},
-		{owner: this}
-		);
-    },
-	
-	//Méthode pour créer la séquence
-	createSequence: function(id, title, type){
-		//Le status peut être notVerified, verified (par défaut) et help
-		var status; 
-		if(type=='notVerified') {status = 'error';}
-		else if(type=='verified')  {status = 'success';}
-		else if(type=='help')  {status = 'warning';}
-		
-		this.$.TBODY.createComponent({
-			tag: 'tr', //Création d'une ligne
-			name: id,
-			classes: status,
-			
-			//Evénement
-			ontap: 'sequenceItemTapped',
-			components: [
+
+		{
+			tag: 'table',
+			classes: 'table table-bordered table-condensed table-striped',
+			components:
+			[
+				{tag: 'caption', content: $L('Sequence Listing')},
 				{
-					//Création du seul élément de la ligne
-					tag:'td',
-					components: [
+					tag: 'thead',
+					components:
+					[
 						{
-							tag: "a",
-							classes: 'btn-link',
-							attributes: {
-								href:''
-							},
-							content: title
+							tag: 'tr',
+							components:
+							[
+								{tag: 'th', attributes: {width: '7%'}, content: $L('#')},
+								{tag: 'th', content: $L('Title')}
+							]
 						}
 					]
-				}
+				},
+				// Body
+				{tag: 'tbody', name: 'body'},
 			]
-		},
-		{owner: this}
+		}
+	],
+
+	/**
+	 * Change the number of pages
+	 *
+	 * @param  pagination  integer  New number of pages
+	 *
+	 * @return  this
+	 */
+	setPagination: function (pagination)
+	{
+		this.$.pagination.destroyClientControls();
+		if (pagination > 1)
+		{
+			for (var i=1; i<=pagination; i++)
+			{
+				this.$.pagination.createComponent(
+					{
+						tag: 'li',
+						classes: i == 1 ? 'active' : '',
+						components:
+						[{tag: 'a', ontap: 'paginationTapped', attributes: {href: '#'}, content: i}]
+					},
+					{owner: this}
+				);
+			}
+			this.$.pagination.show();
+		}
+		else
+		{
+			this.$.pagination.hide();
+		}
+		return this;
+	},
+
+	/**
+	 * Handle tap event on a sequence
+	 *
+	 * @param  inSender  enyo.instance  Sender of the event
+	 * @param  inEvent   Object         Event fired
+	 *
+	 * @return void
+	 */
+    sequenceTapped: function(inSender, inEvent)
+    {
+    	for (var i in this.$.body.children)
+    	{
+	    	this.$.body.children[i].removeClass('info');
+    	}
+    	inSender.parent.parent.addClass('info');
+    	inEvent.sequence = inSender.sequence;
+		this.doSequenceTapped({sequence: inSender.sequence});
+    },
+
+	/**
+	 * Handle tap event on a page number
+	 *
+	 * @param  inSender  enyo.instance  Sender of the event
+	 * @param  inEvent   Object         Event fired
+	 *
+	 * @return void
+	 */
+	paginationTapped: function(inSender, inEvent)
+	{
+		for (var i in this.$.pagination.children)
+		{
+			this.$.pagination.children[i].removeClass('active');
+		}
+		inSender.parent.addClass('active');
+		this.$.body.destroyClientControls();
+		this.setTables(
+			(inSender.content - 1) * this.page, this.sequences.slice((inSender.content - 1) * this.page,
+			inSender.content * this.page)
 		);
+		this.$.body.render();
     },
-	
-	//Création du corps du tableau
-	createTbody: function(){
-		this.$.tableauSequences.createComponent({
-			name: 'TBODY',
-			tag: 'tbody',
-		},
-		{owner: this}
-		);
+
+	/**
+	 * Fill the table
+	 *
+	 * @param  start     integer  Start of the table
+	 * @param  elements  array    Elements of the table
+	 *
+	 * @return  this
+	 */
+	setTables: function(start, elements)
+	{
+		for (var i in elements)
+		{
+			this.$.body.createComponent(
+				{
+					tag: 'tr',
+					components:
+					[
+						{tag: 'td', content: start + parseInt(i) + 1},
+						{
+							tag: 'td',
+							components:
+							[
+								{
+									tag: 'a',
+									ontap: 'sequenceTapped',
+									sequence: this.sequences[start + parseInt(i)],
+									attributes:
+									{
+										href:'#'
+									},
+									content: elements[i].title
+								}
+							]
+						}
+					]
+				},
+				{owner: this}
+			);
+		}
+		return this;
 	},
 
-
-	deleteTbody: function(){
-		this.$.TBODY.destroy();
+	/**
+	 * Update the element
+	 *
+	 * @return this
+	 */
+	update: function ()
+	{
+		this.setPagination(((this.sequences.length / this.page) | 0) + (this.sequences.length % this.page > 0 ? 1 : 0));
+		this.setTables(0, this.sequences.slice(0, this.page));
+		return this.render();
 	},
-	
-	/*
-	Initialisation des séquences et du tableau
-	*/
-	letsGo: function(){
 
-			nbSequenceDerniereTab = (this.tabSequences.length%10); //modulo pour savoir combien de sequences seront affichées sur la derniere tab
-			if(nbSequenceDerniereTab==0) { //si il n'y a pas de séquence sur la dernière tab, soit nombre de séquence division par 10 sans reste
-				nbTotalTab = Math.floor(this.tabSequences.length/10); //alors on ne fait rien
-			}
-			else {
-				nbTotalTab = Math.floor(this.tabSequences.length/10)+1; //sinon on ajoute une tab pour afficher les dernière séquences
-			}
-			for(t=1; t<=nbTotalTab; t++) { //on créer les tab (liste des pages)
-				this.createTab(t);
-			}
-			this.remplissageSequences(0);
-    },
-	
-	changeTab: function(inSender, inEvent){
-			nbFirstSequence = (inSender.content-1)*10; //on recupere l'id de la tab, -1 car on ne commence pas à 0
-			//exemple pour la premiere page : inSender.content --> 1, 1-1*10=0
-			//exemple pour la seconde page : inSender.content --> 1, (2-1)*10=10
-			//3 ieme --> 20, 4 ieme --> 30...
-			this.deleteTbody(); //suppression du corps du tableau
-			this.remplissageSequences(nbFirstSequence);
-    },
-	
-	//Remplissage des séquences
-	remplissageSequences: function(startSequence){
-		this.createTbody(); //on créer un tobdy (corps du tableau) associé à la table pour lui insérer les séquences
-			for(s=0; s<10; s++) { //on remplit le tbody de la tab cliquée avec les séquences corresponantes
-				nbId = startSequence+s;
-				if (typeof (this.tabSequences[nbId]) != 'undefined') {
-					this.titre = this.tabSequences[nbId].titre;	
-					this.newtitre = (this.titre.length > 100)?this.titre.substring(0,97)+"...":this.titre;
-					this.createSequence(this.tabSequences[nbId].id, this.newtitre, this.tabSequences[nbId].type);
-				}
-			}
-			this.render();
-	},
-	
 	//Changement du type 'notVerified', 'verified', 'help'
 	setType: function(type)
 	{
@@ -202,30 +182,16 @@ enyo.kind({
 			{
 				//Changement du type de la séquence
 				this.tabSequences[i].type=type;
-				
+
 				var status;
 				if(type=='notVerified') {status = 'error';}
 				else if(type=='verified')  {status = 'success';}
-				else if(type=='help')  {status = 'warning';}		
-		
+				else if(type=='help')  {status = 'warning';}
+
 				//On récupère la ligne avec l'id de la séquence courante
 				var ligne = document.getElementById('app_sequences_'+this.tabSequences[i].id);
 				ligne.className = status;
 			}
 		}
-	}
-});
-
-enyo.kind({
-	name:"Elang.Sequence",
-	published:{
-		id : null,
-		titre : null,
-		debut : null,
-		fin : null,
-		type : null
-	},
-	create: function(){
-		this.inherited(arguments);
 	}
 });

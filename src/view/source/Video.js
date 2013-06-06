@@ -9,28 +9,15 @@
 enyo.kind({
 	name: 'Elang.Video',
 
-	published:
-	{
-		poster: '',
-		track: '',
-		language: '',
-		time:0,
-		end:Infinity
-	},
+	published: {poster: '', track: '', language: '', time: 0, end: Infinity},
 
-	handlers:
-	{
-		ontimeupdate: 'handleTimeUpdate',
-	},
+	handlers: {ontimeupdate: 'timeUpdated'},
 
 	tag: 'video',
 
 	content: 'Your user agent does not support the HTML5 Video element.',
 
-	attributes:
-	{
-		controls: 'controls'
-	},
+	attributes: {controls: 'controls'},
 
 	classes: 'elang',
 
@@ -39,13 +26,7 @@ enyo.kind({
 		{
 			name: 'track',
 			tag: 'track',
-			attributes:
-			{
-				kind: 'captions',
-				type: 'text/vtt',
-				default: 'default',
-				srclang: 'en-GB'
-			}
+			attributes: {kind: 'captions', type: 'text/vtt', default: 'default', srclang: 'en-GB'}
 		}	
 	],
 
@@ -56,38 +37,37 @@ enyo.kind({
 		enyo.ready(
 			function () {
 				// Listen for video events
-				enyo.dispatcher.listen(document.getElementById(this.getAttribute('id')), 'timeupdate');
+				enyo.dispatcher.listen(document.getElementById(this.id), 'timeupdate');
 			},
 			this
 		);
 	},
 
-	handleTimeUpdate:function (inSender, inEvent)
+	timeUpdated: function (inSender, inEvent)
 	{
-		var vid=document.getElementById(this.getAttribute('id'));
+		var vid=document.getElementById(this.id);
 		if (vid.currentTime >= this.end)
 		{
 			vid.pause();
 			vid.currentTime = this.end;
 			this.end = Infinity;
 		}
+		inEvent.time = document.getElementById(this.id).currentTime;
 	},
 
 	play: function ()
 	{
-		document.getElementById(this.getAttribute('id')).play();
+		document.getElementById(this.id).play();
 	},
 
 	pause: function ()
 	{
-		document.getElementById(this.getAttribute('id')).pause();
+		document.getElementById(this.id).pause();
 	},
 
-	updateSubtitles:function (sequenceID,sequenceText)
+	changeCue: function (number, text)
 	{
-		var vid=document.getElementById(this.getAttribute('id'));
-		var tracks=vid.textTracks;
-		tracks[0].cues[sequenceID].text.processedCue=sequenceText;		
+		document.getElementById(this.id).textTracks[0].cues[number].text = text;
 	},
 
 	clearSource: function ()
@@ -102,12 +82,7 @@ enyo.kind({
 	 */
 	addSource: function (src, type)
 	{
-		this.createComponent(
-			{
-				tag: 'source',
-				attributes: {src: src, type: type}
-			}
-		);
+		this.createComponent({tag: 'source', attributes: {src: src, type: type}});
 		return this;
 	},
 
@@ -148,7 +123,7 @@ enyo.kind({
 	 */
 	timeChanged: function (oldValue)
 	{
-		document.getElementById(this.getAttribute('id')).currentTime = this.time;
+		document.getElementById(this.id).currentTime = this.time;
 	},
 
 	/**
@@ -156,6 +131,12 @@ enyo.kind({
 	 */
 	getTime: function ()
 	{
-		return document.getElementById(this.getAttribute('id')).currentTime;
+		return document.getElementById(this.id).currentTime;
+	},
+
+	update: function ()
+	{
+		this.render();
+		captionator.captionify(document.getElementById(this.id));
 	}
 });

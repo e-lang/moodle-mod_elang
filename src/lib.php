@@ -183,12 +183,12 @@ function elang_save_files(stdClass $elang)
 				$cue->id_elang = $id;
 				$title = $elt->getTitle();
 				$text = strip_tags($elt->getText());
-				if (is_numeric($title))
+				if (empty($title) || is_numeric($title))
 				{
 					$title = preg_replace('/(\[[^\]]*\])/', '...', $text);
-					if (mb_strlen($title) > $elang->titlelength)
+					if (mb_strlen($title, 'UTF-8') > $elang->titlelength)
 					{
-						$cue->title = preg_replace('/ [^ ]*$/', ' ...', mb_substr($title, 0, $elang->titlelength));
+						$cue->title = preg_replace('/ [^ ]*$/', ' ...', mb_substr($title, 0, $elang->titlelength, 'UTF-8'));
 					}
 					else
 					{
@@ -409,12 +409,11 @@ function elang_pluginfile($course, $cm, $context, $filearea, array $args, $force
 			$cue->setBegin($record->begin);
 			$cue->setEnd($record->end);
 			$text = json_decode($record->json);
-			//var_dump($text);
 			foreach ($text as &$element)
 			{
 				if ($element[0] == '[' && $element[strlen($element) - 1] == ']')
 				{
-					$element = str_repeat('_', ((int) ((mb_strlen($element, 'UTF-8') - 1) / $repeatedunderscore) + 1) * $repeatedunderscore);
+					$element = str_repeat('-', ((int) ((mb_strlen($element, 'UTF-8') - 1) / $repeatedunderscore) + 1) * $repeatedunderscore);
 				}
 			}
 			$cue->setText(implode($text));

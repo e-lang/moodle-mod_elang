@@ -2,15 +2,27 @@
 	Put anything you reference with "url()" in ../assets/
 	This way, you can minify your application, and just remove the "source" folder for production
 */
-.nice-padding {
-	padding: 15px;
-}
 
-a, a:hover, a:focus {
+#app_head a,
+#app_head a:hover,
+#app_head a:focus
+{
 	text-decoration: none;
 	color: inherit;
 }
 
-.arduino {
+::cue(.help)
+{
+	color: blue;
+}
+
+::cue(.success)
+{
+	color: green;
+}
+
+::cue(.error)
+{
 	color: red;
 }
+

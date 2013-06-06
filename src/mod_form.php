@@ -167,6 +167,7 @@ class mod_elang_mod_form extends moodleform_mod
 		else
 		{
 			$config = get_config('elang');
+			var_dump($config);
 			$default_values['repeatedunderscore'] = $config->repeatedunderscore;
 			$default_values['showlanguage'] = $config->showlanguage;
 			$default_values['titlelength'] = $config->titlelength;

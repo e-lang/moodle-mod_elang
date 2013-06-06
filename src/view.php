@@ -85,9 +85,9 @@ else
 	</head>
 	<body>
 		<script>
-			var app=new App(
+			var app=new Elang.App(
 				<?php echo json_encode(array('url' => (string) new moodle_url('/mod/elang/server.php', array('id' => $cm->id)), 'timeout' => $config->timeout));?>
-			).renderInto(document.body);
+			).renderInto(document.body).requestData();
 		</script>
 	</body>
 </html>
