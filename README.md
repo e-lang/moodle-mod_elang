@@ -11,13 +11,13 @@ A moodle module for learning language published under the [CeCILL-B licence](htt
 
 * Launch `mkdir src/view/lib`
 
-* Download [jquery](code.jquery.com/jquery.js) in `src/view/lib` folder
+* Download [jquery](http://code.jquery.com/jquery.js) in the `src/view/lib` folder
 
-* Download and unzip [bootstrap](http://twitter.github.io/bootstrap/assets/bootstrap.zip) in `src/view/lib` folder
+* Download and unzip [bootstrap](http://twitter.github.io/bootstrap/assets/bootstrap.zip) in the `src/view/lib` folder
 
-* Launch `cd src/view; tools/deploy.sh; cd ../..`
+* Launch `cd src/view; enyo/tools/deploy.js; cd ../..`
 
-* Place the `src` folder into the `mod/elang` folder of the moodle directory.
+* Place the files of the `src` folder into the `mod/elang` folder of the moodle directory.
 
 * Visit Settings > Site Administration > Notifications, you should find the module's tables successfully created
 
@@ -29,3 +29,51 @@ Licenses
 --------
 
 * Icon designed by Benjamin D. Esham (Public domain), via [Wikimedia Commons] (http://commons.wikimedia.org/wiki/File:Chat_bubbles.svg)
+
+Authors
+-------
+
+* Alfred Knapp: Main idea application
+* [@chdemko](Christophe Demko): Main developer architect
+
+Contributors
+-------------
+
+Students in computer science master at the University of La Rochelle (2012-2013)
+
+* Armengaud Marie-Claude
+* Barraud Romain
+* Benrahal Imad
+* Bertel Marc
+* Bonnin Claire
+* Cambon Guillaume
+* Chevallier Maxime
+* Collet Antonin
+* David Jerome
+* De La Taste Pierre
+* Escribano Gaetan
+* Feld Wolfgang
+* Fighou Zoubair
+* Firar Soukaina
+* Graton Emilie
+* Hay Julien
+* Hervin Terence
+* Jageneau Julie
+* Jean-Caurant Axel
+* Kouakou Ahou Ines
+* Lapierre David
+* Le Pajolec Samuel
+* Lebigre Theo
+* Leblay Joffrey
+* Lemenicier Florian
+* Lemrabott  Mohamed Mahmoud
+* Letertre Valentin
+* Loemba Anne
+* Michaud Florian
+* Miloudi Fouad
+* Noiraud Vincent
+* Normandin Mathias
+* Parer Victor
+* Toinon Alexis
+* Vachon Mathilde
+
