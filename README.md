@@ -34,7 +34,7 @@ Authors
 -------
 
 * Alfred Knapp: Main idea application
-* [@chdemko](Christophe Demko): Main developer architect
+* [Christophe Demko](@chdemko): Main developer architect
 
 Contributors
 -------------
