@@ -5,16 +5,16 @@
 
 ::cue(.help)
 {
-	color: blue;
+	color: #00CED1;
 }
 
 ::cue(.success)
 {
-	color: green;
+	color: #7CFC00;
 }
 
 ::cue(.error)
 {
-	color: red;
+	color: #FF6347;
 }
 

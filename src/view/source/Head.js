@@ -38,6 +38,7 @@ enyo.kind({
 	published:
 	{
 		title: '',
+		pdf: '',
 		number: 0,
 		success: 0,
 		help: 0,
@@ -85,6 +86,6 @@ enyo.kind({
 
 	printTapped: function (inSender, inEvent)
 	{
-		alert('ici');
+		window.open(this.pdf);
 	},
 });

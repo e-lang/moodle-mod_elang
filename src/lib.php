@@ -9,10 +9,10 @@
  * logic, should go to locallib.php. This will help to save some memory when
  * Moodle is performing actions across all modules.
  *
- * @package     mod
+ * @package	 mod
  * @subpackage  elang
  * @copyright   2013 University of La Rochelle, France
- * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ * @license	 http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -49,7 +49,7 @@ function elang_supports($feature)
  * will create a new instance and return the id number
  * of the new instance.
  *
- * @param   object              $elang  An object from the form in mod_form.php
+ * @param   object			  $elang  An object from the form in mod_form.php
  * @param   mod_elang_mod_form  $mform  The form
  *
  * @return  int  The id of the newly inserted elang record
@@ -167,9 +167,8 @@ function elang_save_files(stdClass $elang)
 	}
 
 	// Delete old records
-	$DB->delete_records('elang_cue', array('id_elang' => $id));
-	$DB->delete_records('elang_responses', array('id_elang' => $id));
-	$DB->delete_records('elang_ask_correction', array('id_elang' => $id));
+	$DB->delete_records('elang_cues', array('id_elang' => $id));
+	$DB->delete_records('elang_users', array('id_elang' => $id));
 
 	$fs = get_file_storage();
 	$files = $fs->get_area_files($context->id, 'mod_elang', 'subtitle', $id);
@@ -182,7 +181,6 @@ function elang_save_files(stdClass $elang)
 
 			$cue = new stdClass();
 
-			$options = $elang->titlelength;
 			foreach($vtt->getCueList() as $i => $elt)
 			{
 				$cue->id_elang = $id;
@@ -191,6 +189,7 @@ function elang_save_files(stdClass $elang)
 				if (empty($title) || is_numeric($title))
 				{
 					$title = preg_replace('/(\[[^\]]*\])/', '...', $text);
+					var_dump($title, $elang);
 					if (mb_strlen($title, 'UTF-8') > $elang->titlelength)
 					{
 						$cue->title = preg_replace('/ [^ ]*$/', ' ...', mb_substr($title, 0, $elang->titlelength, 'UTF-8'));
@@ -206,9 +205,23 @@ function elang_save_files(stdClass $elang)
 				}
 				$cue->begin	=  $elt->getBegin();
 				$cue->end = $elt->getend();
-				$cue->json = json_encode(preg_split('/(\[[^\]]*\])/', $text, -1, PREG_SPLIT_DELIM_CAPTURE));
-
-				$DB->insert_record('elang_cue', $cue);
+				$cue->number = $i + 1;
+				$texts = preg_split('/(\[[^\]]*\])/', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
+				$data = array();
+				$i = 1;
+				foreach ($texts as $text)
+				{
+					if ($text[0] == '[' && $text[strlen($text)-1] == ']')
+					{
+						$data[] = array('type' => 'input', 'content' => substr($text, 1, strlen($text) - 2), 'order' => $i++);
+					}
+					else
+					{
+						$data[] = array('type' => 'text', 'content' => $text);
+					}
+				}
+				$cue->json = json_encode($data);
+				$DB->insert_record('elang_cues', $cue);
 			}
 		}
 	}
@@ -234,9 +247,8 @@ function elang_delete_instance($id) {
 
 	// Delete any dependent records
 	$DB->delete_records('elang', array('id' => $elang->id));
-	$DB->delete_records('elang_ask_correction', array('id' => $elang->id));
-	$DB->delete_records('elang_cue', array('id' => $elang->id));
-	$DB->delete_records('elang_responses', array('id' => $elang->id));
+	$DB->delete_records('elang_cues', array('id' => $elang->id));
+	$DB->delete_records('elang_users', array('id' => $elang->id));
 
 	return true;
 }
@@ -391,7 +403,7 @@ function elang_get_file_info($browser, $areas, $course, $cm, $context, $filearea
  */
 function elang_pluginfile($course, $cm, $context, $filearea, array $args, $forcedownload, array $options=array())
 {
-	global $DB, $CFG;
+	global $DB, $CFG, $USER;
 
 	require_once dirname(__FILE__) . '/locallib.php';
 
@@ -412,30 +424,52 @@ function elang_pluginfile($course, $cm, $context, $filearea, array $args, $force
 		$vtt = new Elang\WebVTT;
 
 		$idlang = reset($args);
-        $records = $DB->get_records('elang_cue', array('id_elang' => $idlang), 'begin ASC');
-        $elang = $DB->get_record('elang', array('id' => $idlang));
-        $options = json_decode($elang->options, true);
-        $repeatedunderscore = isset($options['repeatedunderscore']) ? $options['repeatedunderscore'] : 10;
-        $i = 0;
-        foreach ($records as $record)
-        {
+		$records = $DB->get_records('elang_cues', array('id_elang' => $idlang), 'begin ASC');
+		$elang = $DB->get_record('elang', array('id' => $idlang));
+		$options = json_decode($elang->options, true);
+		$repeatedunderscore = isset($options['repeatedunderscore']) ? $options['repeatedunderscore'] : 10;
+		$i = 0;
+		$users = $DB->get_records('elang_users', array('id_elang' => $idlang, 'id_user' => $USER->id), '', 'id_cue,json');
+		foreach ($records as $id => $record)
+		{
+			if (isset($users[$id]))
+			{
+				$data = json_decode($users[$id]->json, true);
+			}
+			else
+			{
+				$data = array();
+			}
 			$cue = new Elang\Cue;
 			$cue->setTitle($i++ + 1);
 			$cue->setBegin($record->begin);
 			$cue->setEnd($record->end);
-			$text = json_decode($record->json);
-			foreach ($text as &$element)
-			{
-				if ($element[0] == '[' && $element[strlen($element) - 1] == ']')
-				{
-					$element = str_repeat('-', ((int) ((mb_strlen($element, 'UTF-8') - 1) / $repeatedunderscore) + 1) * $repeatedunderscore);
-				}
-			}
-			$cue->setText(implode($text));
+			$cue->setText(Elang\generateCueText(json_decode($record->json, true), $data, '-', $repeatedunderscore));
 			$vtt->addCue($cue);
-        }
+		}
 
 		send_file((string) $vtt, end($args), 0 , 0, true, false, 'text/vtt');
+	}
+	elseif ($filearea == 'pdf')
+	{
+		require_once $CFG->libdir . '/pdflib.php';
+		$doc = new pdf;
+		$doc->SetFont('helvetica', '', 18, '', true);
+		$doc->setPrintHeader(false);
+		$doc->setPrintFooter(false);
+		$doc->AddPage();
+
+		$idlang = reset($args);
+		$records = $DB->get_records('elang_cues', array('id_elang' => $idlang), 'begin ASC');
+		$elang = $DB->get_record('elang', array('id' => $idlang));
+		$options = json_decode($elang->options, true);
+		$repeatedunderscore = isset($options['repeatedunderscore']) ? $options['repeatedunderscore'] : 10;
+		foreach ($records as $id => $record)
+		{
+			$doc->Write(5, Elang\generateCueText(json_decode($record->json, true), $data, '_',  $repeatedunderscore),'', false, '', true);
+			$doc->Write(5, '','', false, '', true);
+		}
+		send_file($doc->Output('', 'S'), end($args), 0 , 0, true, false, 'application/pdf');
 	}
 	else
 	{

@@ -1,13 +1,15 @@
 enyo.kind({
-    name: 'Elang.Sequences',
+	name: 'Elang.Cues',
 
 	published:
 	{
-		sequences: [],
+		cues: [],
 		page: 10
 	},
 
-	events: {onSequenceTapped: ''},
+	current: null,
+
+	events: {onCueTapped: ''},
 
 	components:
 	[
@@ -22,7 +24,7 @@ enyo.kind({
 			classes: 'table table-bordered table-condensed table-striped',
 			components:
 			[
-				{tag: 'caption', content: $L('Sequence Listing')},
+				{tag: 'caption', content: $L('Cue Listing')},
 				{
 					tag: 'thead',
 					components:
@@ -77,29 +79,37 @@ enyo.kind({
 	},
 
 	/**
-	 * Handle tap event on a sequence
+	 * Handle tap event on a cue
 	 *
 	 * @param  inSender  enyo.instance  Sender of the event
-	 * @param  inEvent   Object         Event fired
+	 * @param  inEvent   Object		 Event fired
 	 *
 	 * @return void
 	 */
-    sequenceTapped: function(inSender, inEvent)
-    {
-    	for (var i in this.$.body.children)
-    	{
-	    	this.$.body.children[i].removeClass('info');
-    	}
-    	inSender.parent.parent.addClass('info');
-    	inEvent.sequence = inSender.sequence;
-		this.doSequenceTapped({sequence: inSender.sequence});
-    },
+	cueTapped: function(inSender, inEvent)
+	{
+		for (var i in this.$.body.children)
+		{
+			this.$.body.children[i].removeClass('info');
+		}
+		if (this.current == inSender.cue)
+		{
+			this.current = null;
+			this.doCueTapped({cue: null});
+		}
+		else
+		{
+			inSender.parent.parent.addClass('info');
+			this.current = inSender.cue;
+			this.doCueTapped({cue: inSender.cue});
+		}
+	},
 
 	/**
 	 * Handle tap event on a page number
 	 *
 	 * @param  inSender  enyo.instance  Sender of the event
-	 * @param  inEvent   Object         Event fired
+	 * @param  inEvent   Object		 Event fired
 	 *
 	 * @return void
 	 */
@@ -112,17 +122,17 @@ enyo.kind({
 		inSender.parent.addClass('active');
 		this.$.body.destroyClientControls();
 		this.setTables(
-			(inSender.content - 1) * this.page, this.sequences.slice((inSender.content - 1) * this.page,
+			(inSender.content - 1) * this.page, this.cues.slice((inSender.content - 1) * this.page,
 			inSender.content * this.page)
 		);
 		this.$.body.render();
-    },
+	},
 
 	/**
 	 * Fill the table
 	 *
-	 * @param  start     integer  Start of the table
-	 * @param  elements  array    Elements of the table
+	 * @param  start	 integer  Start of the table
+	 * @param  elements  array	Elements of the table
 	 *
 	 * @return  this
 	 */
@@ -142,8 +152,8 @@ enyo.kind({
 							[
 								{
 									tag: 'a',
-									ontap: 'sequenceTapped',
-									sequence: this.sequences[start + parseInt(i)],
+									ontap: 'cueTapped',
+									cue: this.cues[start + parseInt(i)],
 									attributes:
 									{
 										href:'#'
@@ -167,21 +177,21 @@ enyo.kind({
 	 */
 	update: function ()
 	{
-		this.setPagination(((this.sequences.length / this.page) | 0) + (this.sequences.length % this.page > 0 ? 1 : 0));
-		this.setTables(0, this.sequences.slice(0, this.page));
+		this.setPagination(((this.cues.length / this.page) | 0) + (this.cues.length % this.page > 0 ? 1 : 0));
+		this.setTables(0, this.cues.slice(0, this.page));
 		return this.render();
 	},
 
 	//Changement du type 'notVerified', 'verified', 'help'
 	setType: function(type)
 	{
-		//On cherche la séquence courante (dans tabSequences)
-		for (i in this.tabSequences)
+		//On cherche la séquence courante (dans tabCues)
+		for (i in this.tabCues)
 		{
-			if(this.tabSequences[i].id ==this.idSequenceCourante)
+			if(this.tabCues[i].id ==this.idCueCourante)
 			{
 				//Changement du type de la séquence
-				this.tabSequences[i].type=type;
+				this.tabCues[i].type=type;
 
 				var status;
 				if(type=='notVerified') {status = 'error';}
@@ -189,7 +199,7 @@ enyo.kind({
 				else if(type=='help')  {status = 'warning';}
 
 				//On récupère la ligne avec l'id de la séquence courante
-				var ligne = document.getElementById('app_sequences_'+this.tabSequences[i].id);
+				var ligne = document.getElementById('app_cues_'+this.tabCues[i].id);
 				ligne.className = status;
 			}
 		}

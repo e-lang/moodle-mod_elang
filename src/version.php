@@ -15,7 +15,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 // The current module version (Date: YYYYMMDDXX). If version == 0 then module will not be installed
-$module->version   = 2013060301;
+$module->version   = 2013060802;
 
 // Requires this Moodle version
 $module->requires  = 2010031900;

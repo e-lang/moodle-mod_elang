@@ -21,10 +21,9 @@ enyo.kind({
 
 	handlers:
 	{
-		onSequenceTapped: 'sequenceTapped',
-		onValidSequence: 'sequenceValidated',
+		onCueTapped: 'cueTapped',
+		onValidCue: 'cueValidated',
 		onHelpTapped: 'helpTapped',
-		onReloadTapped: 'reloadTapped',
 		onCueChanged: 'cueChanged',
 		ontimeupdate: 'timeUpdated',
 	},
@@ -43,7 +42,7 @@ enyo.kind({
 			]
 		},
 
-		// Video, Input and sequences list
+		// Video, Input and cues list
 		{
 			classes: 'row-fluid',
 			components:
@@ -55,23 +54,9 @@ enyo.kind({
 						// Video
 						{kind: 'Elang.Video', name: 'video'},
 
-						// Reload and progress bar
-						{
-							classes: 'row-fluid',
-							components:
-							[
-								{
-									// Reload
-									classes: 'span1',
-									components: [{kind: 'Elang.Reload', name: 'reload'}]
-								},
-								{
-									// Progress bar
-									classes: 'span11',
-									components: [{kind: 'Elang.Progressbar', name: 'progressbar'}]
-								}
-							]
-						},
+						// Progress bar
+						{kind: 'Elang.Progressbar', name: 'progressbar'},
+
 						// Input
 						{kind: 'Elang.Input', name: 'input'}						
 					]
@@ -80,10 +65,10 @@ enyo.kind({
 					classes: 'span6',
 					components:
 					[
-						// Sequence list
+						// Cue list
 						{
-							kind: 'Elang.Sequences',
-							name: 'sequences'
+							kind: 'Elang.Cues',
+							name: 'cues'
 						}
 					]
 				}
@@ -97,25 +82,29 @@ enyo.kind({
 		}
 	],
 
-	sequenceTapped: function (inSender, inEvent)
+	cueTapped: function (inSender, inEvent)
 	{
-		this.$.video.pause();
-		this.$.video.setTime(inEvent.sequence.begin);
-		this.$.video.setEnd(inEvent.sequence.end);
-		this.$.reload.setSequence(inEvent.sequence);
-		this.$.input.setSequence(inEvent.sequence);
-		this.$.progressbar.setBegin(inEvent.sequence.begin).setCurrent(inEvent.sequence.begin).setEnd(inEvent.sequence.end).update();
+		if (inEvent.cue != null)
+		{
+			this.$.video.pause();
+			this.$.video.setBegin(inEvent.cue.begin);
+			this.$.video.setTime(inEvent.cue.begin);
+			this.$.video.setEnd(inEvent.cue.end);
+			this.$.input.setCue(inEvent.cue);
+			this.$.progressbar.show();
+			this.$.progressbar.setBegin(inEvent.cue.begin).setCurrent(inEvent.cue.begin).setEnd(inEvent.cue.end).update();
+		}
+		else
+		{
+			this.$.video.setBegin(0);
+			this.$.video.setEnd(Infinity);
+			this.$.input.setCue(inEvent.cue);
+			this.$.progressbar.hide();
+		}
 	},
 
 	helpTapped: function (inSender, inEvent){
-	  this.$.sequences.setType('help');
-	},
-
-	reloadTapped: function (inSender, inEvent)
-	{
-		this.$.video.setTime(inEvent.sequence.begin);
-		this.$.video.setEnd(inEvent.sequence.end);
-		this.$.video.play();
+	  this.$.cues.setType('help');
 	},
 
 	timeUpdated: function (inSender, inEvent)
@@ -123,9 +112,9 @@ enyo.kind({
 		this.$.progressbar.setCurrent(inEvent.time).update();
 	},
 
-	sequenceValidated: function (inSender,inEvent)
+	cueValidated: function (inSender,inEvent)
 	{
-	  this.$.sequences.setType('verified');
+	  this.$.cues.setType('verified');
 	},
 
 	cueChanged: function (inSender, inEvent)
@@ -220,11 +209,12 @@ enyo.kind({
 		this.$.head.setSuccess(inResponse.success);
 		this.$.head.setError(inResponse.error);
 		this.$.head.setHelp(inResponse.help);
+		this.$.head.setPdf(inResponse.pdf);
 		this.$.head.render();
 
-		// Construct the sequences object
-		this.$.sequences.setSequences(inResponse.sequences).setPage(inResponse.page);
-		this.$.sequences.update();
+		// Construct the cues object
+		this.$.cues.setCues(inResponse.cues).setPage(inResponse.page);
+		this.$.cues.update();
 
 		// Construct the input object
 		this.$.input.setUrl(this.url);
@@ -242,5 +232,7 @@ enyo.kind({
 		this.$.video.setLanguage(inResponse.language);
 		this.$.video.setTrack(inResponse.track);
 		this.$.video.render();
+
+		this.$.progressbar.hide();
 	}
 });

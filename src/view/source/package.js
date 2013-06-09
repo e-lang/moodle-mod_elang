@@ -9,8 +9,7 @@ enyo.depends(
 	"Modal.js",
 	"Input.js",
 	"Progressbar.js",
-	"Reload.js",
-	"Sequences.js",
+	"Cues.js",
 	"App.css",
 	"Video.css"
 );

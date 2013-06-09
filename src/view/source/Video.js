@@ -9,7 +9,7 @@
 enyo.kind({
 	name: 'Elang.Video',
 
-	published: {poster: '', track: '', language: '', time: 0, end: Infinity},
+	published: {poster: '', track: '', language: '', time: 0, begin: 0, end: Infinity},
 
 	handlers: {ontimeupdate: 'timeUpdated'},
 
@@ -49,8 +49,7 @@ enyo.kind({
 		if (vid.currentTime >= this.end)
 		{
 			vid.pause();
-			vid.currentTime = this.end;
-			this.end = Infinity;
+			vid.currentTime = this.begin;
 		}
 		inEvent.time = document.getElementById(this.id).currentTime;
 	},
@@ -133,4 +132,5 @@ enyo.kind({
 	{
 		return document.getElementById(this.id).currentTime;
 	},
+
 });

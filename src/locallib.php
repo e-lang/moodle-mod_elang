@@ -229,10 +229,49 @@ class WebVTT implements \Iterator{
 	
 }
 
+function generateCueText($data, $user, $char='-', $repeatedunderscore = 10)
+{
+	$text = array();
+	foreach ($data as $number => $element)
+	{
+		if ($element['type'] == 'input')
+		{
+			if (isset($user[$number]))
+			{
+				if (!empty($user[$number]['content']))
+				{
+					if ($user[$number]['content'] == $element['content'])
+					{
+						$text[] = '<c.success>' . $user[$number]['content'] . '</c>';
+					}
+					else
+					{
+						$text[] = '<c.error>' . $user[$number]['content'] . '</c>';
+					}
+				}
+				elseif ($user[$number]['help'])
+				{
+					$text[] = '<c.help>' . $element['content'] . '</c>';
+				}
+				else
+				{
+					$text[] = str_repeat($char, ((int) ((mb_strlen($element['content'], 'UTF-8') - 1) / $repeatedunderscore) + 1) * $repeatedunderscore);
+				}
+			}
+			else
+			{
+				$text[] = str_repeat($char, ((int) ((mb_strlen($element['content'], 'UTF-8') - 1) / $repeatedunderscore) + 1) * $repeatedunderscore);
+			}
+		}
+		else
+		{
+			$text[] = $element['content'];
+		}
+	}
+	return implode($text);
+}
+
 /**
- * マルチバイト文字列、英数字の混じった文字列を１文字ずつ配列に分割
- * 参考:http://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q1417635014#
- * mb_split, str_split, preg_splitことごとく使えない。
  */
 function mbStringToArray($string, $encoding = 'UTF-8') {
 	$arrayResult = array();
@@ -244,12 +283,10 @@ function mbStringToArray($string, $encoding = 'UTF-8') {
 }
 
 /**
- * 編集距離（レーベンシュタイン距離）を求める（マルチバイト文字対応）
  * @param $str1
  * @param $str2
  * @param $encoding
  * @param $costReplace
- * @return 数値（距離）,かぶっていた文字の数
  */
 function LevenshteinDistance($str1, $str2, $costReplace = 2, $encoding = 'UTF-8') {
 	$count_same_letter = 0;
@@ -276,10 +313,10 @@ function LevenshteinDistance($str1, $str2, $costReplace = 2, $encoding = 'UTF-8'
 				$cost = 0;
 				$count_same_letter++;
 			} else {
-				$cost = $costReplace; //置換
+				$cost = $costReplace;
 				}
-			$d[$i1][$i2] = min($d[$i1 - 1][$i2] + 1, //挿入
-			$d[$i1][$i2 - 1] + 1, //削除
+			$d[$i1][$i2] = min($d[$i1 - 1][$i2] + 1,
+			$d[$i1][$i2 - 1] + 1,
 			$d[$i1 - 1][$i2 - 1] + $cost);
 		}
 	}
