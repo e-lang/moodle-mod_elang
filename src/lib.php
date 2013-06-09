@@ -189,7 +189,6 @@ function elang_save_files(stdClass $elang)
 				if (empty($title) || is_numeric($title))
 				{
 					$title = preg_replace('/(\[[^\]]*\])/', '...', $text);
-					var_dump($title, $elang);
 					if (mb_strlen($title, 'UTF-8') > $elang->titlelength)
 					{
 						$cue->title = preg_replace('/ [^ ]*$/', ' ...', mb_substr($title, 0, $elang->titlelength, 'UTF-8'));

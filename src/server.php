@@ -255,7 +255,7 @@ switch ($task)
 		$text = optional_param('text', '', PARAM_TEXT);
 
 		// Log action
-		add_to_log($course->id, 'elang', 'view check ' . $cue->number . ' ' . $elements[$number]['order'] . ' [' . $text . ']=[' . $elements[$number]['content'] . ']', 'server.php?id=' . $cm->id . '&task=' . $task, $cm->name, $cm->id);
+		add_to_log($course->id, 'elang', 'view check ' . $cue->number . ' ' . $elements[$number]['order'] . ' [' . $text . ']=[' . $elements[$number]['content'] . ']', 'view.php?id=' . $cm->id, $cm->name, $cm->id);
 
 		header('Content-type: application/json');
 		$user = $DB->get_record('elang_users', array('id_cue' => $id_cue, 'id_user' => $USER->id));
@@ -313,7 +313,7 @@ switch ($task)
 		}
 
 		// Log action
-		add_to_log($course->id, 'elang', 'view help ' . $cue->number . ' ' . $elements[$number]['order'] . ' [' . $elements[$number]['content'] . ']', 'server.php?id=' . $cm->id . '&task=' . $task, $cm->name, $cm->id);
+		add_to_log($course->id, 'elang', 'view help ' . $cue->number . ' ' . $elements[$number]['order'] . ' [' . $elements[$number]['content'] . ']', 'view.php?id=' . $cm->id. $task, $cm->name, $cm->id);
 
 		header('Content-type: application/json');
 		$user = $DB->get_record('elang_users', array('id_cue' => $id_cue, 'id_user' => $USER->id));
