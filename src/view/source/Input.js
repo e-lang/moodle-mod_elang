@@ -5,7 +5,7 @@ enyo.kind({
 
 	published: {cue: null, url: null, timeout: null},
 
-	events: {onCueChanged: ''},
+	events: {onTrackChanged: ''},
 
 	cueChanged: function (oldValue)
 	{
@@ -168,7 +168,7 @@ enyo.kind({
 				this.cue.elements[inRequest.sender.name] = {content: inResponse.content, type: 'success'};
 				this.cueChanged();
 				this.render();
-				this.doCueChanged({number: this.cue.number, text: inResponse.cue});
+				this.doTrackChanged({number: this.cue.number, text: inResponse.cue});
 				break;
 			case 'failure':
 				if (inRequest.sender.value == '')
@@ -188,7 +188,7 @@ enyo.kind({
 				}
 				this.cueChanged();
 				this.render();
-				this.doCueChanged({number: this.cue.number, text: inResponse.cue});
+				this.doTrackChanged({number: this.cue.number, text: inResponse.cue});
 				break;
 		}
 	},
@@ -206,7 +206,7 @@ enyo.kind({
 		this.cue.elements[inRequest.sender.number] = {content: inResponse.content, type: 'help'};
 		this.cueChanged();
 		this.render();
-		this.doCueChanged({number: this.cue.number, text: inResponse.cue});
+		this.doTrackChanged({number: this.cue.number, text: inResponse.cue});
 	}
 });
 

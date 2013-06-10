@@ -7,27 +7,44 @@
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  */
 enyo.kind({
+	/**
+	 * Name of the kind
+	 */
 	name: 'Elang.App',
 
+	/**
+	 * Published properties:
+	 * - url: server url
+	 * - timeout: server timeout in milliseconds
+	 * Each property will have a public setter and a getter method
+	 */
+	published: {url: null, timeout: null},
+
+	/**
+	 * Handlers
+	 * - onCueTapped: handle a tap on a cue
+	 * - onHelpT
+	 */
+	handlers: {onCueTapped: 'cueTapped', onHelpTapped: 'helpTapped', onTrackChanged: 'trackChanged', ontimeupdate: 'timeUpdated'},
+
+	/**
+	 * css classes
+	 */
 	classes: 'container-fluid',
 
+	/**
+	 * css styles
+	 */
 	style: 'overflow: auto;',
 
-	published:
-	{
-		url: '',
-		timeout:''
-	},
-
-	handlers:
-	{
-		onCueTapped: 'cueTapped',
-		onValidCue: 'cueValidated',
-		onHelpTapped: 'helpTapped',
-		onCueChanged: 'cueChanged',
-		ontimeupdate: 'timeUpdated',
-	},
-
+	/**
+	 * Named components:
+	 * - head (Elang.Head): The head of the application containing the title and a pdf button
+	 * - progressbar (Elang.Progressbar): Student's progress
+	 * - video (Elang.Video): Video exercise
+	 * - slider (Elang.Progressbar): Cue cursor
+	 * - 
+	 */
 	components:
 	[
 		// Title and description
@@ -51,14 +68,14 @@ enyo.kind({
 					classes: 'span6',
 					components:
 					[
-						// Video
+						// video
 						{kind: 'Elang.Video', name: 'video'},
 
-						// Progress bar
-						{kind: 'Elang.Progressbar', name: 'progressbar'},
+						// slider
+						{kind: 'Elang.Progressbar', name: 'slider'},
 
-						// Input
-						{kind: 'Elang.Input', name: 'input'}						
+						// input
+						{kind: 'Elang.Input', name: 'input'}
 					]
 				},
 				{
@@ -82,48 +99,13 @@ enyo.kind({
 		}
 	],
 
-	cueTapped: function (inSender, inEvent)
-	{
-		if (inEvent.cue != null)
-		{
-			this.$.video.pause();
-			this.$.video.setBegin(inEvent.cue.begin);
-			this.$.video.setTime(inEvent.cue.begin);
-			this.$.video.setEnd(inEvent.cue.end);
-			this.$.input.setCue(inEvent.cue);
-			this.$.progressbar.show();
-			this.$.progressbar.setBegin(inEvent.cue.begin).setCurrent(inEvent.cue.begin).setEnd(inEvent.cue.end).update();
-		}
-		else
-		{
-			this.$.video.setBegin(0);
-			this.$.video.setEnd(Infinity);
-			this.$.input.setCue(inEvent.cue);
-			this.$.progressbar.hide();
-		}
-	},
-
-	helpTapped: function (inSender, inEvent){
-	  this.$.cues.setType('help');
-	},
-
-	timeUpdated: function (inSender, inEvent)
-	{
-		this.$.progressbar.setCurrent(inEvent.time).update();
-	},
-
-	cueValidated: function (inSender,inEvent)
-	{
-	  this.$.cues.setType('verified');
-	},
-
-	cueChanged: function (inSender, inEvent)
-	{
-		this.$.video.changeCue(inEvent.number, inEvent.text);
-	},
 
 	/**
-	 * Get the video data
+	 * Request the data
+	 *
+	 * @public
+	 *
+	 * @return  void
 	 */
 	requestData: function ()
 	{
@@ -153,6 +135,8 @@ enyo.kind({
 
 	/**
 	 * Callback failure function
+	 *
+	 * @protected
 	 *
 	 * @param   inRequest  enyo.Ajax      Request use for Ajax
 	 * @param   inError    string|number  Error code
@@ -186,13 +170,15 @@ enyo.kind({
 				break;
 			case 'timeout':
 				this.$.modal.setMessage('Timeout with the server');
-				break;				
+				break;
 		}
 		inRequest.fail(inError);
 	},
 
 	/**
 	 * Callback success function
+	 *
+	 * @protected
 	 *
 	 * @param   inRequest   enyo.Ajax  Request use for Ajax
 	 * @param   inResponse  object     Response bject
@@ -233,6 +219,71 @@ enyo.kind({
 		this.$.video.setTrack(inResponse.track);
 		this.$.video.render();
 
-		this.$.progressbar.hide();
-	}
+		// Hide the slider
+		this.$.slider.hide();
+	},
+
+	/**
+	 * Handle tap event on a cue
+	 *
+	 * @protected
+	 *
+	 * @param  inSender  enyo.instance  Sender of the event
+	 * @param  inEvent   Object		    Event fired
+	 *
+	 * @return void
+	 */
+	cueTapped: function (inSender, inEvent)
+	{
+		if (inEvent.cue == null)
+		{
+			this.$.video.setBegin(0);
+			this.$.video.setEnd(Infinity);
+
+			this.$.input.setCue(null);
+
+			this.$.slider.hide();
+		}
+		else
+		{
+			this.$.video.pause();
+			this.$.video.setBegin(inEvent.cue.begin);
+			this.$.video.setTime(inEvent.cue.begin);
+			this.$.video.setEnd(inEvent.cue.end);
+
+			this.$.input.setCue(inEvent.cue);
+
+			this.$.slider.setBegin(inEvent.cue.begin).setWarning(inEvent.cue.begin).setEnd(inEvent.cue.end);
+			this.$.slider.show();
+		}
+	},
+
+	/**
+	 * Handle help event on a input
+	 *
+	 * @protected
+	 *
+	 * @param  inSender  enyo.instance  Sender of the event
+	 * @param  inEvent   Object		    Event fired
+	 *
+	 * @return void
+	 */
+	helpTapped: function (inSender, inEvent)
+	{
+	},
+
+	trackChanged: function (inSender, inEvent)
+	{
+		this.$.video.changeCue(inEvent.number, inEvent.text);
+	},
+
+	timeUpdated: function (inSender, inEvent)
+	{
+		this.$.slider.setWarning(inEvent.time);
+	},
+
+	cueValidated: function (inSender,inEvent)
+	{
+	  this.$.cues.setType('verified');
+	},
 });
