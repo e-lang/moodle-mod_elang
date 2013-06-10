@@ -1,18 +1,37 @@
+/**
+ * Application kind
+ *
+ * @package     mod
+ * @subpackage  elang
+ * @copyright   2013 University of La Rochelle, France
+ * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ */
 enyo.kind({
+	/**
+	 * Name of the kind
+	 */
 	name: 'Elang.Cues',
 
-	published:
-	{
-		cues: [],
-		page: 10
-	},
+	/**
+	 * Published properties:
+	 * - cues: array of cue
+	 * - page: number of pages
+	 * Each property will have a public setter and a getter method
+	 */
+	published: {cues: [], page: 10},
 
-	current: null,
-
+	/**
+	 * Events:
+	 * - onCueTapped: fired when a cue is tapped
+	 */
 	events: {onCueTapped: ''},
 
-	components:
-	[
+	/**
+	 * Named components:
+	 * - pagination: table pagination
+	 * - body: table body
+	 */
+	components: [
 		{
 			// Pagination
 			classes: 'pagination pagination-centered',
@@ -22,17 +41,14 @@ enyo.kind({
 		{
 			tag: 'table',
 			classes: 'table table-bordered table-condensed table-striped',
-			components:
-			[
+			components: [
 				{tag: 'caption', content: $L('Cue Listing')},
 				{
 					tag: 'thead',
-					components:
-					[
+					components: [
 						{
 							tag: 'tr',
-							components:
-							[
+							components: [
 								{tag: 'th', attributes: {width: '7%'}, content: $L('#')},
 								{tag: 'th', content: $L('Title')}
 							]
@@ -81,12 +97,14 @@ enyo.kind({
 	/**
 	 * Handle tap event on a cue
 	 *
+	 * @protected
+	 *
 	 * @param  inSender  enyo.instance  Sender of the event
-	 * @param  inEvent   Object		 Event fired
+	 * @param  inEvent   Object		    Event fired
 	 *
 	 * @return void
 	 */
-	cueTapped: function(inSender, inEvent)
+	cueTapped: function (inSender, inEvent)
 	{
 		for (var i in this.$.body.children)
 		{
@@ -107,6 +125,8 @@ enyo.kind({
 
 	/**
 	 * Handle tap event on a page number
+	 *
+	 * @protected
 	 *
 	 * @param  inSender  enyo.instance  Sender of the event
 	 * @param  inEvent   Object		 Event fired
@@ -132,7 +152,7 @@ enyo.kind({
 	 * Fill the table
 	 *
 	 * @param  start	 integer  Start of the table
-	 * @param  elements  array	Elements of the table
+	 * @param  elements  array	  Elements of the table
 	 *
 	 * @return  this
 	 */
@@ -145,7 +165,7 @@ enyo.kind({
 					tag: 'tr',
 					components:
 					[
-						{tag: 'td', content: start + parseInt(i) + 1},
+						{tag: 'td', content: start + Number(i) + 1},
 						{
 							tag: 'td',
 							components:
@@ -153,7 +173,7 @@ enyo.kind({
 								{
 									tag: 'a',
 									ontap: 'cueTapped',
-									cue: this.cues[start + parseInt(i)],
+									cue: this.cues[start + Number(i)],
 									attributes:
 									{
 										href:'#'
@@ -203,5 +223,8 @@ enyo.kind({
 				ligne.className = status;
 			}
 		}
-	}
+	},
+
+	current: null,
+
 });
