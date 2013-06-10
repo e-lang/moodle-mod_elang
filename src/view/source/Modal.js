@@ -1,5 +1,5 @@
 /**
- * Modal to alert when the ajax request failed
+ * Modal to alert when an ajax request failed
  *
  * @package     mod
  * @subpackage  elang
@@ -7,21 +7,31 @@
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  */
 enyo.kind({
+	/**
+	 * Name of the kind
+	 */
 	name: 'Elang.Modal',
 
+	/**
+	 * Published properties:
+	 * - message: message to be displayed
+	 * Each property will have a public setter and a getter method
+	 */
+	published: {message: ''},
+
+	/**
+	 * css classes
+	 */
 	classes: 'modal hide fade',
 
-	published:
-	{
-		message: ''
-	},
-
-	components:
-	[
+	/**
+	 * Named components:
+	 * - message: where to display the message
+	 */
+	components: [
 		{
 			classes: 'modal-header',
-			components:
-			[
+			components: [
 				{
 					tag: 'button',
 					type: 'button',
@@ -35,14 +45,13 @@ enyo.kind({
 				},
 				{
 					tag: 'h1',
-					content: 'Error'
+					content: $L('Error')
 				},
 			]
 		},
 		{
 			classes: 'modal-body',
-			components:
-			[
+			components: [
 				{
 					name: 'message',
 					classes: 'alert',
@@ -52,8 +61,7 @@ enyo.kind({
 		},
 		{
 			classes: 'modal-footer',
-			components:
-			[
+			components: [
 				{
 					tag: 'button',
 					classes: 'btn',
@@ -63,12 +71,21 @@ enyo.kind({
 						'modal',
 						'aria-hidden': 'true'
 					},
-					content: 'Close'
+					content: $L('Close')
 				}
 			]
 		},
 	],
 
+	/**
+	 * Detect a change in the message property
+	 *
+	 * @protected
+	 *
+	 * @param   oldValue  string  The message old value
+	 *
+	 * @return  void
+	 */
 	messageChanged: function (oldValue)
 	{
 		this.$.message.content = this.message;
