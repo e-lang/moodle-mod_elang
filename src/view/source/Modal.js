@@ -1,5 +1,5 @@
 /**
- * Modal to alert when an ajax request failed
+ * Modal to alert the user
  *
  * @package     mod
  * @subpackage  elang
@@ -14,10 +14,13 @@ enyo.kind({
 
 	/**
 	 * Published properties:
+	 * - head: head of the modal
+	 * - type: type of the modal ('success', 'info', 'warning', 'danger')
+	 * - title: title of the modal
 	 * - message: message to be displayed
-	 * Each property will have a public setter and a getter method
+	 * Each property will have public setter and a getter methods
 	 */
-	published: {message: ''},
+	published: {head: '', type: '', title: '', message: ''},
 
 	/**
 	 * css classes
@@ -26,9 +29,13 @@ enyo.kind({
 
 	/**
 	 * Named components:
-	 * - message: where to display the message
+	 * - head: head of the alert
+	 * - type: used to set the type of the alert
+	 * - title: used to set the title of the alert
+	 * - message: message displayed
 	 */
 	components: [
+		{kind: enyo.Signals, onkeydown: 'keyDown'},
 		{
 			classes: 'modal-header',
 			components: [
@@ -36,26 +43,29 @@ enyo.kind({
 					tag: 'button',
 					type: 'button',
 					classes: 'close',
-					attributes:
-					{
-						'data-dismiss': 'modal',
-						'aria-hidden': 'true'
-					},
-					content: 'x'
+					attributes: {'data-dismiss': 'modal', 'aria-hidden': 'true'},
+					allowHtml: true,
+					content: '&times;'
 				},
-				{
-					tag: 'h1',
-					content: $L('Error')
-				},
+
+				// head
+				{name: 'head', tag: 'h3'},
 			]
 		},
 		{
 			classes: 'modal-body',
 			components: [
+				// type
 				{
-					name: 'message',
-					classes: 'alert',
-					tag: 'p',
+					name: 'type',
+					classes: 'alert alert-block',
+					components: [
+						// title
+						{name: 'title', tag: 'h4'},
+
+						// message
+						{name: 'message'}
+					],
 				}
 			]
 		},
@@ -65,17 +75,121 @@ enyo.kind({
 				{
 					tag: 'button',
 					classes: 'btn',
-					attributes:
-					{
-						'data-dismiss' :
-						'modal',
-						'aria-hidden': 'true'
-					},
+					attributes: {'data-dismiss': 'modal', 'aria-hidden': 'true'},
 					content: $L('Close')
 				}
 			]
 		},
 	],
+
+	/**
+	 * Set the data for the alert
+	 *
+	 * @public
+	 *
+	 * @param   head     string  The head content
+	 * @param   type     string  The type content
+	 * @param   title    string  The title content
+	 * @param   message  string  The message content
+	 *
+	 * @return  this
+	 */
+	setData: function (head, type, title, message)
+	{
+		this.setHead(head);
+		this.setType(type);
+		this.setTitle(title);
+		this.setMessage(message);
+		return this;
+	},
+
+	/**
+	 * Toggle the state of the alert
+	 *
+	 * @public
+	 *
+	 * @return  this
+	 */
+	toggle: function()
+	{
+		$('#' + this.id).modal('toggle');
+		return this;
+	},
+
+	/**
+	 * Show the alert
+	 *
+	 * @public
+	 *
+	 * @return  this
+	 */
+	show: function ()
+	{
+		$('#' + this.id).modal('show');
+		return this;
+	},
+
+	/**
+	 * Hide the alert
+	 *
+	 * @public
+	 *
+	 * @return  this
+	 */
+	hide: function ()
+	{
+		$('#' + this.id).modal('hide');
+		return this;
+	},
+
+	/**
+	 * Detect a change in the head property
+	 *
+	 * @protected
+	 *
+	 * @param   oldValue  string  The head old value
+	 *
+	 * @return  void
+	 */
+	headChanged: function (oldValue)
+	{
+		this.$.head.content = this.head;
+	},
+
+	/**
+	 * Detect a change in the type property
+	 *
+	 * @protected
+	 *
+	 * @param   oldValue  string  The type old value
+	 *
+	 * @return  void
+	 */
+	typeChanged: function (oldValue)
+	{
+		if (['success', 'info', 'warning', 'danger'].indexOf(this.type) < 0)
+		{
+			var type = this.type;
+			this.type = oldValue;
+			throw new RangeError('Type value "' + type + '" is incorrect');
+		}
+		this.$.type.addClass('alert-' + this.type);
+		this.$.type.removeClass('alert-' + oldValue);
+	},
+
+	/**
+	 * Detect a change in the title property
+	 *
+	 * @protected
+	 *
+	 * @param   oldValue  string  The title old value
+	 *
+	 * @return  void
+	 */
+	titleChanged: function (oldValue)
+	{
+		this.$.title.content = this.title;
+	},
 
 	/**
 	 * Detect a change in the message property
@@ -89,8 +203,25 @@ enyo.kind({
 	messageChanged: function (oldValue)
 	{
 		this.$.message.content = this.message;
-		this.render();
-		$('#' + this.id).modal('toggle');
+	},
+
+	/**
+	 * Handle keydown event on a modal
+	 *
+	 * @protected
+	 *
+	 * @param  inSender  enyo.instance  Sender of the event
+	 * @param  inEvent   Object		    Event fired
+	 *
+	 * @return void
+	 */
+	keyDown: function(inSender, inEvent)
+	{
+		// Detect escape character
+		if (inEvent.keyCode == 27)
+		{
+			return this.hide();
+		}
 	},
 });
 

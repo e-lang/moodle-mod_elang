@@ -1,5 +1,5 @@
 /**
- * Application kind
+ * Cues kind
  *
  * @package     mod
  * @subpackage  elang
@@ -14,17 +14,24 @@ enyo.kind({
 
 	/**
 	 * Published properties:
-	 * - cues: array of cue
-	 * - page: number of pages
+	 * - elements: array of cues
+	 * - limit: maximum number of cues per page
 	 * Each property will have a public setter and a getter method
 	 */
-	published: {cues: [], page: 10},
+	published: {elements: [], limit: 10},
 
 	/**
 	 * Events:
-	 * - onCueTapped: fired when a cue is tapped
+	 * - onCueSelect: fired when the cue is changed
+	 * - onCueDeselect: fired when the cue is deselected
 	 */
-	events: {onCueTapped: ''},
+	events: {onCueSelect: '', onCueDeselect: ''},
+
+	/**
+	 * Handlers:
+	 * - onPageChange: fired when the page changes
+	 */
+	handlers: {onPageChange: 'pageChange'},
 
 	/**
 	 * Named components:
@@ -32,17 +39,17 @@ enyo.kind({
 	 * - body: table body
 	 */
 	components: [
+		// Pagination
 		{
-			// Pagination
-			classes: 'pagination pagination-centered',
-			components: [{name: 'pagination', tag: 'ul'}]
+			kind: 'Elang.Pagination', name: 'pagination'
 		},
 
 		{
 			tag: 'table',
 			classes: 'table table-bordered table-condensed table-striped',
 			components: [
-				{tag: 'caption', content: $L('Cue Listing')},
+				{
+					tag: 'caption', content: $L('Cue Listing')},
 				{
 					tag: 'thead',
 					components: [
@@ -56,46 +63,15 @@ enyo.kind({
 					]
 				},
 				// Body
-				{tag: 'tbody', name: 'body'},
+				{
+					tag: 'tbody', name: 'body'
+				},
 			]
 		}
 	],
 
 	/**
-	 * Change the number of pages
-	 *
-	 * @param  pagination  integer  New number of pages
-	 *
-	 * @return  this
-	 */
-	setPagination: function (pagination)
-	{
-		this.$.pagination.destroyClientControls();
-		if (pagination > 1)
-		{
-			for (var i=1; i<=pagination; i++)
-			{
-				this.$.pagination.createComponent(
-					{
-						tag: 'li',
-						classes: i == 1 ? 'active' : '',
-						components:
-						[{tag: 'a', ontap: 'paginationTapped', attributes: {href: '#'}, content: i}]
-					},
-					{owner: this}
-				);
-			}
-			this.$.pagination.show();
-		}
-		else
-		{
-			this.$.pagination.hide();
-		}
-		return this;
-	},
-
-	/**
-	 * Handle tap event on a cue
+	 * Handle a page change event
 	 *
 	 * @protected
 	 *
@@ -104,7 +80,23 @@ enyo.kind({
 	 *
 	 * @return void
 	 */
-	cueTapped: function (inSender, inEvent)
+	pageChange: function (inSender, inEvent)
+	{
+		this.fillCues(inEvent.number);
+		this.doCueDeselect();
+	},
+
+	/**
+	 * Handle a tap event on a cue
+	 *
+	 * @protected
+	 *
+	 * @param  inSender  enyo.instance  Sender of the event
+	 * @param  inEvent   Object		    Event fired
+	 *
+	 * @return void
+	 */
+	cueTap: function (inSender, inEvent)
 	{
 		for (var i in this.$.body.children)
 		{
@@ -113,67 +105,75 @@ enyo.kind({
 		if (this.current == inSender.cue)
 		{
 			this.current = null;
-			this.doCueTapped({cue: null});
+			this.doCueDeselect();
 		}
 		else
 		{
 			inSender.parent.parent.addClass('info');
 			this.current = inSender.cue;
-			this.doCueTapped({cue: inSender.cue});
+			this.doCueSelect({cue: inSender.cue});
 		}
 	},
 
 	/**
-	 * Handle tap event on a page number
+	 * Detect a change in the limit value
 	 *
 	 * @protected
 	 *
-	 * @param  inSender  enyo.instance  Sender of the event
-	 * @param  inEvent   Object		 Event fired
+	 * @param  oldValue  integer  Old limit value
 	 *
-	 * @return void
+	 * @return  void
 	 */
-	paginationTapped: function(inSender, inEvent)
+	limitChanged: function (oldValue)
 	{
-		for (var i in this.$.pagination.children)
+		if (this.limit > 0)
 		{
-			this.$.pagination.children[i].removeClass('active');
+			this.changeTotal();
 		}
-		inSender.parent.addClass('active');
-		this.$.body.destroyClientControls();
-		this.setTables(
-			(inSender.content - 1) * this.page, this.cues.slice((inSender.content - 1) * this.page,
-			inSender.content * this.page)
-		);
-		this.$.body.render();
+		else
+		{
+			var limit = this.limit;
+			this.limit = oldValue;
+			throw new RangeError('Limit value "' + limit + '" is incorrect');
+		}
+	},
+
+	elementsChanged: function (oldValue)
+	{
+		this.fillCues(0);
 	},
 
 	/**
 	 * Fill the table
 	 *
-	 * @param  start	 integer  Start of the table
-	 * @param  elements  array	  Elements of the table
+	 * @protected
+	 *
+	 * @param  page	 integer  Page of the table
 	 *
 	 * @return  this
 	 */
-	setTables: function(start, elements)
+	fillCues: function (page)
 	{
-		for (var i in elements)
+		this.$.pagination.setTotal(((this.elements.length / this.limit) | 0) + (this.elements.length % this.limit > 0 ? 1 : 0));		
+		var start = page * this.limit;
+		var elements = this.elements.slice(start, start + this.limit);
+		this.$.body.destroyClientControls();
+		for (var i=0; i < elements.length; i++)
 		{
 			this.$.body.createComponent(
 				{
 					tag: 'tr',
 					components:
 					[
-						{tag: 'td', content: start + Number(i) + 1},
+						{tag: 'td', content: start + i + 1},
 						{
 							tag: 'td',
 							components:
 							[
 								{
 									tag: 'a',
-									ontap: 'cueTapped',
-									cue: this.cues[start + Number(i)],
+									ontap: 'cueTap',
+									cue: this.elements[start + i],
 									attributes:
 									{
 										href:'#'
@@ -187,44 +187,6 @@ enyo.kind({
 				{owner: this}
 			);
 		}
-		return this;
-	},
-
-	/**
-	 * Update the element
-	 *
-	 * @return this
-	 */
-	update: function ()
-	{
-		this.setPagination(((this.cues.length / this.page) | 0) + (this.cues.length % this.page > 0 ? 1 : 0));
-		this.setTables(0, this.cues.slice(0, this.page));
 		return this.render();
 	},
-
-	//Changement du type 'notVerified', 'verified', 'help'
-	setType: function(type)
-	{
-		//On cherche la séquence courante (dans tabCues)
-		for (i in this.tabCues)
-		{
-			if(this.tabCues[i].id ==this.idCueCourante)
-			{
-				//Changement du type de la séquence
-				this.tabCues[i].type=type;
-
-				var status;
-				if(type=='notVerified') {status = 'error';}
-				else if(type=='verified')  {status = 'success';}
-				else if(type=='help')  {status = 'warning';}
-
-				//On récupère la ligne avec l'id de la séquence courante
-				var ligne = document.getElementById('app_cues_'+this.tabCues[i].id);
-				ligne.className = status;
-			}
-		}
-	},
-
-	current: null,
-
 });

@@ -2,3 +2,18 @@ video.elang {
 	width: 100%;
 }
 
+::cue(.help)
+{
+	color: #00CED1;
+}
+
+::cue(.success)
+{
+	color: #7CFC00;
+}
+
+::cue(.error)
+{
+	color: #FF6347;
+}
+

@@ -1,16 +1,36 @@
+/**
+ * Head kind
+ *
+ * @package     mod
+ * @subpackage  elang
+ * @copyright   2013 University of La Rochelle, France
+ * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ */
 enyo.kind({
+	/**
+	 * Name of the kind
+	 */
 	name : "Elang.Head",
 
-	components:
-	[
+	/**
+	 * Published properties:
+	 * - title: exercise title
+	 * - pdf: URL to get the pdf
+	 * Each property will have a public setter and a getter method
+	 */
+	published: {title: '', pdf: ''},
+
+	/**
+	 * Named components:
+	 * - title: the title
+	 */
+	components: [
 		{
 			classes: 'page-header',
-			components:
-			[
+			components: [
 				{
 					tag: 'h1',
-					components:
-					[
+					components: [
 						{tag: 'span', name: 'title'},
 						{tag: 'span', content: ' '},
 						{
@@ -24,66 +44,28 @@ enyo.kind({
 				}
 			]
 		},
-		{
-			classes: 'progress',
-			components:
-			[
-				{name: 'success', classes: 'bar bar-success', style: 'width: 0%;'},
-				{name: 'help', classes: 'bar bar-info', style: 'width: 0%;'},
-				{name: 'error', classes: 'bar bar-danger', style: 'width: 0%;'}
-			]
-		}
 	],
 
-	published:
-	{
-		title: '',
-		pdf: '',
-		number: 0,
-		success: 0,
-		help: 0,
-		error: 0
-	},
-
+	/**
+	 * Detect a change in the title property
+	 *
+	 * @param   oldValue  string  The title old value
+	 */
 	titleChanged: function (oldValue)
 	{
 		this.$.title.content = this.title;
 	},
 
-	successChanged: function (oldValue)
-	{
-		if (this.number > 0)
-		{
-			var width = ((this.success / this.number) * 100) | 0;
-		}
-		this.$.success.applyStyle('width', width + '%');
-	},
-
-	helpChanged: function (oldValue)
-	{
-		if (this.number > 0)
-		{
-			var width = ((this.help / this.number) * 100) | 0;
-		}
-		this.$.help.applyStyle('width', width + '%');
-	},
-
-	errorChanged: function (oldValue)
-	{
-		if (this.number > 0)
-		{
-			var width = ((this.error / this.number) * 100) | 0;
-		}
-		this.$.error.applyStyle('width', width + '%');
-	},
-
-	numberChanged: function (oldValue)
-	{
-		this.successChanged(this.success);
-		this.helpChanged(this.help);
-		this.errorChanged(this.error);
-	},
-
+	/**
+	 * Handle tap event on the print button
+	 *
+	 * @protected
+	 *
+	 * @param  inSender  enyo.instance  Sender of the event
+	 * @param  inEvent   Object		    Event fired
+	 *
+	 * @return void
+	 */
 	printTapped: function (inSender, inEvent)
 	{
 		window.open(this.pdf);

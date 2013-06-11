@@ -3,18 +3,3 @@
 	This way, you can minify your application, and just remove the "source" folder for production
 */
 
-::cue(.help)
-{
-	color: #00CED1;
-}
-
-::cue(.success)
-{
-	color: #7CFC00;
-}
-
-::cue(.error)
-{
-	color: #FF6347;
-}
-

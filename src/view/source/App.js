@@ -16,7 +16,7 @@ enyo.kind({
 	 * Published properties:
 	 * - url: server url
 	 * - timeout: server timeout in milliseconds
-	 * Each property will have a public setter and a getter method
+	 * Each property will have public setter and a getter methods
 	 */
 	published: {url: null, timeout: null},
 
@@ -25,7 +25,13 @@ enyo.kind({
 	 * - onCueTapped: handle a tap on a cue
 	 * - onHelpT
 	 */
-	handlers: {onCueTapped: 'cueTapped', onHelpTapped: 'helpTapped', onTrackChanged: 'trackChanged', ontimeupdate: 'timeUpdated'},
+	handlers: {
+		onCueSelect: 'cueSelect',
+		onCueDeselect: 'cueDeselect',
+		onHelpTapped: 'helpTapped',
+		onTrackChanged: 'trackChanged',
+		ontimeupdate: 'timeUpdated'
+	},
 
 	/**
 	 * css classes
@@ -40,39 +46,41 @@ enyo.kind({
 	/**
 	 * Named components:
 	 * - head (Elang.Head): The head of the application containing the title and a pdf button
-	 * - progressbar (Elang.Progressbar): Student's progress
+	 * - indicator (Elang.Progressbar): Student's progress
 	 * - video (Elang.Video): Video exercise
-	 * - slider (Elang.Progressbar): Cue cursor
-	 * - 
+	 * - progressbar (Elang.Progressbar): Video progress bar
+	 * - cues (Elang.Cues): Cues list
 	 */
-	components:
-	[
-		// Title and description
+	components: [
+		// Title and indicator
 		{
 			classes: 'row-fluid',
-			components:
-			[
+			components: [
 				{
 					classes: 'span12',
-					components: [{kind: 'Elang.Head', name: 'head'}]
+					components: [
+						// title
+						{kind: 'Elang.Head', name: 'head'},
+
+						// indicator
+						{kind: 'Elang.Progressbar', name: 'indicator'}
+					]
 				}
 			]
 		},
 
-		// Video, Input and cues list
+		// Video, progressbar, input and cues list
 		{
 			classes: 'row-fluid',
-			components:
-			[
+			components: [
 				{
 					classes: 'span6',
-					components:
-					[
+					components: [
 						// video
 						{kind: 'Elang.Video', name: 'video'},
 
-						// slider
-						{kind: 'Elang.Progressbar', name: 'slider'},
+						// progressbar
+						{kind: 'Elang.Progressbar', name: 'progressbar'},
 
 						// input
 						{kind: 'Elang.Input', name: 'input'}
@@ -80,23 +88,16 @@ enyo.kind({
 				},
 				{
 					classes: 'span6',
-					components:
-					[
-						// Cue list
-						{
-							kind: 'Elang.Cues',
-							name: 'cues'
-						}
+					components: [
+						// cues
+						{kind: 'Elang.Cues', name: 'cues'}
 					]
 				}
 			]
 		},
 
 		// Modal to alert when the ajax request failed
-		{
-			kind: 'Elang.Modal',
-			name: 'modal'
-		}
+		{kind: 'Elang.Modal', name: 'modal'}
 	],
 
 
@@ -148,28 +149,28 @@ enyo.kind({
 		switch (inError)
 		{
 			case 400:
-				this.$.modal.setMessage('400 Bad Request');
+				this.$.modal.setData($L('Error'), 'danger', inError, $L('Bad Request')).render().show();
 				break;
 			case 401:
-				this.$.modal.setMessage('401 Unauthorized');
+				this.$.modal.setData($L('Error'), 'danger', inError, $L('Unauthorized')).render().show();
 				break;
 			case 403:
-				this.$.modal.setMessage('403 Forbidden');
+				this.$.modal.setData($L('Error'), 'danger', inError, $L('Forbidden')).render().show();
 				break;
 			case 404:
-				this.$.modal.setMessage('404 Not Found');
+				this.$.modal.setData($L('Error'), 'danger', inError, $L('Not Found')).render().show();
 				break;
 			case 500:
-				this.$.modal.setMessage('500 Internal Server Error');
+				this.$.modal.setData($L('Error'), 'danger', inError, $L('Internal Server Error')).render().show();
 				break;
 			case 501:
-				this.$.modal.setMessage('501 Not Implemented');
+				this.$.modal.setData($L('Error'), 'danger', inError, $L('Not Implemented')).render().show();
 				break;
 			case 503:
-				this.$.modal.setMessage('503 Service Unavailable');
+				this.$.modal.setData($L('Error'), 'danger', inError, $L('Service Unavailable')).render().show();
 				break;
 			case 'timeout':
-				this.$.modal.setMessage('Timeout with the server');
+				this.$.modal.setData($L('Error'), 'danger', $L('Timeout'), $L('Timeout with the server')).render().show();
 				break;
 		}
 		inRequest.fail(inError);
@@ -191,16 +192,15 @@ enyo.kind({
 
 		// Construct the header
 		this.$.head.setTitle(inResponse.title);
-		this.$.head.setNumber(inResponse.number);
+/*		this.$.head.setNumber(inResponse.number);
 		this.$.head.setSuccess(inResponse.success);
 		this.$.head.setError(inResponse.error);
-		this.$.head.setHelp(inResponse.help);
+		this.$.head.setHelp(inResponse.help);*/
 		this.$.head.setPdf(inResponse.pdf);
 		this.$.head.render();
 
 		// Construct the cues object
-		this.$.cues.setCues(inResponse.cues).setPage(inResponse.page);
-		this.$.cues.update();
+		this.$.cues.setLimit(inResponse.limit).setElements(inResponse.cues).render();
 
 		// Construct the input object
 		this.$.input.setUrl(this.url);
@@ -219,12 +219,12 @@ enyo.kind({
 		this.$.video.setTrack(inResponse.track);
 		this.$.video.render();
 
-		// Hide the slider
-		this.$.slider.hide();
+		// Hide the progressbar
+		this.$.progressbar.hide();
 	},
 
 	/**
-	 * Handle tap event on a cue
+	 * Handle select cue event
 	 *
 	 * @protected
 	 *
@@ -233,29 +233,37 @@ enyo.kind({
 	 *
 	 * @return void
 	 */
-	cueTapped: function (inSender, inEvent)
+	cueSelect: function (inSender, inEvent)
 	{
-		if (inEvent.cue == null)
-		{
-			this.$.video.setBegin(0);
-			this.$.video.setEnd(Infinity);
+		this.$.video.pause();
+		this.$.video.setBegin(inEvent.cue.begin);
+		this.$.video.setTime(inEvent.cue.begin);
+		this.$.video.setEnd(inEvent.cue.end);
 
-			this.$.input.setCue(null);
+		this.$.input.setCue(inEvent.cue);
 
-			this.$.slider.hide();
-		}
-		else
-		{
-			this.$.video.pause();
-			this.$.video.setBegin(inEvent.cue.begin);
-			this.$.video.setTime(inEvent.cue.begin);
-			this.$.video.setEnd(inEvent.cue.end);
+		this.$.progressbar.setBegin(inEvent.cue.begin).setWarning(inEvent.cue.begin).setEnd(inEvent.cue.end);
+		this.$.progressbar.show();
+	},
 
-			this.$.input.setCue(inEvent.cue);
+	/**
+	 * Handle deselect cue event
+	 *
+	 * @protected
+	 *
+	 * @param  inSender  enyo.instance  Sender of the event
+	 * @param  inEvent   Object		    Event fired
+	 *
+	 * @return void
+	 */
+	cueDeselect: function (inSender, inEvent)
+	{
+		this.$.video.setBegin(0);
+		this.$.video.setEnd(Infinity);
 
-			this.$.slider.setBegin(inEvent.cue.begin).setWarning(inEvent.cue.begin).setEnd(inEvent.cue.end);
-			this.$.slider.show();
-		}
+		this.$.input.setCue(null);
+
+		this.$.progressbar.hide();
 	},
 
 	/**
@@ -279,7 +287,7 @@ enyo.kind({
 
 	timeUpdated: function (inSender, inEvent)
 	{
-		this.$.slider.setWarning(inEvent.time);
+		this.$.progressbar.setWarning(inEvent.time);
 	},
 
 	cueValidated: function (inSender,inEvent)
