@@ -20,7 +20,7 @@ enyo.kind({
 	 * - info: the info cursor between the minimum and the maximum (rendered in blue)
 	 * - warning: the warning cursor between the minimum and the maximum (rendered in orange)
 	 * - danger: the danger cursor between the minimum and the maximum (rendered in red)
-	 * Each property will have a public setter and a getter method
+	 * Each property will have public setter and getter methods
 	 */
 	published: {begin: 0, end: 0, success: 0, info: 0, warning: 0, danger: 0},
 

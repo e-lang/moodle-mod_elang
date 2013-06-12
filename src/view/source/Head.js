@@ -16,7 +16,7 @@ enyo.kind({
 	 * Published properties:
 	 * - title: exercise title
 	 * - pdf: URL to get the pdf
-	 * Each property will have a public setter and a getter method
+	 * Each property will have public setter and getter methods
 	 */
 	published: {title: '', pdf: ''},
 
@@ -37,7 +37,7 @@ enyo.kind({
 							tag: 'a',
 							classes: 'btn btn-primary',
 							attributes: {href: '#'},
-							ontap: 'printTapped',
+							ontap: 'printTap',
 							components: [{tag :'i', classes: 'icon-print icon-white'}, {tag: 'span', content: $L(' Get a pdf version')}]
 						}
 					]
@@ -61,13 +61,16 @@ enyo.kind({
 	 *
 	 * @protected
 	 *
-	 * @param  inSender  enyo.instance  Sender of the event
-	 * @param  inEvent   Object		    Event fired
+	 * @param   inSender  enyo.instance  Sender of the event
+	 * @param   inEvent   Object		    Event fired
 	 *
-	 * @return void
+	 * @return  true
 	 */
-	printTapped: function (inSender, inEvent)
+	printTap: function (inSender, inEvent)
 	{
 		window.open(this.pdf);
+
+		// Prevents event propagation
+		return true;
 	},
 });

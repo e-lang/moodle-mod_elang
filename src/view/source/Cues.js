@@ -16,22 +16,15 @@ enyo.kind({
 	 * Published properties:
 	 * - elements: array of cues
 	 * - limit: maximum number of cues per page
-	 * Each property will have a public setter and a getter method
+	 * Each property will have public setter and getter methods
 	 */
 	published: {elements: [], limit: 10},
-
-	/**
-	 * Events:
-	 * - onCueSelect: fired when the cue is changed
-	 * - onCueDeselect: fired when the cue is deselected
-	 */
-	events: {onCueSelect: '', onCueDeselect: ''},
 
 	/**
 	 * Handlers:
 	 * - onPageChange: fired when the page changes
 	 */
-	handlers: {onPageChange: 'pageChange'},
+	handlers: {onPageChange: 'pageChange', onCueSelect: 'cueSelect'},
 
 	/**
 	 * Named components:
@@ -75,44 +68,38 @@ enyo.kind({
 	 *
 	 * @protected
 	 *
-	 * @param  inSender  enyo.instance  Sender of the event
-	 * @param  inEvent   Object		    Event fired
+	 * @param   inSender  enyo.instance  Sender of the event
+	 * @param   inEvent   Object		    Event fired
 	 *
 	 * @return void
 	 */
 	pageChange: function (inSender, inEvent)
 	{
 		this.fillCues(inEvent.number);
-		this.doCueDeselect();
 	},
 
 	/**
-	 * Handle a tap event on a cue
+	 * Handle a cue select event
 	 *
 	 * @protected
 	 *
-	 * @param  inSender  enyo.instance  Sender of the event
-	 * @param  inEvent   Object		    Event fired
+	 * @param   inSender  enyo.instance  Sender of the event
+	 * @param   inEvent   Object		    Event fired
 	 *
 	 * @return void
 	 */
-	cueTap: function (inSender, inEvent)
+	cueSelect: function (inSender, inEvent)
 	{
-		for (var i in this.$.body.children)
-		{
-			this.$.body.children[i].removeClass('info');
-		}
-		if (this.current == inSender.cue)
-		{
-			this.current = null;
-			this.doCueDeselect();
-		}
-		else
-		{
-			inSender.parent.parent.addClass('info');
-			this.current = inSender.cue;
-			this.doCueSelect({cue: inSender.cue});
-		}
+		enyo.forEach(
+			this.$.body.getClientControls(),
+			function (row) {
+				if (this != row)
+				{
+					row.removeClass('info');
+				}
+			},
+			inEvent.originator
+		);
 	},
 
 	/**
@@ -154,39 +141,98 @@ enyo.kind({
 	 */
 	fillCues: function (page)
 	{
-		this.$.pagination.setTotal(((this.elements.length / this.limit) | 0) + (this.elements.length % this.limit > 0 ? 1 : 0));		
+		this.$.pagination.setTotal(((this.elements.length / this.limit) | 0) + (this.elements.length % this.limit > 0 ? 1 : 0));
 		var start = page * this.limit;
 		var elements = this.elements.slice(start, start + this.limit);
 		this.$.body.destroyClientControls();
 		for (var i=0; i < elements.length; i++)
 		{
-			this.$.body.createComponent(
-				{
-					tag: 'tr',
-					components:
-					[
-						{tag: 'td', content: start + i + 1},
-						{
-							tag: 'td',
-							components:
-							[
-								{
-									tag: 'a',
-									ontap: 'cueTap',
-									cue: this.elements[start + i],
-									attributes:
-									{
-										href:'#'
-									},
-									content: elements[i].title
-								}
-							]
-						}
-					]
-				},
-				{owner: this}
-			);
+			this.$.body.createComponent({kind: 'Elang.Cue', number: start + i + 1, data: elements[i]}, {owner: this});
 		}
 		return this.render();
+	},
+});
+
+/**
+ * Cue kind
+ *
+ * @package     mod
+ * @subpackage  elang
+ * @copyright   2013 University of La Rochelle, France
+ * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ */
+enyo.kind({
+	/**
+	 * Name of the kind
+	 */
+	name: 'Elang.Cue',
+
+	/**
+	 * Published properties:
+	 * - number: number of the cue
+	 * - data: data hold by the cue
+	 * Each property will have public setter and getter methods
+	 */
+	published: {number: 0, data: {}},
+
+	/**
+	 * Events:
+	 * - onCueSelect: fired when the cue is changed
+	 * - onCueDeselect: fired when the cue is deselected
+	 */
+	events: {onCueSelect: '', onCueDeselect: ''},
+
+	/**
+	 * tag for this kind
+	 */
+	tag: 'tr',
+
+	/**
+	 * Named components:
+	 * - number: cue number
+	 * - data: cue data
+	 */
+	components: [
+		{name: 'number', tag: 'td'},
+		{tag: 'td', components: [{name: 'title', tag: 'a', ontap: 'cueTap', attributes: {href:'#'}}]}
+	],
+
+	/**
+	 * Create function
+	 *
+	 * @protected
+	 */
+	create: function ()
+	{
+		this.inherited(arguments);
+		this.$.number.content = this.number;
+		this.$.title.content = this.data.title;
+	},
+
+	/**
+	 * Handle a tap event on a cue
+	 *
+	 * @protected
+	 *
+	 * @param   inSender  enyo.instance  Sender of the event
+	 * @param   inEvent   Object		    Event fired
+	 *
+	 * @return  true
+	 */
+	cueTap: function (inSender, inEvent)
+	{
+		if (this.hasClass('info'))
+		{
+			this.removeClass('info');
+			this.doCueDeselect();
+		}
+		else
+		{
+			this.addClass('info');
+			this.doCueSelect();
+		}
+
+		// Prevents event propagation
+		return true;
 	},
 });

@@ -20,7 +20,7 @@ enyo.kind({
 	/**
 	 * Published properties:
 	 * - total: total number of pages
-	 * Each property will have a public setter and a getter method
+	 * Each property will have public setter and getter methods
 	 */
 	published: {total: 0},
 
@@ -80,10 +80,10 @@ enyo.kind({
 	 *
 	 * @protected
 	 *
-	 * @param  inSender  enyo.instance  Sender of the event
-	 * @param  inEvent   Object		 Event fired
+	 * @param   inSender  enyo.instance  Sender of the event
+	 * @param   inEvent   Object		 Event fired
 	 *
-	 * @return void
+	 * @return  true
 	 */
 	pageTap: function(inSender, inEvent)
 	{
@@ -102,5 +102,8 @@ enyo.kind({
 			this
 		);
 		inSender.container.addClass('active');
+
+		// Prevents event propagation
+		return true;
 	},
 });

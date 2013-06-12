@@ -1,26 +1,59 @@
+/**
+ * Cues kind
+ *
+ * @package     mod
+ * @subpackage  elang
+ * @copyright   2013 University of La Rochelle, France
+ * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ */
 enyo.kind({
+	/**
+	 * Name of the kind
+	 */
 	name: "Elang.Input",
 
-	components: [{tag: 'p', name: 'content'}],
-
+	/**
+	 * Published properties:
+	 * - cue: the current cue
+	 * - url: server url
+	 * - timeout: server timeout
+	 * Each property will have public setter and getter methods
+	 */
 	published: {cue: null, url: null, timeout: null},
 
-	events: {onTrackChanged: ''},
+	/**
+	 * Events:
+	 * - onTrackChange: fired when the text track associated with the cue change
+	 * - onFail: fired when an ajax request failed
+	 */
+	events: {onTrackChange: '', onFail: ''},
 
+	/**
+	 * Named components:
+	 * - content: input content
+	 */
+	components: [{tag: 'p', name: 'content'}],
+
+	/**
+	 * Detect a change in the cue property
+	 *
+	 * @param   oldValue  string  The cue old value
+	 */
 	cueChanged: function (oldValue)
 	{
 		this.$.content.destroyClientControls();
 		if (this.cue != null)
 		{
-			for (var i in this.cue.elements)
+			var elements = this.cue.getData().elements;
+			for (var i in elements)
 			{
-				var element = this.cue.elements[i];
+				var element = elements[i];
 				switch (element.type)
 				{
 					case 'text':
 						this.$.content.createComponents(
 							[
-								{tag: 'span', 'content': this.cue.elements[i].content},
+								{tag: 'span', 'content': element.content},
 								{tag: 'span', 'content': ' '},
 							],
 							{owner: this}
@@ -29,7 +62,7 @@ enyo.kind({
 					case 'success':
 						this.$.content.createComponents(
 							[
-								{tag: 'span', classes: 'alert-success', 'content': this.cue.elements[i].content},
+								{tag: 'span', classes: 'alert-success', 'content': element.content},
 								{tag: 'span', 'content': ' '},
 							],
 							{owner: this}
@@ -56,13 +89,13 @@ enyo.kind({
 											kind: 'Input',
 											name: i,
 											classes: element.size > 50 ? 'input-xxlarge' : element.size > 40 ? 'input-xlarge' : element.size > 30 ? 'input-large' : '',
-											onchange: 'textChanged',
+											onchange: 'textChange',
 											value: element.content,
 											attributes: {type: 'text'}
 										},
 										{
 											tag: 'a',
-											ontap: 'helpTapped',
+											ontap: 'helpTap',
 											number: i,
 											classes: 'btn',
 											attibutes: {href: '#'},
@@ -81,7 +114,17 @@ enyo.kind({
 		this.render();
 	},
 
-	textChanged: function (inSender, inEvent)
+	/**
+	 * Handle text change event
+	 *
+	 * @protected
+	 *
+	 * @param   inSender  enyo.instance  Sender of the event
+	 * @param   inEvent   Object		    Event fired
+	 *
+	 * @return  true
+	 */
+	textChange: function (inSender, inEvent)
 	{
 		// Request creation. The handleAs parameter is 'json' by default
 		var request = new enyo.Ajax(
@@ -107,10 +150,23 @@ enyo.kind({
 		request.sender = inSender;
 
 		// Makes the Ajax call with parameters
-		request.go({task: 'check', id_cue: this.cue.id, number: inSender.name, text: inSender.value});
+		request.go({task: 'check', id_cue: this.cue.getData().id, number: inSender.name, text: inSender.value});
+
+		// Prevents event propagation
+		return true;
 	},
 
-	helpTapped: function (inSender, inEvent)
+	/**
+	 * Handle help tap event
+	 *
+	 * @protected
+	 *
+	 * @param   inSender  enyo.instance  Sender of the event
+	 * @param   inEvent   Object		    Event fired
+	 *
+	 * @return  true
+	 */
+	helpTap: function (inSender, inEvent)
 	{
 		// Request creation. The handleAs parameter is 'json' by default
 		var request = new enyo.Ajax(
@@ -136,7 +192,10 @@ enyo.kind({
 		request.sender = inSender;
 
 		// Makes the Ajax call with parameters
-		request.go({task: 'help', id_cue: this.cue.id, number: inSender.number});
+		request.go({task: 'help', id_cue: this.cue.getData().id, number: inSender.number});
+
+		// Prevents event propagation
+		return true;
 	},
 
 	/**
@@ -149,7 +208,8 @@ enyo.kind({
 	 */
 	failure: function (inRequest, inError)
 	{
-		alert(inError);
+		this.doFail({error: inError});
+		inRequest.fail(inError);
 	},
 
 	/**
@@ -162,33 +222,34 @@ enyo.kind({
 	 */
 	success: function (inRequest, inResponse)
 	{
+		var data = this.cue.getData();
 		switch (inResponse.status)
 		{
 			case 'success':
-				this.cue.elements[inRequest.sender.name] = {content: inResponse.content, type: 'success'};
+				data.elements[inRequest.sender.name] = {content: inResponse.content, type: 'success'};
 				this.cueChanged();
 				this.render();
-				this.doTrackChanged({number: this.cue.number, text: inResponse.cue});
+				this.doTrackChange({number: data.number, text: inResponse.cue});
 				break;
 			case 'failure':
 				if (inRequest.sender.value == '')
 				{
-					this.cue.elements[inRequest.sender.name] = {
+					data.elements[inRequest.sender.name] = {
 						content: '', type: 'input',
-						size: this.cue.elements[inRequest.sender.name].size
+						size: data.elements[inRequest.sender.name].size
 					};
 				}
 				else
 				{
-					this.cue.elements[inRequest.sender.name] = {
+					data.elements[inRequest.sender.name] = {
 						content: inRequest.sender.value,
 						type: 'failure',
-						size: this.cue.elements[inRequest.sender.name].size
+						size: data.elements[inRequest.sender.name].size
 					};
 				}
 				this.cueChanged();
 				this.render();
-				this.doTrackChanged({number: this.cue.number, text: inResponse.cue});
+				this.doTrackChange({number: data.number, text: inResponse.cue});
 				break;
 		}
 	},
@@ -203,10 +264,10 @@ enyo.kind({
 	 */
 	help: function (inRequest, inResponse)
 	{
-		this.cue.elements[inRequest.sender.number] = {content: inResponse.content, type: 'help'};
+		this.cue.getData().elements[inRequest.sender.number] = {content: inResponse.content, type: 'help'};
 		this.cueChanged();
 		this.render();
-		this.doTrackChanged({number: this.cue.number, text: inResponse.cue});
+		this.doTrackChange({number: this.cue.getData().number, text: inResponse.cue});
 	}
 });
 

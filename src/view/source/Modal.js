@@ -210,18 +210,21 @@ enyo.kind({
 	 *
 	 * @protected
 	 *
-	 * @param  inSender  enyo.instance  Sender of the event
-	 * @param  inEvent   Object		    Event fired
+	 * @param   inSender  enyo.instance  Sender of the event
+	 * @param   inEvent   Object		    Event fired
 	 *
-	 * @return void
+	 * @return  true
 	 */
 	keyDown: function(inSender, inEvent)
 	{
 		// Detect escape character
 		if (inEvent.keyCode == 27)
 		{
-			return this.hide();
+			this.hide();
 		}
+
+		// Prevents event propagation
+		return true;
 	},
 });
 
