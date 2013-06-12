@@ -4,7 +4,7 @@
 	xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
 	<TABLES>
-		<TABLE NAME="elang" COMMENT="Exercises" NEXT="elang_cue">
+		<TABLE NAME="elang" COMMENT="Exercises" NEXT="elang_cues">
 			<FIELDS>
 				<FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="course"/>
 				<FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Course elang activity belongs to" PREVIOUS="id" NEXT="name"/>
@@ -13,7 +13,7 @@
 				<FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="description" PREVIOUS="intro" NEXT="timecreated"/>
 				<FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="introformat" NEXT="timemodified"/>
 				<FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="timecreated" NEXT="language"/>
-				<FIELD NAME="language" TYPE="text" LENGTH="short" NOTNULL="true" SEQUENCE="false" PREVIOUS="timemodified" NEXT="options"/>
+				<FIELD NAME="language" TYPE="text" LENGTH="small" NOTNULL="true" SEQUENCE="false" PREVIOUS="timemodified" NEXT="options"/>
 				<FIELD NAME="options" TYPE="text" LENGTH="big" NOTNULL="true" SEQUENCE="false" DEFAULT="{}" PREVIOUS="language"/>
 			</FIELDS>
 			<KEYS>
@@ -24,7 +24,7 @@
 			</INDEXES>
 		</TABLE>
 
-		<TABLE NAME="elang_cues" COMMENT="Exercise's cues" PREVIOUS="elang" NEXT="elang_responses">
+		<TABLE NAME="elang_cues" COMMENT="Exercise's cues" PREVIOUS="elang" NEXT="elang_users">
 			<FIELDS>
 				<FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="id_elang"/>
 				<FIELD NAME="id_elang" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="number"/>
@@ -43,7 +43,7 @@
 			</INDEXES>
 		</TABLE>
 
-		<TABLE NAME="elang_users" COMMENT="Users' activity" PREVIOUS="elang_cue">
+		<TABLE NAME="elang_users" COMMENT="Users' activity" PREVIOUS="elang_cues">
 			<FIELDS>
 				<FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="id_elang"/>
 				<FIELD NAME="id_elang" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="id_cue"/>

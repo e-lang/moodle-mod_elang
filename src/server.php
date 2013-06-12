@@ -161,9 +161,24 @@ switch ($task)
 			{
 				if ($element['type'] == 'input')
 				{
-					if (isset($user[$number]) && !empty($user[$number]['content']))
+					if (isset($user[$number]))
 					{
-						if ($user[$number]['content'] == $element['content'])
+						if ($user[$number]['help'])
+						{
+							$elements[] = array(
+								'type' => 'help',
+								'content' => $element['content']
+							);
+						}
+						elseif (empty($user[$number]['content']))
+						{
+							$elements[] = array(
+								'type' => 'input',
+								'size' => ((int) (mb_strlen($element['content'], 'UTF-8') - 1) / 10 + 1) * 10,
+								'content' => ''
+							);
+						}
+						elseif ($user[$number]['content'] == $element['content'])
 						{
 							$elements[] = array(
 								'type' => 'success',
@@ -178,13 +193,6 @@ switch ($task)
 								'content' => $user[$number]['content']
 							);
 						}
-					}
-					elseif ($user[$number]['help'])
-					{
-						$elements[] = array(
-							'type' => 'help',
-							'content' => $element['content']
-						);
 					}
 					else
 					{
@@ -222,7 +230,7 @@ switch ($task)
 			'error' => 20,
 			'help' => 10,
 			'cues' => $cues,
-			'page' => 10,
+			'limit' => 10,
 			'sources' => $sources,
 			'poster' => $poster,
 			'track' => $subtitle,
@@ -313,7 +321,7 @@ switch ($task)
 		}
 
 		// Log action
-		add_to_log($course->id, 'elang', 'view help ' . $cue->number . ' ' . $elements[$number]['order'] . ' [' . $elements[$number]['content'] . ']', 'view.php?id=' . $cm->id. $task, $cm->name, $cm->id);
+		add_to_log($course->id, 'elang', 'view help ' . $cue->number . ' ' . $elements[$number]['order'] . ' [' . $elements[$number]['content'] . ']', 'view.php?id=' . $cm->id, $cm->name, $cm->id);
 
 		header('Content-type: application/json');
 		$user = $DB->get_record('elang_users', array('id_cue' => $id_cue, 'id_user' => $USER->id));

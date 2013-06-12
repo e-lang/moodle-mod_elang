@@ -18,10 +18,16 @@ defined('MOODLE_INTERNAL') || die();
 $module->version   = 2013060802;
 
 // Requires this Moodle version
-$module->requires  = 2010031900;
+$module->requires  = 2012062500;
 
 // Period for cron to check this module (secs)
 $module->cron      = 0;
 
 // To check on upgrade, that module sits in correct place
 $module->component = 'mod_elang';
+
+// Human-friendly version name
+$module->release  = 'alpha-0.0.2';
+
+// Maturity: MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC, MATURITY_STABLE
+$module->maturity = MATURITY_ALPHA;

@@ -62,8 +62,9 @@ function elang_add_instance(stdClass $elang, mod_elang_mod_form $mform = null)
 	$elang->timemodified = time();
 	$elang->timecreated = time();
 	$elang->options = json_encode(array(
-		'showlanguage' => isset($elang->showlanguage) ? 1 : 0,
+		'showlanguage' => isset($elang->showlanguage) ? true : false,
 		'repeatedunderscore' => isset($elang->repeatedunderscore) ? $elang->repeatedunderscore : 10,
+		'titlelength' => isset($elang->titlelength) ? $elang->titlelength : 100,
 	));
 
 	// Storage of the main table of the module :
@@ -210,7 +211,7 @@ function elang_save_files(stdClass $elang)
 				$i = 1;
 				foreach ($texts as $text)
 				{
-					if ($text[0] == '[' && $text[strlen($text)-1] == ']')
+					if (isset($text[0]) && $text[0] == '[' && $text[strlen($text)-1] == ']')
 					{
 						$data[] = array('type' => 'input', 'content' => substr($text, 1, strlen($text) - 2), 'order' => $i++);
 					}

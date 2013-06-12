@@ -108,9 +108,11 @@ class mod_elang_mod_form extends moodleform_mod
 		$mform->addElement('text', 'repeatedunderscore', get_string('repeatedunderscore', 'elang'));
 		$mform->addHelpButton('repeatedunderscore', 'repeatedunderscore', 'elang');
 		$mform->addRule('repeatedunderscore', get_string('repeatedunderscore_error', 'elang'), 'numeric', null, 'client');
+		$mform->setType('repeatedunderscore', PARAM_INT);
 		$mform->addElement('text', 'titlelength', get_string('titlelength', 'elang'));
 		$mform->addHelpButton('titlelength', 'titlelength', 'elang');
 		$mform->addRule('titlelength', get_string('titlelength_error', 'elang'), 'numeric', null, 'client');
+		$mform->setType('titlelength', PARAM_INT);
 
 		// Add standard elements, common to all modules
 		$this->standard_coursemodule_elements();
@@ -160,9 +162,9 @@ class mod_elang_mod_form extends moodleform_mod
 			);
 			$default_values['poster'] = $draftitemid;
 			$options = json_decode(isset($default_values['options']) ? $default_values['options'] : '{}', true);
-			$default_values['showlanguage'] = $options['showlanguage'];
-			$default_values['repeatedunderscore'] = $options['repeatedunderscore'];
-			$default_values['titlelength'] = $options['titlelength'];
+			$default_values['showlanguage'] = isset($options['showlanguage']) ? $options['showlanguage'] : true;
+			$default_values['repeatedunderscore'] = isset($options['repeatedunderscore']) ? $options['repeatedunderscore'] : 10;
+			$default_values['titlelength'] = isset($options['titlelength']) ? $options['titlelength'] : 100;
 		}
 		else
 		{
