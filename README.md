@@ -3,9 +3,10 @@ moodle-mod_elang
 
 [![Build Status](https://travis-ci.org/chdemko/moodle-mod_elang.png?branch=master)](https://travis-ci.org/chdemko/moodle-mod_elang)
 
-Description
+See (http://chdemko.github.io/moodle-mod_elang/) [http://chdemko.github.io/moodle-mod_elang/] for description, license, authors and contributors.
+
+Installation
 -----------
-A moodle module for learning language published under the [CeCILL-B licence](http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license)
 
 * Launch `git submodule init`, then `git submodule update`
 
@@ -24,56 +25,4 @@ A moodle module for learning language published under the [CeCILL-B licence](htt
 * Go to Site Administration > Plugins > Activity modules > Manage activities
   and you should find that this elang has been added to the list of
   installed modules.
-
-Licenses
---------
-
-* Icon designed by Benjamin D. Esham (Public domain), via [Wikimedia Commons] (http://commons.wikimedia.org/wiki/File:Chat_bubbles.svg)
-
-Authors
--------
-
-* Alfred Knapp: Main idea application
-* [Christophe Demko](@chdemko): Main developer architect
-
-Contributors
--------------
-
-Students in computer science master at the University of La Rochelle (2012-2013)
-
-* Armengaud Marie-Claude
-* Barraud Romain
-* Benrahal Imad
-* Bertel Marc
-* Bonnin Claire
-* Cambon Guillaume
-* Chevallier Maxime
-* Collet Antonin
-* David Jerome
-* De La Taste Pierre
-* Escribano Gaetan
-* Feld Wolfgang
-* Fighou Zoubair
-* Firar Soukaina
-* Graton Emilie
-* Hay Julien
-* Hervin Terence
-* Jageneau Julie
-* Jean-Caurant Axel
-* Kouakou Ahou Ines
-* Lapierre David
-* Le Pajolec Samuel
-* Lebigre Theo
-* Leblay Joffrey
-* Lemenicier Florian
-* Lemrabott  Mohamed Mahmoud
-* Letertre Valentin
-* Loemba Anne
-* Michaud Florian
-* Miloudi Fouad
-* Noiraud Vincent
-* Normandin Mathias
-* Parer Victor
-* Toinon Alexis
-* Vachon Mathilde
 
