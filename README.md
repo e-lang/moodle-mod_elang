@@ -3,10 +3,10 @@ moodle-mod_elang
 
 [![Build Status](https://travis-ci.org/chdemko/moodle-mod_elang.png?branch=master)](https://travis-ci.org/chdemko/moodle-mod_elang)
 
-See (http://chdemko.github.io/moodle-mod_elang/) [http://chdemko.github.io/moodle-mod_elang/] for description, license, authors and contributors.
+See [http://chdemko.github.io/moodle-mod_elang](http://chdemko.github.io/moodle-mod_elang) for description, license, authors and contributors.
 
 Installation
------------
+------------
 
 * Launch `git submodule init`, then `git submodule update`
 
