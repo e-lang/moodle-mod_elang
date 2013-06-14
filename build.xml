@@ -35,7 +35,6 @@
 		<unzip src="tmp/enyo.zip" dest="build/elang/view" />
 		<move file="build/elang/view/enyo-master" tofile="build/elang/view/enyo"/>
 		<copy file="tmp/jquery.js" tofile="build/elang/view/lib/jquery.js" />
-		<copy file="README.md" tofile="build/elang" />
 		<zip destfile="${ant.project.name}-${release}-${version}.zip" basedir="build" excludes="**/*~" />
 	</target>
 
