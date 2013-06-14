@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="moodle-mod_elang" default="build" basedir=".">
+	<property name="version" value="2013060802" />
+	<property name="requires" value="2012062500" />
+	<property name="release" value="alpha-0.0.2" />
+	<property name="maturity" value="MATURITY_ALPHA" />
+
+	<target name="build" depends="clean, get, zip"/>
+
+	<target name="clean" description="Clean up">
+		<delete dir="build" />
+		<delete dir="tmp" />
+	</target>
+
+	<target name="get" description="Get files">
+		<mkdir dir="tmp" />
+		<get src="http://twitter.github.io/bootstrap/assets/bootstrap.zip" dest="tmp/bootstrap.zip" />
+		<get src="http://code.jquery.com/jquery.js" dest="tmp/jquery.js" />
+		<get src="https://github.com/enyojs/enyo/archive/master.zip" dest="tmp/enyo.zip" />
+	</target>
+
+	<target name="zip" description="Zip files">
+		<copy todir="build/elang">
+			<fileset dir="src">
+				<exclude name="version.tpl"/>
+			</fileset>
+		</copy>
+		<copy file="src/version.tpl" tofile="build/elang/version.php" overwrite="true" />
+		<replace file="build/elang/version.php" token="@VERSION@" value="${version}" summary="true" />
+		<replace file="build/elang/version.php" token="@REQUIRES@" value="${requires}" summary="true" />
+		<replace file="build/elang/version.php" token="@RELEASE@" value="${release}" summary="true" />
+		<replace file="build/elang/version.php" token="@MATURITY@" value="${maturity}" summary="true" />
+
+		<unzip src="tmp/bootstrap.zip" dest="build/elang/view/lib" />
+		<unzip src="tmp/enyo.zip" dest="build/elang/view" />
+		<move file="build/elang/view/enyo-master" tofile="build/elang/view/enyo"/>
+		<copy file="tmp/jquery.js" tofile="build/elang/view/lib/jquery.js" />
+		<copy file="README.md" tofile="build/elang" />
+		<zip destfile="${ant.project.name}-${release}-${version}.zip" basedir="build" excludes="**/*~" />
+	</target>
+
+</project>
