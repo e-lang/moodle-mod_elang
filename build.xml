@@ -11,7 +11,7 @@
 		<delete dir="build" />
 		<delete dir="tmp" />
 		<delete>
-			<fileset dir="." includes="moodle-mod_elang*.zip"/>
+			<fileset dir="." includes="${ant.project.name}*.zip"/>
 		</delete>
 	</target>
 
