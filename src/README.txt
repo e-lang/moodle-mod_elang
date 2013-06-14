@@ -5,3 +5,7 @@ Installation
 
 * Visit Settings > Site Administration > Notifications and install the E-Lang module
 
+Use
+---
+
+See http://chdemko.github.io/moodle-mod_elang/ for conditions of use.

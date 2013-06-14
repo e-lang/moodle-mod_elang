@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="moodle-mod_elang" default="build" basedir=".">
-	<property name="version" value="2013060802" />
+	<property name="version" value="2013061500" />
 	<property name="requires" value="2012062500" />
 	<property name="release" value="alpha-0.0.2" />
 	<property name="maturity" value="MATURITY_ALPHA" />
 
-	<target name="build" depends="clean, get, zip"/>
+	<target name="build" depends="clean, get, prepare, debug, compressed" />
 
 	<target name="clean" description="Clean up">
 		<delete dir="build" />
 		<delete dir="tmp" />
+		<delete>
+			<fileset dir="." includes="moodle-mod_elang*.zip"/>
+		</delete>
 	</target>
 
 	<target name="get" description="Get files">
@@ -19,7 +22,7 @@
 		<get src="https://github.com/enyojs/enyo/archive/master.zip" dest="tmp/enyo.zip" />
 	</target>
 
-	<target name="zip" description="Zip files">
+	<target name="prepare" description="Prepare files">
 		<copy todir="build/elang">
 			<fileset dir="src">
 				<exclude name="version.tpl"/>
@@ -35,7 +38,17 @@
 		<unzip src="tmp/enyo.zip" dest="build/elang/view" />
 		<move file="build/elang/view/enyo-master" tofile="build/elang/view/enyo"/>
 		<copy file="tmp/jquery.js" tofile="build/elang/view/lib/jquery.js" />
-		<zip destfile="${ant.project.name}-${release}-${version}.zip" basedir="build" excludes="**/*~" />
+	</target>
+
+	<target name="debug" description="Zip files for debug version">
+		<zip destfile="${ant.project.name}-${release}-${version}-debug.zip" basedir="build" excludes="**/*~,elang/view/build,elang/view/deploy" />
+	</target>
+
+	<target name="compressed" description="Zip files for compressed version">
+		<chmod file="build/elang/view/enyo/tools/deploy.js" perm="u+x" />
+		<exec dir="build/elang/view" executable="enyo/tools/deploy.js" />
+		<zip destfile="${ant.project.name}-${release}-${version}.zip" basedir="build" excludes="**/*~,elang/view/" />
+		<zip destfile="${ant.project.name}-${release}-${version}.zip" update="true" basedir="build" includes="elang/view/build/*,elang/view/lib/bootstrap/img/*" />
 	</target>
 
 </project>

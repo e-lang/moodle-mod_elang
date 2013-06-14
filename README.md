@@ -11,6 +11,7 @@ Build
 * Run `ant get` for getting [bootstrap](http://twitter.github.io/bootstrap/assets/bootstrap.zip),
 [jquery](http://code.jquery.com/jquery.js) and [enyojs](https://github.com/enyojs/enyo/archive/master.zip)
 
-* Run `ant zip` for creating zip file ready to be unzipped in the `mod` folder of the moodle directory
+* Run `ant prepare` for preparing files
 
+* Run `ant debug` or `ant compressed` for creating zip files ready to be unzipped in the `mod` folder of the moodle directory
 
