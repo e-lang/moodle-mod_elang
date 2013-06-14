@@ -6,10 +6,10 @@
  * You can have a rather longer description of the file as well,
  * if you like, and it can span multiple lines.
  *
- * @package	    mod
+ * @package     mod
  * @subpackage  elang
  * @copyright   2013 University of La Rochelle, France
- * @license	    http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  */
 
 require_once dirname(dirname(dirname(__FILE__))) . '/config.php';
@@ -43,7 +43,6 @@ if (!isloggedin())
 	die;
 }
 
-
 // Get the context
 $context = context_module::instance($cm->id);
 
@@ -73,9 +72,9 @@ switch ($task)
 	case 'data':
 		header('Content-type: application/json');
 		$fs = get_file_storage();
-		$files = $fs->get_area_files($context->id, 'mod_elang', 'videos', $elang->id);
+		$files = $fs->get_area_files($context->id, 'mod_elang', 'videos', 0);
 		$sources = array();
-		
+
 		foreach ($files as $file)
 		{
 			if ($file->get_source())
@@ -94,7 +93,7 @@ switch ($task)
 			}
 		}
 
-		$files = $fs->get_area_files($context->id, 'mod_elang', 'poster', $elang->id);
+		$files = $fs->get_area_files($context->id, 'mod_elang', 'poster', 0);
 		$poster = '';
 
 		foreach ($files as $file)
@@ -145,18 +144,22 @@ switch ($task)
 		$i = 0;
 		$records = $DB->get_records('elang_cues', array('id_elang' => $elang->id), 'begin ASC');
 		$users = $DB->get_records('elang_users', array('id_elang' => $elang->id, 'id_user' => $USER->id), '', 'id_cue,json');
- 		foreach ($records as $id => $record)
+
+		foreach ($records as $id => $record)
 		{
 			$data = json_decode($record->json, true);
- 	      	if (isset($users[$id]))
-        	{
+
+			if (isset($users[$id]))
+			{
 				$user = json_decode($users[$id]->json, true);
 			}
 			else
 			{
 				$user = array();
 			}
+
 			$elements = array();
+
 			foreach ($data as $number => $element)
 			{
 				if ($element['type'] == 'input')
@@ -222,38 +225,44 @@ switch ($task)
 			);
 		}
 
-		echo json_encode(array(
-			'title' => $elang->name,
-			'description' => $elang->intro,
-			'number' => 150,
-			'success' => 50,
-			'error' => 20,
-			'help' => 10,
-			'cues' => $cues,
-			'limit' => 10,
-			'sources' => $sources,
-			'poster' => $poster,
-			'track' => $subtitle,
-			'pdf' => $pdf,
-			'language' => $elang->language
-		));
+		echo json_encode(
+			array(
+				'title' => $elang->name,
+				'description' => $elang->intro,
+				'number' => 150,
+				'success' => 50,
+				'error' => 20,
+				'help' => 10,
+				'cues' => $cues,
+				'limit' => 10,
+				'sources' => $sources,
+				'poster' => $poster,
+				'track' => $subtitle,
+				'pdf' => $pdf,
+				'language' => $elang->language
+			)
+		);
 		die;
 		break;
 	case 'check':
 		$id_cue = optional_param('id_cue', 0, PARAM_INT);
 		$cue = $DB->get_record('elang_cues', array('id' => $id_cue), '*');
+
 		if (!$cue)
 		{
 			header('HTTP/1.1 404 Not Found');
 			die;
 		}
+
 		if ($cue->id_elang != $elang->id)
 		{
 			header('HTTP/1.1 400 Bad Request');
 			die;
 		}
+
 		$number = optional_param('number', 0, PARAM_INT);
 		$elements = json_decode($cue->json, true);
+
 		if (!isset($elements[$number]))
 		{
 			header('HTTP/1.1 500 Internal Server Error');
@@ -263,10 +272,24 @@ switch ($task)
 		$text = optional_param('text', '', PARAM_TEXT);
 
 		// Log action
-		add_to_log($course->id, 'elang', 'view check ' . $cue->number . ' ' . $elements[$number]['order'] . ' [' . $text . ']=[' . $elements[$number]['content'] . ']', 'view.php?id=' . $cm->id, $cm->name, $cm->id);
+		add_to_log(
+			$course->id,
+			'elang',
+			'add check',
+			'view.php?id=' . $cm->id,
+			$DB->insert_record(
+				'elang_logs',
+				array(
+					'info' => $cue->number . ',' . $elements[$number]['order'] . ',[' . $text . ']=[' . $elements[$number]['content'] . ']',
+					'id_elang' => $elang->id
+				)
+			),
+			$cm->id
+		);
 
 		header('Content-type: application/json');
 		$user = $DB->get_record('elang_users', array('id_cue' => $id_cue, 'id_user' => $USER->id));
+
 		if ($user)
 		{
 			$data = json_decode($user->json, true);
@@ -289,6 +312,7 @@ switch ($task)
 		}
 
 		$cue_text = Elang\generateCueText($elements, $data, '-', $repeatedunderscore);
+
 		if ($elements[$number]['content'] == $text)
 		{
 			echo json_encode(array('status' => 'success', 'cue' => $cue_text, 'content' => $text));
@@ -297,23 +321,28 @@ switch ($task)
 		{
 			echo json_encode(array('status' => 'failure', 'cue' => $cue_text));
 		}
+
 		die;
 		break;
 	case 'help':
 		$id_cue = optional_param('id_cue', 0, PARAM_INT);
 		$cue = $DB->get_record('elang_cues', array('id' => $id_cue), '*');
+
 		if (!$cue)
 		{
 			header('HTTP/1.1 404 Not Found');
 			die;
 		}
+
 		if ($cue->id_elang != $elang->id)
 		{
 			header('HTTP/1.1 400 Bad Request');
 			die;
 		}
+
 		$number = optional_param('number', 0, PARAM_INT);
 		$elements = json_decode($cue->json, true);
+
 		if (!isset($elements[$number]))
 		{
 			header('HTTP/1.1 500 Internal Server Error');
@@ -321,10 +350,24 @@ switch ($task)
 		}
 
 		// Log action
-		add_to_log($course->id, 'elang', 'view help ' . $cue->number . ' ' . $elements[$number]['order'] . ' [' . $elements[$number]['content'] . ']', 'view.php?id=' . $cm->id, $cm->name, $cm->id);
+		add_to_log(
+			$course->id,
+			'elang',
+			'add check',
+			'view.php?id=' . $cm->id,
+			$DB->insert_record(
+				'elang_logs',
+				array(
+					'info' => $cue->number . ',' . $elements[$number]['order'] . ',[' . $elements[$number]['content'] . ']',
+					'id_elang' => $elang->id
+				)
+			),
+			$cm->id
+		);
 
 		header('Content-type: application/json');
 		$user = $DB->get_record('elang_users', array('id_cue' => $id_cue, 'id_user' => $USER->id));
+
 		if ($user)
 		{
 			$data = json_decode($user->json, true);

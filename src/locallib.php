@@ -79,7 +79,7 @@ class Cue{
 			$res.="\n";
 		}
 		//Time
-		$res .=Cue::formatMSString($this->begin).' --> '.Cue::formatMSString($this->end);
+		$res .= Cue::formatMSString($this->begin).' --> '.Cue::formatMSString($this->end);
 		$res.="\n";
 		//Text
 		$res .=$this->text;
@@ -225,8 +225,23 @@ class WebVTT implements \Iterator{
 			$res.="\n";
 		}
 		return $res;
+	}	
+}
+
+function generateTitle($elang, $options)
+{
+	// Get all the languages
+	$languages = getLanguages();
+
+	// Get the page title
+	if ($options['showlanguage'])
+	{
+		return sprintf(get_string('formatname', 'elang'), $elang->name, $languages[$elang->language]);
 	}
-	
+	else
+	{
+		return $elang->name;
+	}
 }
 
 function generateCueText($data, $user, $char='-', $repeatedunderscore = 10)
@@ -269,6 +284,131 @@ function generateCueText($data, $user, $char='-', $repeatedunderscore = 10)
 		}
 	}
 	return implode($text);
+}
+
+/**
+ * Save files for an instance
+ *
+ * @param   object  $elang  An object from the form in mod_form.php
+ *
+ * @return void
+ */
+function saveFiles(\stdClass $elang)
+{
+	global $DB;
+
+	require_once dirname(__FILE__) . '/locallib.php';
+
+	$id = $elang->id;
+	$cmid = $elang->coursemodule;
+	$context = \context_module::instance($cmid);
+
+	// Storage of files from the filemanager (videos):
+	$draftitemid = $elang->videos;
+
+	if ($draftitemid)
+	{
+		file_save_draft_area_files(
+			$draftitemid,
+			$context->id,
+			'mod_elang',
+			'videos',
+			0
+		);
+	}
+
+	// Storage of files from the filemanager (subtitle):
+	$draftitemid = $elang->subtitle;
+
+	if ($draftitemid)
+	{
+		file_save_draft_area_files(
+			$draftitemid,
+			$context->id,
+			'mod_elang',
+			'subtitle',
+			$id
+		);
+	}
+
+	// Storage of files from the filemanager (poster):
+	$draftitemid = $elang->poster;
+
+	if ($draftitemid)
+	{
+		file_save_draft_area_files(
+			$draftitemid,
+			$context->id,
+			'mod_elang',
+			'poster',
+			0
+		);
+	}
+
+	// Delete old records
+	$DB->delete_records('elang_cues', array('id_elang' => $id));
+	$DB->delete_records('elang_users', array('id_elang' => $id));
+
+	$fs = get_file_storage();
+	$files = $fs->get_area_files($context->id, 'mod_elang', 'subtitle', $id);
+
+	foreach ($files as $file)
+	{
+		if ($file->get_source())
+		{
+			$contents = $file->get_content();
+			$vtt = new WebVTT($contents);
+
+			$cue = new \stdClass;
+
+			foreach ($vtt->getCueList() as $i => $elt)
+			{
+				$cue->id_elang = $id;
+				$title = $elt->getTitle();
+				$text = strip_tags($elt->getText());
+
+				if (empty($title) || is_numeric($title))
+				{
+					$title = preg_replace('/(\[[^\]]*\])/', '...', $text);
+
+					if (mb_strlen($title, 'UTF-8') > $elang->titlelength)
+					{
+						$cue->title = preg_replace('/ [^ ]*$/', ' ...', mb_substr($title, 0, $elang->titlelength, 'UTF-8'));
+					}
+					else
+					{
+						$cue->title = $title;
+					}
+				}
+				else
+				{
+					$cue->title	= $title;
+				}
+
+				$cue->begin	= $elt->getBegin();
+				$cue->end = $elt->getend();
+				$cue->number = $i + 1;
+				$texts = preg_split('/(\[[^\]]*\])/', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
+				$data = array();
+				$i = 1;
+
+				foreach ($texts as $text)
+				{
+					if (isset($text[0]) && $text[0] == '[' && $text[strlen($text) - 1] == ']')
+					{
+						$data[] = array('type' => 'input', 'content' => substr($text, 1, strlen($text) - 2), 'order' => $i++);
+					}
+					else
+					{
+						$data[] = array('type' => 'text', 'content' => $text);
+					}
+				}
+
+				$cue->json = json_encode($data);
+				$DB->insert_record('elang_cues', $cue);
+			}
+		}
+	}
 }
 
 /**
@@ -324,3 +464,80 @@ function LevenshteinDistance($str1, $str2, $costReplace = 2, $encoding = 'UTF-8'
 	return array('distance' => $d[$mb_len1][$mb_len2], 'count_same_letter' => $count_same_letter);
 }
 
+/**
+ * Get the list of all languages
+ *
+ * @return  array  Map array of the form tag => Language name
+ */
+function getLanguages()
+{
+	return array(
+		'af-ZA' => 'Afrikaans (South Africa)',
+		'ar-AA' => 'Arabic Unitag (العربية الموحدة)',
+		'hy-AM' => 'Armenian',
+		'az-AZ' => 'Azeri-Azərbaycanca (Azərbaycan)',
+		'id-ID' => 'Bahasa Indonesia',
+		'be-BY' => 'Belarusian-Беларуская (Беларусь)',
+		'bn-BD' => 'Bengali (Bangladesh)',
+		'bs-BA' => 'Bosanski (Bosnia)',
+		'bg-BG' => 'Bulgarian (Български)',
+		'ca-ES' => 'Catalan',
+		'zh-CN' => 'Chinese Simplified 简体中文',
+		'zh-TW' => 'Chinese Traditional (Taiwan)',
+		'hr-HR' => 'Croatian',
+		'cs-CZ' => 'Czech (Czech republic)',
+		'da-DK' => 'Danish (DK)',
+		'en-AU' => 'English (Australia)',
+		'en-GB' => 'English (United Kingdom)',
+		'en-US' => 'English (United States)',
+		'eo-XX' => 'Esperanto',
+		'et-EE' => 'Estonian',
+		'eu-ES' => 'Euskara (Basque)',
+		'fi-FI' => 'Finnish (Suomi)',
+		'fr-FR' => 'Français (Fr)',
+		'gl-ES' => 'Galician (Galiza)',
+		'de-DE' => 'German (DE-CH-AT)',
+		'el-GR' => 'Greek',
+		'gu-IN' => 'Gujarati (India)',
+		'he-IL' => 'Hebrew (Israel)',
+		'hi-IN' => 'Hindi-हिंदी (India)',
+		'hu-HU' => 'Hungarian (Magyar)',
+		'it-IT' => 'Italian (Italy)',
+		'ja-JP' => 'Japanese 日本語',
+		'km-KH' => 'Khmer (Cambodia)',
+		'ko-KR' => 'Korean (Republic of Korea)',
+		'ckb-IQ' => 'Kurdish Soran&icirc; (کوردى)',
+		'lo-LA' => 'Lao-ລາວ(ພາສາລາວ)',
+		'lv-LV' => 'Latvian (LV)',
+		'lt-LT' => 'Lithuanian',
+		'mk-MK' => 'Macedonian-Македонски',
+		'ml-IN' => 'Malayalam-മലയാളം(India)',
+		'mn-MN' => 'Mongolian-Монгол (Монгол Улс)',
+		'nl-NL' => 'Nederlands nl-NL',
+		'nb-NO' => 'Norsk bokm&aring;l (Norway)',
+		'nn-NO' => 'Norsk nynorsk (Norway)',
+		'fa-IR' => 'Persian (پارسی)',
+		'pl-PL' => 'Polski (Polska)',
+		'pt-BR' => 'Portugu&ecirc;s (Brasil)',
+		'pt-PT' => 'Portugu&ecirc;s (pt-PT)',
+		'ro-RO' => 'Rom&acirc;nă (Rom&acirc;nia)',
+		'ru-RU' => 'Russian-Русский (CIS)',
+		'gd-GB' => 'Scottish Gaelic (GB)',
+		'sr-RS' => 'Serbian (Cyrilic)',
+		'sr-YU' => 'Serbian (Latin)',
+		'sq-AL' => 'Shqip-AL',
+		'sk-SK' => 'Slovak (Slovenčina)',
+		'es-ES' => 'Spanish (Espa&ntilde;ol)',
+		'sv-SE' => 'Svenska (Sverige)',
+		'sw-KE' => 'Swahili',
+		'sy-IQ' => 'Syriac (Iraq)',
+		'ta-IN' => 'Tamil-தமிழ் (India)',
+		'th-TH' => 'Thai-ไทย (ภาษาไทย)',
+		'tr-TR' => 'T&uuml;rk&ccedil;e (T&uuml;rkiye)',
+		'uk-UA' => 'Ukrainian-Українська (Україна)',
+		'ur-PK' => 'Urdu Pakistan (اردو)',
+		'ug-CN' => 'Uyghur (ئۇيغۇرچە)',
+		'vi-VN' => 'Vietnamese (Vietnam)',
+		'cy-GB' => 'Welsh (United Kingdom)'
+	);
+}

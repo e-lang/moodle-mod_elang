@@ -6,52 +6,53 @@
  * You can have a rather longer description of the file as well,
  * if you like, and it can span multiple lines.
  *
- * @package	 mod
+ * @package     mod
  * @subpackage  elang
  * @copyright   2013 University of La Rochelle, France
- * @license	 http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  */
 
 require_once dirname(dirname(dirname(__FILE__))) . '/config.php';
-require_once dirname(__FILE__) . '/lib.php';
+require_once dirname(__FILE__) . '/locallib.php';
 
- // course_module ID, or
-$id = optional_param('id', 0, PARAM_INT);
+// Get the course number
+$id = required_param('id', PARAM_INT);
 
-if ($id)
-{
-	$cm = get_coursemodule_from_id('elang', $id, 0, false, MUST_EXIST);
-	$course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
-	$elang = $DB->get_record('elang', array('id' => $cm->instance), '*', MUST_EXIST);
-}
-else
-{
-	error('You must specify a course_module ID');
-}
+// Get the course module
+$cm = get_coursemodule_from_id('elang', $id, 0, false, MUST_EXIST);
 
+// Get the course
+$course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
+
+// Get the exercise
+$elang = $DB->get_record('elang', array('id' => $cm->instance), '*', MUST_EXIST);
+
+// Verify the login
 require_login($course, true, $cm);
+
+// Get the context
 $context = context_module::instance($cm->id);
+
+// Verify access right
 require_capability('mod/elang:view', $context);
 
+// Add a view log
 add_to_log($course->id, 'elang', 'view', 'view.php?id=' . $cm->id, $elang->id, $cm->id);
 
-$languages = elang_get_languages();
+// Get the options for the exercise
 $options = json_decode($elang->options, true);
+
+// Get the page title
+$title = Elang\generateTitle($elang, $options);
+
+// Get the module general settings
 $config = get_config('elang');
-if ($options['showlanguage'])
-{
-	$name = sprintf(get_string('formatname', 'elang'), $elang->name, $languages[$elang->language]);
-}
-else
-{
-	$name = $elang->name;
-}
 ?>
 <!DOCTYPE html>
 <html<?php echo get_html_lang(); ?>>
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<title><?php echo format_string($name); ?></title>
+		<title><?php echo format_string($title); ?></title>
 
 		<link rel="shortcut icon" href="pix/icon.ico"/>
 

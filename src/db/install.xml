@@ -14,7 +14,7 @@
 				<FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="introformat" NEXT="timemodified"/>
 				<FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="timecreated" NEXT="language"/>
 				<FIELD NAME="language" TYPE="text" LENGTH="small" NOTNULL="true" SEQUENCE="false" PREVIOUS="timemodified" NEXT="options"/>
-				<FIELD NAME="options" TYPE="text" LENGTH="big" NOTNULL="true" SEQUENCE="false" DEFAULT="{}" PREVIOUS="language"/>
+				<FIELD NAME="options" TYPE="text" LENGTH="big" NOTNULL="true" SEQUENCE="false" PREVIOUS="language"/>
 			</FIELDS>
 			<KEYS>
 				<KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -43,7 +43,7 @@
 			</INDEXES>
 		</TABLE>
 
-		<TABLE NAME="elang_users" COMMENT="Users' activity" PREVIOUS="elang_cues">
+		<TABLE NAME="elang_users" COMMENT="Users' activity" PREVIOUS="elang_cues" NEXT="elang_logs">
 			<FIELDS>
 				<FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="id_elang"/>
 				<FIELD NAME="id_elang" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="id_cue"/>
@@ -56,6 +56,18 @@
 				<KEY NAME="felang" TYPE="foreign" FIELDS="id_elang" REFTABLE="elang" REFFIELDS="id" PREVIOUS="primary" NEXT="fcue"/>
 				<KEY NAME="fcue" TYPE="foreign" FIELDS="id_cue" REFTABLE="elang_cue" REFFIELDS="id" PREVIOUS="felang" NEXT="fuser"/>
 				<KEY NAME="fuser" TYPE="foreign" FIELDS="id_user" REFTABLE="user" REFFIELDS="id" PREVIOUS="fcue"/>
+			</KEYS>
+		</TABLE>
+
+		<TABLE NAME="elang_logs" COMMENT="Users' activity" PREVIOUS="elang_users">
+			<FIELDS>
+				<FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="id_elang"/>
+				<FIELD NAME="id_elang" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="info"/>
+				<FIELD NAME="info" TYPE="text" LENGTH="big" NOTNULL="true" SEQUENCE="false" PREVIOUS="id_elang"/>
+			</FIELDS>
+			<KEYS>
+				<KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="felang"/>
+				<KEY NAME="felang" TYPE="foreign" FIELDS="id_elang" REFTABLE="elang" REFFIELDS="id" PREVIOUS="primary"/>
 			</KEYS>
 		</TABLE>
 	</TABLES>

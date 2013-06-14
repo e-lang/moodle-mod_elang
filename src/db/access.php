@@ -37,7 +37,7 @@ $capabilities = array(
 
 	'mod/elang:view' => array(
 		'captype' => 'read',
-		'contextlevel' => CONTEXT_COURSE,
+		'contextlevel' => CONTEXT_MODULE,
 		'archetypes' => array(
 			'student' => CAP_ALLOW,
 			'teacher' => CAP_ALLOW,
@@ -47,7 +47,7 @@ $capabilities = array(
 	),
 
 	'mod/elang:addinstance' => array(
-		'riskbitmask' => RISK_SPAM,
+		'riskbitmask' => RISK_XSS,
 		'captype' => 'write',
 		'contextlevel' => CONTEXT_COURSE,
 		'archetypes' => array(

@@ -6,10 +6,10 @@
  * You can have a rather longer description of the file as well,
  * if you like, and it can span multiple lines.
  *
- * @package	 mod
+ * @package     mod
  * @subpackage  elang
  * @copyright   2013 University of La Rochelle, France
- * @license	 http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  */
 
 defined('MOODLE_INTERNAL') || die;
@@ -17,7 +17,9 @@ defined('MOODLE_INTERNAL') || die;
 if ($ADMIN->fulltree)
 {
 	require_once dirname(__FILE__) . '/lib.php';
+	require_once dirname(__FILE__) . '/locallib.php';
 	require_once $CFG->libdir . '/resourcelib.php';
+	$languages = Elang\getLanguages();
 
 	// General settings
 	$settings->add(
@@ -78,6 +80,15 @@ if ($ADMIN->fulltree)
 	);
 	$settings->add(
 		new admin_setting_configtext(
+			'elang/limit',
+			get_string('limit', 'elang'),
+			get_string('limit_config', 'elang'),
+			10,
+			PARAM_INT
+		)
+	);
+	$settings->add(
+		new admin_setting_configtext(
 			'elang/timeout',
 			get_string('timeout', 'elang'),
 			get_string('timeout_config', 'elang'),
@@ -85,7 +96,7 @@ if ($ADMIN->fulltree)
 			PARAM_INT
 		)
 	);
-	$languages = elang_get_languages();
+
 	$settings->add(
 		new admin_setting_configmultiselect(
 			'elang/language',
@@ -101,6 +112,34 @@ if ($ADMIN->fulltree)
 			get_string('showlanguage', 'elang'),
 			get_string('showlanguage_config', 'elang'),
 			1
+		)
+	);
+
+	$settings->add(
+		new admin_setting_configtext(
+			'elang/left',
+			get_string('left', 'elang'),
+			get_string('left_config', 'elang'),
+			20,
+			PARAM_INT
+		)
+	);
+	$settings->add(
+		new admin_setting_configtext(
+			'elang/top',
+			get_string('top', 'elang'),
+			get_string('top_config', 'elang'),
+			20,
+			PARAM_INT
+		)
+	);
+	$settings->add(
+		new admin_setting_configtext(
+			'elang/size',
+			get_string('size', 'elang'),
+			get_string('size_config', 'elang'),
+			16,
+			PARAM_INT
 		)
 	);
 }

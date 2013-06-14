@@ -27,7 +27,7 @@ $module->cron      = 0;
 $module->component = 'mod_elang';
 
 // Human-friendly version name
-$module->release  = 'alpha-0.0.2';
+$module->release   = 'alpha-0.0.2';
 
 // Maturity: MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC, MATURITY_STABLE
-$module->maturity = MATURITY_ALPHA;
+$module->maturity  = MATURITY_ALPHA;
