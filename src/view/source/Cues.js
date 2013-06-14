@@ -115,7 +115,7 @@ enyo.kind({
 	{
 		if (this.limit > 0)
 		{
-			this.changeTotal();
+			this.fillCues(0);
 		}
 		else
 		{

@@ -71,7 +71,7 @@ function elang_add_instance(stdClass $elang, mod_elang_mod_form $mform = null)
 			'limit' => isset($elang->limit) ? $elang->limit : 10,
 			'left' => isset($elang->left) ? $elang->left : 20,
 			'top' => isset($elang->top) ? $elang->top : 20,
-			'size' => isset($elang->size) ? $elang->lsizeimit : 16,
+			'size' => isset($elang->size) ? $elang->size : 16,
 		)
 	);
 
@@ -410,10 +410,22 @@ function elang_get_file_info($browser, $areas, $course, $cm, $context, $filearea
 
 	if ($filearea === 'videos' || $filearea === 'poster')
 	{
+		$filepath = is_null($filepath) ? '/' : $filepath;
+		$filename = is_null($filename) ? '.' : $filename;
+
+		$urlbase = $CFG->wwwroot . '/pluginfile.php';
+
 		if (!$storedfile = $fs->get_file($context->id, 'mod_elang', $filearea, 0, $filepath, $filename))
 		{
-			// Not found
-			return null;
+			if ($filepath === '/' and $filename === '.')
+			{
+				$storedfile = new virtual_root_file($context->id, 'mod_elang', $filearea, 0);
+			}
+			else
+			{
+				// Not found
+				return null;
+			}
 		}
 
 		return new file_info_stored($browser, $context, $storedfile, $urlbase, $areas[$filearea], true, true, true, false);
@@ -511,13 +523,18 @@ function elang_pluginfile($course, $cm, $context, $filearea, array $args, $force
 		$doc->WriteHtml($elang->intro);
 
 		$i = 1;
+
 		foreach ($records as $id => $record)
 		{
 			$cue->setBegin($record->begin);
 			$cue->setEnd($record->end);
 			$doc->Write(5, '', '', false, '', true);
-			$doc->Write(5, sprintf(get_string('pdfcue', 'elang'), $i++, Elang\Cue::formatMSString($record->begin), Elang\Cue::formatMSString($record->end)), '', false, '', true);
-			$doc->Write(5, Elang\generateCueText(json_decode($record->json, true), $data, '_', $repeatedunderscore), '', false, '', true);
+			$doc->WriteHtml(
+				'<h3>' .
+				sprintf(get_string('pdfcue', 'elang'), $i++, Elang\Cue::millisecondsToString($record->begin), Elang\Cue::millisecondsToString($record->end)) .
+				'</h3>'
+			);
+			$doc->Write(5, Elang\generateCueText(json_decode($record->json, true), array(), '_', $repeatedunderscore), '', false, '', true);
 		}
 
 		send_file($doc->Output('', 'S'), end($args), 0, 0, true, false, 'application/pdf');

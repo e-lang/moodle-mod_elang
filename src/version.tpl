@@ -15,10 +15,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 // The current module version (Date: YYYYMMDDXX). If version == 0 then module will not be installed
-$module->version   = 2013060802;
+$module->version   = @VERSION@;
 
 // Requires this Moodle version
-$module->requires  = 2012062500;
+$module->requires  = @REQUIRES@;
 
 // Period for cron to check this module (secs)
 $module->cron      = 0;
@@ -27,7 +27,7 @@ $module->cron      = 0;
 $module->component = 'mod_elang';
 
 // Human-friendly version name
-$module->release   = 'alpha-0.0.2';
+$module->release   = '@RELEASE@';
 
 // Maturity: MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC, MATURITY_STABLE
-$module->maturity  = MATURITY_ALPHA;
+$module->maturity  = @MATURITY@;

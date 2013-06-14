@@ -1,4 +1,0 @@
-[submodule "src/view/enyo"]
-	path = src/view/enyo
-	url = https://github.com/enyojs/enyo.git
-

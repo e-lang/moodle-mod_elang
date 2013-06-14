@@ -92,7 +92,7 @@ class WebVTTTest extends PHPUnit_Framework_TestCase
 			$expected_title
 		);
 		//Test duration (string) equals
-		$time = Elang\Cue::formatMSString($wev->current()->getbegin()).' --> '.Elang\Cue::formatMSString($wev->current()->getEnd());
+		$time = Elang\Cue::millisecondsToString($wev->current()->getbegin()).' --> '.Elang\Cue::millisecondsToString($wev->current()->getEnd());
 		$this->assertEquals (
 			$time,
 			$expected_duration

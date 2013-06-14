@@ -91,7 +91,7 @@ class mod_elang_mod_form extends moodleform_mod
 			'subtitle',
 			get_string('subtitle', 'elang'),
 			null,
-			array('subdirs' => 0, 'maxbytes' => $config->subtitlemaxsize, 'maxfiles' => 1, 'accepted_types' => array('.vtt'))
+			array('subdirs' => 0, 'maxbytes' => $config->subtitlemaxsize, 'maxfiles' => 1, 'accepted_types' => array('.vtt', '.srt'))
 		);
 		$mform->addHelpButton('subtitle', 'subtitle', 'elang');
 		$mform->addRule('subtitle', null, 'required', null, 'client');

@@ -69,9 +69,12 @@ $repeatedunderscore = isset($options['repeatedunderscore']) ? $options['repeated
 
 switch ($task)
 {
+	// Get the data for preparing the exercise
 	case 'data':
 		header('Content-type: application/json');
 		$fs = get_file_storage();
+
+		// Get the video files
 		$files = $fs->get_area_files($context->id, 'mod_elang', 'videos', 0);
 		$sources = array();
 
@@ -93,6 +96,7 @@ switch ($task)
 			}
 		}
 
+		// Get the poster file
 		$files = $fs->get_area_files($context->id, 'mod_elang', 'poster', 0);
 		$poster = '';
 
@@ -112,6 +116,7 @@ switch ($task)
 			}
 		}
 
+		// Get the subtitle and the pdf file
 		$files = $fs->get_area_files($context->id, 'mod_elang', 'subtitle', $elang->id);
 		$subtitle = '';
 
@@ -145,6 +150,7 @@ switch ($task)
 		$records = $DB->get_records('elang_cues', array('id_elang' => $elang->id), 'begin ASC');
 		$users = $DB->get_records('elang_users', array('id_elang' => $elang->id, 'id_user' => $USER->id), '', 'id_cue,json');
 
+		// Get the cues
 		foreach ($records as $id => $record)
 		{
 			$data = json_decode($record->json, true);
@@ -225,6 +231,9 @@ switch ($task)
 			);
 		}
 
+		$limit = isset($options['limit']) ? $options['limit'] : 10;
+
+		// Send the data
 		echo json_encode(
 			array(
 				'title' => $elang->name,
@@ -234,7 +243,7 @@ switch ($task)
 				'error' => 20,
 				'help' => 10,
 				'cues' => $cues,
-				'limit' => 10,
+				'limit' => $limit,
 				'sources' => $sources,
 				'poster' => $poster,
 				'track' => $subtitle,
@@ -244,10 +253,15 @@ switch ($task)
 		);
 		die;
 		break;
+
 	case 'check':
+		// Get the cue id
 		$id_cue = optional_param('id_cue', 0, PARAM_INT);
+
+		// Get the cue record
 		$cue = $DB->get_record('elang_cues', array('id' => $id_cue), '*');
 
+		// Detect an error
 		if (!$cue)
 		{
 			header('HTTP/1.1 404 Not Found');
@@ -260,9 +274,13 @@ switch ($task)
 			die;
 		}
 
+		// Get the input number
 		$number = optional_param('number', 0, PARAM_INT);
+
+		// Get the elements of the cue
 		$elements = json_decode($cue->json, true);
 
+		// Detect an error
 		if (!isset($elements[$number]))
 		{
 			header('HTTP/1.1 500 Internal Server Error');
@@ -324,10 +342,15 @@ switch ($task)
 
 		die;
 		break;
+
 	case 'help':
+		// Get the cue id
 		$id_cue = optional_param('id_cue', 0, PARAM_INT);
+
+		// Get the cue record
 		$cue = $DB->get_record('elang_cues', array('id' => $id_cue), '*');
 
+		// Detect error
 		if (!$cue)
 		{
 			header('HTTP/1.1 404 Not Found');
@@ -340,9 +363,13 @@ switch ($task)
 			die;
 		}
 
+		// Get the input number
 		$number = optional_param('number', 0, PARAM_INT);
+
+		// Get the elements of the cue
 		$elements = json_decode($cue->json, true);
 
+		// Detect an error
 		if (!isset($elements[$number]))
 		{
 			header('HTTP/1.1 500 Internal Server Error');
@@ -353,7 +380,7 @@ switch ($task)
 		add_to_log(
 			$course->id,
 			'elang',
-			'add check',
+			'view help',
 			'view.php?id=' . $cm->id,
 			$DB->insert_record(
 				'elang_logs',
@@ -393,6 +420,7 @@ switch ($task)
 		echo json_encode(array('cue' => $cue_text, 'content' => $elements[$number]['content']));
 		die;
 		break;
+
 	default:
 		header('HTTP/1.1 400 Bad Request');
 		die;

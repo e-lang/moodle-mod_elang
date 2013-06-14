@@ -17,6 +17,6 @@ $logs = array(
 	array('module' => 'elang', 'action' => 'view', 'mtable' => 'elang', 'field' => 'name'),
 	array('module' => 'elang', 'action' => 'view all', 'mtable' => 'elang', 'field' => 'name'),
 
-	array('module' => 'elang', 'action' => 'view help', 'mtable' => 'elang_log', 'field' => 'info'),
-	array('module' => 'elang', 'action' => 'add check', 'mtable' => 'elang_log', 'field' => 'info'),
+	array('module' => 'elang', 'action' => 'view help', 'mtable' => 'elang_logs', 'field' => 'info'),
+	array('module' => 'elang', 'action' => 'add check', 'mtable' => 'elang_logs', 'field' => 'info'),
 );
