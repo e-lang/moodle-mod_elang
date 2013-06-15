@@ -26,6 +26,7 @@ $ -> Language fix or change
 ! -> Note
 
 2013-06-16  Christophe Demko
+ ^ Removing .gitmodule file
  ^ Deleting build directory when preparing
  +^ Adding some comments and cleaning test files
 
