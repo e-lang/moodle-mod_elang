@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="moodle-mod_elang" default="build" basedir=".">
+
 	<property name="version" value="2013061600" />
 	<property name="requires" value="2012062500" />
 	<property name="release" value="alpha-0.0.3" />
@@ -23,6 +24,7 @@
 	</target>
 
 	<target name="prepare" description="Prepare files">
+		<delete dir="build" />
 		<copy todir="build/elang">
 			<fileset dir="src">
 				<exclude name="version.tpl"/>

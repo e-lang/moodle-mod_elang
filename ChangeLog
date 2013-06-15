@@ -26,6 +26,7 @@ $ -> Language fix or change
 ! -> Note
 
 2013-06-16  Christophe Demko
+ ^ Deleting build directory when preparing
  +^ Adding some comments and cleaning test files
 
 2013-06-15  Christophe Demko
