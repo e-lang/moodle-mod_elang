@@ -10,6 +10,8 @@
  * @subpackage  elang
  * @copyright   2013 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ *
+ * @since       0.0.1
  */
 
 namespace Elang;
@@ -49,6 +51,8 @@ class Cue
 	 * @param   string  $string  String representation of time
 	 *
 	 * @return  integer  Time in milliseconds
+	 *
+	 * @since  0.0.1
 	 */
 	public static function millisecondsFromString($string)
 	{
@@ -80,6 +84,8 @@ class Cue
 	 * @param   integer  $ms  Time in milliseconds
 	 *
 	 * @return  string  String representation of time
+	 *
+	 * @since  0.0.1
 	 */
 	public static function millisecondsToString($ms)
 	{
@@ -106,6 +112,8 @@ class Cue
 	 * toString magic method
 	 *
 	 * @return  string  String representation of $this
+	 *
+	 * @since  0.0.1
 	 */
 	public function __toString()
 	{
@@ -133,6 +141,8 @@ class Cue
 	 * title getter
 	 *
 	 * @return  string  The cue title
+	 *
+	 * @since  0.0.1
 	 */
 	public function getTitle()
 	{
@@ -143,6 +153,8 @@ class Cue
 	 * begin getter
 	 *
 	 * @return  integer  The cue begin
+	 *
+	 * @since  0.0.1
 	 */
 	public function getBegin()
 	{
@@ -153,6 +165,8 @@ class Cue
 	 * end getter
 	 *
 	 * @return  integer  The cue end
+	 *
+	 * @since  0.0.1
 	 */
 	public function getend()
 	{
@@ -163,6 +177,8 @@ class Cue
 	 * text getter
 	 *
 	 * @return  string  The cue text
+	 *
+	 * @since  0.0.1
 	 */
 	public function getText()
 	{
@@ -175,6 +191,8 @@ class Cue
 	 * @param   string  $title  The new title
 	 *
 	 * @return  $this  For chaining
+	 *
+	 * @since  0.0.1
 	 */
 	public function setTitle($title)
 	{
@@ -187,6 +205,8 @@ class Cue
 	 * @param   integer  $begin  The new begin
 	 *
 	 * @return  $this  For chaining
+	 *
+	 * @since  0.0.1
 	 */
 	public function setBegin($begin)
 	{
@@ -199,6 +219,8 @@ class Cue
 	 * @param   integer  $end  The new end
 	 *
 	 * @return  $this  For chaining
+	 *
+	 * @since  0.0.1
 	 */
 	public function setEnd($end)
 	{
@@ -211,6 +233,8 @@ class Cue
 	 * @param   string  $text  The new text
 	 *
 	 * @return  $this  For chaining
+	 *
+	 * @since  0.0.1
 	 */
 	public function setText($text)
 	{
@@ -251,6 +275,8 @@ class WebVTT implements \Iterator
 	 * Constructor
 	 *
 	 * @param   string|null  $content  Content to parse
+	 *
+	 * @since  0.0.1
 	 */
 	public function __construct($content = null)
 	{
@@ -269,6 +295,8 @@ class WebVTT implements \Iterator
 	 * @param   Cue  $cue  The cue to be added
 	 *
 	 * @return  $this
+	 *
+	 * @since  0.0.1
 	 */
 	public function addCue($cue)
 	{
@@ -283,6 +311,8 @@ class WebVTT implements \Iterator
 	 * @param   array  $list  New list of cues
 	 *
 	 * @return  $this
+	 *
+	 * @since  0.0.1
 	 */
 	public function setCueList($list)
 	{
@@ -295,6 +325,8 @@ class WebVTT implements \Iterator
 	 * Get the cue list
 	 *
 	 * @return  array  List of cues
+	 *
+	 * @since  0.0.1
 	 */
 	public function getCueList()
 	{
@@ -305,6 +337,8 @@ class WebVTT implements \Iterator
 	 * Rewind the iterator
 	 *
 	 * @return  void
+	 *
+	 * @since  0.0.1
 	 */
 	public function rewind()
 	{
@@ -315,6 +349,8 @@ class WebVTT implements \Iterator
 	 * Get the current cue
 	 *
 	 * @return  Cue
+	 *
+	 * @since  0.0.1
 	 */
 	public function current()
 	{
@@ -325,6 +361,8 @@ class WebVTT implements \Iterator
 	 * Get the current cue number
 	 *
 	 * @return  integer
+	 *
+	 * @since  0.0.1
 	 */
 	public function key()
 	{
@@ -335,6 +373,8 @@ class WebVTT implements \Iterator
 	 * Go to the next cue
 	 *
 	 * @return  void
+	 *
+	 * @since  0.0.1
 	 */
 	public function next()
 	{
@@ -345,6 +385,8 @@ class WebVTT implements \Iterator
 	 * Is the iterator valid
 	 *
 	 * @return  boolean
+	 *
+	 * @since  0.0.1
 	 */
 	public function valid()
 	{
@@ -355,6 +397,8 @@ class WebVTT implements \Iterator
 	 * toString magic method
 	 *
 	 * @return  string  String representation of $this
+	 *
+	 * @since  0.0.1
 	 */
 	public function __toString()
 	{
@@ -378,6 +422,8 @@ class WebVTT implements \Iterator
 	 * @param   string  $content  Subtitle string
 	 *
 	 * @return  $this
+	 *
+	 * @since  0.0.1
 	 */
 	private function parseWebVTT($content)
 	{
@@ -444,6 +490,8 @@ class WebVTT implements \Iterator
  * @param   array   $options  Array of options
  *
  * @return  string  String representation of the title
+ *
+ * @since  0.0.1
  */
 function generateTitle($elang, $options)
 {
@@ -470,6 +518,8 @@ function generateTitle($elang, $options)
  * @param   integer  $repeated  Number of times $char is repeated
  *
  * @return  string  String representation of the cue
+ *
+ * @since  0.0.1
  */
 function generateCueText($data, $user, $char='-', $repeated = 10)
 {
@@ -521,6 +571,8 @@ function generateCueText($data, $user, $char='-', $repeated = 10)
  * @param   object  $elang  An object from the form in mod_form.php
  *
  * @return void
+ *
+ * @since  0.0.1
  */
 function saveFiles(\stdClass $elang)
 {
@@ -647,6 +699,8 @@ function saveFiles(\stdClass $elang)
  * @param   string  $encoding  String encoding
  *
  * @return  array  Array of multi-bytes characteres
+ *
+ * @since  0.0.1
  */
 function mbStringToArray($string, $encoding = 'UTF-8')
 {
@@ -670,6 +724,8 @@ function mbStringToArray($string, $encoding = 'UTF-8')
  * @param   string   $encoding     Strings encoding
  *
  * @return  number  Levenshtein distance between $str1 and $str2
+ *
+ * @since  0.0.1
  */
 function LevenshteinDistance($str1, $str2, $costReplace = 2, $encoding = 'UTF-8')
 {
@@ -710,6 +766,8 @@ function LevenshteinDistance($str1, $str2, $costReplace = 2, $encoding = 'UTF-8'
  * Get the list of all languages
  *
  * @return  array  Map array of the form tag => Language name
+ *
+ * @since  0.0.1
  */
 function getLanguages()
 {

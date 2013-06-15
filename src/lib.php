@@ -13,6 +13,8 @@
  * @subpackage  elang
  * @copyright   2013 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ *
+ * @since       0.0.1
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -27,6 +29,8 @@ defined('MOODLE_INTERNAL') || die();
  * @see plugin_supports() in lib/moodlelib.php
  *
  * @category  core
+ *
+ * @since   0.0.1
  */
 function elang_supports($feature)
 {
@@ -55,6 +59,8 @@ function elang_supports($feature)
  * @return  int  The id of the newly inserted elang record
  *
  * @category  core
+ *
+ * @since   0.0.1
  */
 function elang_add_instance(stdClass $elang, mod_elang_mod_form $mform = null)
 {
@@ -98,6 +104,8 @@ function elang_add_instance(stdClass $elang, mod_elang_mod_form $mform = null)
  * @return  boolean  Success/Fail
  *
  * @category  core
+ *
+ * @since   0.0.1
  */
 function elang_update_instance(stdClass $elang, mod_elang_mod_form $mform = null)
 {
@@ -145,6 +153,8 @@ function elang_update_instance(stdClass $elang, mod_elang_mod_form $mform = null
  * @return  boolean   Success/Failure
  *
  * @category  core
+ *
+ * @since   0.0.1
  */
 function elang_delete_instance($id)
 {
@@ -179,6 +189,8 @@ function elang_delete_instance($id)
  * @return  stdClass|null
  *
  * @category  core
+ *
+ * @since   0.0.1
  */
 function elang_user_outline($course, $user, $mod, $elang)
 {
@@ -201,6 +213,8 @@ function elang_user_outline($course, $user, $mod, $elang)
  * @return  void, is supposed to echp directly
  *
  * @category  core
+ *
+ * @since   0.0.1
  */
 function elang_user_complete($course, $user, $mod, $elang)
 {
@@ -218,6 +232,8 @@ function elang_user_complete($course, $user, $mod, $elang)
  * @return  boolean
  *
  * @category  core
+ *
+ * @since   0.0.1
  */
 function elang_print_recent_activity($course, $viewfullnames, $timestart)
 {
@@ -243,6 +259,8 @@ function elang_print_recent_activity($course, $viewfullnames, $timestart)
  * @return  void  adds items into $activities and increases $index
  *
  * @category  core
+ *
+ * @since   0.0.1
  */
 function elang_get_recent_mod_activity(&$activities, &$index, $timestart, $courseid, $cmid, $userid=0, $groupid=0)
 {
@@ -258,6 +276,8 @@ function elang_get_recent_mod_activity(&$activities, &$index, $timestart, $cours
  * @param   boolean   $viewfullnames  TRUE for full names
  *
  * @return void
+ *
+ * @since   0.0.1
  */
 function elang_print_recent_mod_activity($activity, $courseid, $detail, $modnames, $viewfullnames)
 {
@@ -273,6 +293,8 @@ function elang_print_recent_mod_activity($activity, $courseid, $detail, $modname
  * @todo Finish documenting this function
  *
  * @category  core
+ *
+ * @since   0.0.1
  */
 function elang_cron ()
 {
@@ -287,6 +309,8 @@ function elang_cron ()
  * @return  array
  *
  * @category  core
+ *
+ * @since   0.0.1
  */
 function elang_get_extra_capabilities()
 {
@@ -303,6 +327,8 @@ function elang_get_extra_capabilities()
  * @param   object  $coursemodule  Course module
  *
  * @return  object  info
+ *
+ * @since   0.0.1
  */
 function elang_get_coursemodule_info($coursemodule)
 {
@@ -338,6 +364,8 @@ function elang_get_coursemodule_info($coursemodule)
  * @return array
  *
  * @catgory  code
+ *
+ * @since   0.0.1
  */
 function elang_get_view_actions()
 {
@@ -350,6 +378,8 @@ function elang_get_view_actions()
  * @return array
  *
  * @catgory  code
+ *
+ * @since   0.0.1
  */
 function elang_get_post_actions()
 {
@@ -369,6 +399,8 @@ function elang_get_post_actions()
  * @return  array of [(string)filearea] => (string)description
  *
  * @category  files
+ *
+ * @since   0.0.1
  */
 function elang_get_file_areas($course, $cm, $context)
 {
@@ -394,6 +426,8 @@ function elang_get_file_areas($course, $cm, $context)
  * @return  file_info instance or null if not found
  *
  * @category  files
+ *
+ * @since   0.0.1
  */
 function elang_get_file_info($browser, $areas, $course, $cm, $context, $filearea, $itemid, $filepath, $filename)
 {
@@ -449,6 +483,8 @@ function elang_get_file_info($browser, $areas, $course, $cm, $context, $filearea
  * @return  void
  *
  * @category  files
+ *
+ * @since   0.0.1
  */
 function elang_pluginfile($course, $cm, $context, $filearea, array $args, $forcedownload, array $options=array())
 {

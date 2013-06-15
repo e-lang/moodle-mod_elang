@@ -10,6 +10,8 @@
  * @subpackage  elang
  * @copyright   2013 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ *
+ * @since       0.0.1
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -28,6 +30,8 @@ class mod_elang_mod_form extends moodleform_mod
 	 * Defines forms elements
 	 *
 	 * @return  void
+	 *
+	 * @since  0.0.1
 	 */
 	public function definition()
 	{
@@ -154,6 +158,8 @@ class mod_elang_mod_form extends moodleform_mod
 	 * @param   array  &$default_values  Array of default values
 	 *
 	 * @return  void
+	 *
+	 * @since  0.0.1
 	 */
 	public function data_preprocessing(&$default_values)
 	{

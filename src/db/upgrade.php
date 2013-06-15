@@ -14,6 +14,8 @@
  * @subpackage  elang
  * @copyright   2013 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ *
+ * @since       0.0.1
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -24,6 +26,8 @@ defined('MOODLE_INTERNAL') || die();
  * @param   int  $oldversion  The old version
  *
  * @return  bool
+ *
+ * @since  0.0.1
  */
 function xmldb_elang_upgrade($oldversion)
 {

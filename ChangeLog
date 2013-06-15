@@ -25,6 +25,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+2013-06-16  Christophe Demko
+ +^ Adding some comments and cleaning test files
+
 2013-06-15  Christophe Demko
  ! Publishing version alpha-0.0.2
 
