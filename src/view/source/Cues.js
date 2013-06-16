@@ -29,11 +29,35 @@ enyo.kind({
 	handlers: {onPageChange: 'pageChange', onCueSelect: 'cueSelect'},
 
 	/**
+	 * Events:
+	 * - onCueDeselect: fired when the cue is deselected
+	 */
+	events: {onCueDeselect: ''},
+
+	/**
 	 * Named components:
 	 * - pagination: table pagination
 	 * - body: table body
 	 */
 	components: [
+		// List limit
+		{
+			classes: 'text-center',
+			components: [
+				{
+					tag: 'label',
+					content: $L('Limit per page')
+				},
+				{
+					name: 'limit',
+					kind: "Select",
+					selected: 2,
+					onchange: "limitSelect",
+					components: [{content: 5, value: 5}, {content: 10, value: 10}, {content: 15, value: 15}, {content: 20, value: 20}, {content: 25, value: 25}]
+				},
+			]
+		},
+
 		// Pagination
 		{
 			kind: 'Elang.Pagination', name: 'pagination'
@@ -62,7 +86,7 @@ enyo.kind({
 					tag: 'tbody', name: 'body'
 				},
 			]
-		}
+		},
 	],
 
 	/**
@@ -88,7 +112,7 @@ enyo.kind({
 	 * @protected
 	 *
 	 * @param   inSender  enyo.instance  Sender of the event
-	 * @param   inEvent   Object		    Event fired
+	 * @param   inEvent   Object		 Event fired
 	 *
 	 * @return void
 	 *
@@ -109,6 +133,25 @@ enyo.kind({
 	},
 
 	/**
+	 * Handle a limit select event
+	 *
+	 * @protected
+	 *
+	 * @param   inSender  enyo.instance  Sender of the event
+	 * @param   inEvent   Object		 Event fired
+	 *
+	 * @return void
+	 *
+	 * @since  0.0.3
+	 */
+	limitSelect: function (inSender, inEvent)
+	{
+		this.setLimit(inSender.getValue());
+		this.doCueDeselect();
+		return true;
+	},
+
+	/**
 	 * Detect a change in the limit value
 	 *
 	 * @protected
@@ -123,6 +166,15 @@ enyo.kind({
 	{
 		if (this.limit > 0)
 		{
+			var index = [5, 10, 15, 20, 25].indexOf(Number(this.limit));
+			if (index > 0)
+			{
+				this.$.limit.setSelected(index);
+			}
+			else
+			{
+				this.$.limit.setSelected(0);
+			}
 			this.fillCues(0);
 		}
 		else

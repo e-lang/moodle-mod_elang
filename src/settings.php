@@ -81,12 +81,12 @@ if ($ADMIN->fulltree)
 		)
 	);
 	$settings->add(
-		new admin_setting_configtext(
+		new admin_setting_configselect(
 			'elang/limit',
 			get_string('limit', 'elang'),
 			get_string('limit_config', 'elang'),
 			10,
-			PARAM_INT
+			array(5 => 5, 10 => 10, 15 => 15, 20 => 20, 25 => 25)
 		)
 	);
 	$settings->add(

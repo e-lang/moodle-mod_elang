@@ -125,10 +125,8 @@ class mod_elang_mod_form extends moodleform_mod
 		$mform->addRule('titlelength', get_string('titlelength_error', 'elang'), 'numeric', null, 'client');
 		$mform->setType('titlelength', PARAM_INT);
 
-		$mform->addElement('text', 'limit', get_string('limit', 'elang'));
-		$mform->addHelpButton('limit', 'limit', 'elang');
-		$mform->addRule('limit', get_string('limit_error', 'elang'), 'numeric', null, 'client');
-		$mform->setType('limit', PARAM_INT);
+		$element = $mform->addElement('select', 'limit', get_string('limit', 'elang'), array(5 => 5, 10 => 10, 15 => 15, 20 => 20, 25 => 25));
+		$element->setSelected(10);
 
 		$mform->addElement('text', 'left', get_string('left', 'elang'));
 		$mform->addHelpButton('left', 'left', 'elang');
