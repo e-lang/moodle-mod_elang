@@ -5,6 +5,8 @@
  * @subpackage  elang
  * @copyright   2013 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ *
+ * @since       0.0.1
  */
 enyo.kind({
 	/**
@@ -72,6 +74,8 @@ enyo.kind({
 	 * @param   inEvent   Object		    Event fired
 	 *
 	 * @return void
+	 *
+	 * @since  0.0.1
 	 */
 	pageChange: function (inSender, inEvent)
 	{
@@ -87,6 +91,8 @@ enyo.kind({
 	 * @param   inEvent   Object		    Event fired
 	 *
 	 * @return void
+	 *
+	 * @since  0.0.1
 	 */
 	cueSelect: function (inSender, inEvent)
 	{
@@ -110,6 +116,8 @@ enyo.kind({
 	 * @param  oldValue  integer  Old limit value
 	 *
 	 * @return  void
+	 *
+	 * @since  0.0.1
 	 */
 	limitChanged: function (oldValue)
 	{
@@ -125,6 +133,17 @@ enyo.kind({
 		}
 	},
 
+	/**
+	 * Detect a change in the elements value
+	 *
+	 * @protected
+	 *
+	 * @param  oldValue  array  Old elements value
+	 *
+	 * @return  void
+	 *
+	 * @since  0.0.1
+	 */
 	elementsChanged: function (oldValue)
 	{
 		this.fillCues(0);
@@ -138,6 +157,8 @@ enyo.kind({
 	 * @param  page	 integer  Page of the table
 	 *
 	 * @return  this
+	 *
+	 * @since  0.0.1
 	 */
 	fillCues: function (page)
 	{
@@ -160,6 +181,8 @@ enyo.kind({
  * @subpackage  elang
  * @copyright   2013 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ *
+ * @since       0.0.1
  */
 enyo.kind({
 	/**
@@ -201,6 +224,8 @@ enyo.kind({
 	 * Create function
 	 *
 	 * @protected
+	 *
+	 * @since  0.0.1
 	 */
 	create: function ()
 	{
@@ -218,6 +243,8 @@ enyo.kind({
 	 * @param   inEvent   Object		    Event fired
 	 *
 	 * @return  true
+	 *
+	 * @since  0.0.1
 	 */
 	cueTap: function (inSender, inEvent)
 	{

@@ -5,6 +5,8 @@
  * @subpackage  elang
  * @copyright   2013 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ *
+ * @since       0.0.1
  */
 enyo.kind({
 	/**
@@ -43,6 +45,8 @@ enyo.kind({
 	 * @param  oldValue  integer  Old total number of pages
 	 *
 	 * @return  void
+	 *
+	 * @since  0.0.1
 	 */
 	totalChanged: function (oldValue)
 	{
@@ -84,6 +88,8 @@ enyo.kind({
 	 * @param   inEvent   Object		 Event fired
 	 *
 	 * @return  true
+	 *
+	 * @since  0.0.1
 	 */
 	pageTap: function(inSender, inEvent)
 	{

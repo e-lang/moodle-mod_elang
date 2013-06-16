@@ -19,7 +19,7 @@ namespace Elang;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Class Cue : it's an object to add in the database
+ * Class Cue
  *
  * @since  0.0.1
  */
@@ -480,6 +480,31 @@ class WebVTT implements \Iterator
 		}
 
 		return $subs;
+	}
+}
+
+/**
+ * Send a json response
+ *
+ * @param   mixed  $response  Response to be sent
+ *
+ * @return  void
+ *
+ * @since   0.0.3
+ */
+function sendResponse($response)
+{
+	// Get the optional jsonp callback
+	$callback = optional_param('callback', '', PARAM_ALPHANUMEXT);
+
+	// Send the response
+	if (empty($callback))
+	{
+		echo json_encode($response);
+	}
+	else
+	{
+		echo $callback . '(' . json_encode($response) . ');';
 	}
 }
 

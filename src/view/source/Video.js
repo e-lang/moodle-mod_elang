@@ -5,6 +5,8 @@
  * @subpackage  elang
  * @copyright   2013 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ *
+ * @since       0.0.1
  */
 enyo.kind({
 	/**
@@ -62,6 +64,8 @@ enyo.kind({
 	 * @public
 	 *
 	 * @return  this
+	 *
+	 * @since  0.0.1
 	 */
 	play: function ()
 	{
@@ -75,6 +79,8 @@ enyo.kind({
 	 * @public
 	 *
 	 * @return  this
+	 *
+	 * @since  0.0.1
 	 */
 	pause: function ()
 	{
@@ -91,6 +97,8 @@ enyo.kind({
 	 * @param   text    string   The new text
 	 *
 	 * @return  this
+	 *
+	 * @since  0.0.1
 	 */
 	changeCue: function (number, text)
 	{
@@ -107,6 +115,8 @@ enyo.kind({
 	 * @param   type  string  Mime type of the source
 	 *
 	 * @return  this
+	 *
+	 * @since  0.0.1
 	 */
 	addSource: function (src, type)
 	{
@@ -120,6 +130,8 @@ enyo.kind({
 	 * @public
 	 *
 	 * @return  The current time
+	 *
+	 * @since  0.0.1
 	 */
 	getTime: function ()
 	{
@@ -132,6 +144,8 @@ enyo.kind({
 	 * @protected
 	 *
 	 * @return  void
+	 *
+	 * @since  0.0.1
 	 */
 	create: function ()
 	{
@@ -155,6 +169,8 @@ enyo.kind({
 	 * @param   inEvent   Object		    Event fired
 	 *
 	 * @return void
+	 *
+	 * @since  0.0.1
 	 */
 	timeUpdate: function (inSender, inEvent)
 	{
@@ -175,6 +191,8 @@ enyo.kind({
 	 * @param   oldValue  string  The poster old value
 	 *
 	 * @return void
+	 *
+	 * @since  0.0.1
 	 */
 	posterChanged: function (oldValue)
 	{
@@ -189,6 +207,8 @@ enyo.kind({
 	 * @param   oldValue  string  The track source old value
 	 *
 	 * @return void
+	 *
+	 * @since  0.0.1
 	 */
 	trackChanged: function (oldValue)
 	{
@@ -203,6 +223,8 @@ enyo.kind({
 	 * @param   oldValue  string  The track language old value
 	 *
 	 * @return void
+	 *
+	 * @since  0.0.1
 	 */
 	languageChanged: function (oldValue)
 	{
@@ -217,6 +239,8 @@ enyo.kind({
 	 * @param   oldValue  number  The end property old value
 	 *
 	 * @return void
+	 *
+	 * @since  0.0.1
 	 */
 	timeChanged: function (oldValue)
 	{

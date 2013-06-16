@@ -5,6 +5,8 @@
  * @subpackage  elang
  * @copyright   2013 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ *
+ * @since       0.0.1
  */
 enyo.kind({
 	/**
@@ -15,11 +17,10 @@ enyo.kind({
 	/**
 	 * Published properties:
 	 * - cue: the current cue
-	 * - url: server url
-	 * - timeout: server timeout
+	 * - request: the request object
 	 * Each property will have public setter and getter methods
 	 */
-	published: {cue: null, url: null, timeout: null},
+	published: {cue: null, request: null},
 
 	/**
 	 * Events:
@@ -37,7 +38,11 @@ enyo.kind({
 	/**
 	 * Detect a change in the cue property
 	 *
+	 * @protected
+	 *
 	 * @param   oldValue  string  The cue old value
+	 *
+	 * @since  0.0.1
 	 */
 	cueChanged: function (oldValue)
 	{
@@ -123,34 +128,22 @@ enyo.kind({
 	 * @param   inEvent   Object		    Event fired
 	 *
 	 * @return  true
+	 *
+	 * @since  0.0.1
 	 */
 	textChange: function (inSender, inEvent)
 	{
-		// Request creation. The handleAs parameter is 'json' by default
-		var request = new enyo.Ajax(
-			{
-				// Set the URL
-				url: this.url,
-
-				// Choose the method 'GET' or 'POST'
-				method: 'POST',
-
-				// Set the timeout
-				timeout: this.timeout
-			}
-		);
-
 		// Tells Ajax what the callback success function is
-		request.response(enyo.bind(this, 'success'));
+		this.request.response(enyo.bind(this, 'success'));
 
 		// Tells Ajax what the callback failure function is
-		request.error(enyo.bind(this, 'failure'));
+		this.request.error(enyo.bind(this, 'failure'));
 
 		// Set the input number
-		request.sender = inSender;
+		this.request.sender = inSender;
 
 		// Makes the Ajax call with parameters
-		request.go({task: 'check', id_cue: this.cue.getData().id, number: inSender.name, text: inSender.value});
+		this.request.go({task: 'check', id_cue: this.cue.getData().id, number: inSender.name, text: inSender.value});
 
 		// Prevents event propagation
 		return true;
@@ -165,34 +158,22 @@ enyo.kind({
 	 * @param   inEvent   Object		    Event fired
 	 *
 	 * @return  true
+	 *
+	 * @since  0.0.1
 	 */
 	helpTap: function (inSender, inEvent)
 	{
-		// Request creation. The handleAs parameter is 'json' by default
-		var request = new enyo.Ajax(
-			{
-				// Set the URL
-				url: this.url,
-
-				// Choose the method 'GET' or 'POST'
-				method: 'POST',
-
-				// Set the timeout
-				timeout: this.timeout
-			}
-		);
-
 		// Tells Ajax what the callback success function is
-		request.response(enyo.bind(this, 'help'));
+		this.request.response(enyo.bind(this, 'help'));
 
 		// Tells Ajax what the callback failure function is
-		request.error(enyo.bind(this, 'failure'));
+		this.request.error(enyo.bind(this, 'failure'));
 
 		// Set the input number
-		request.sender = inSender;
+		this.request.sender = inSender;
 
 		// Makes the Ajax call with parameters
-		request.go({task: 'help', id_cue: this.cue.getData().id, number: inSender.number});
+		this.request.go({task: 'help', id_cue: this.cue.getData().id, number: inSender.number});
 
 		// Prevents event propagation
 		return true;
@@ -205,6 +186,8 @@ enyo.kind({
 	 * @param   inError    string|number  Error code
 	 *
 	 * @return  void
+	 *
+	 * @since  0.0.1
 	 */
 	failure: function (inRequest, inError)
 	{
@@ -219,6 +202,8 @@ enyo.kind({
 	 * @param   inResponse  object     Response bject
 	 *
 	 * @return  void
+	 *
+	 * @since  0.0.1
 	 */
 	success: function (inRequest, inResponse)
 	{
@@ -261,6 +246,8 @@ enyo.kind({
 	 * @param   inResponse  object     Response bject
 	 *
 	 * @return  void
+	 *
+	 * @since  0.0.1
 	 */
 	help: function (inRequest, inResponse)
 	{
@@ -270,4 +257,3 @@ enyo.kind({
 		this.doTrackChange({number: this.cue.getData().number, text: inResponse.cue});
 	}
 });
-

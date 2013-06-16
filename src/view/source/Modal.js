@@ -5,6 +5,8 @@
  * @subpackage  elang
  * @copyright   2013 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ *
+ * @since       0.0.1
  */
 enyo.kind({
 	/**
@@ -93,6 +95,8 @@ enyo.kind({
 	 * @param   message  string  The message content
 	 *
 	 * @return  this
+	 *
+	 * @since  0.0.1
 	 */
 	setData: function (head, type, title, message)
 	{
@@ -109,6 +113,8 @@ enyo.kind({
 	 * @public
 	 *
 	 * @return  this
+	 *
+	 * @since  0.0.1
 	 */
 	toggle: function()
 	{
@@ -122,6 +128,8 @@ enyo.kind({
 	 * @public
 	 *
 	 * @return  this
+	 *
+	 * @since  0.0.1
 	 */
 	show: function ()
 	{
@@ -135,6 +143,8 @@ enyo.kind({
 	 * @public
 	 *
 	 * @return  this
+	 *
+	 * @since  0.0.1
 	 */
 	hide: function ()
 	{
@@ -150,6 +160,8 @@ enyo.kind({
 	 * @param   oldValue  string  The head old value
 	 *
 	 * @return  void
+	 *
+	 * @since  0.0.1
 	 */
 	headChanged: function (oldValue)
 	{
@@ -164,6 +176,8 @@ enyo.kind({
 	 * @param   oldValue  string  The type old value
 	 *
 	 * @return  void
+	 *
+	 * @since  0.0.1
 	 */
 	typeChanged: function (oldValue)
 	{
@@ -185,6 +199,8 @@ enyo.kind({
 	 * @param   oldValue  string  The title old value
 	 *
 	 * @return  void
+	 *
+	 * @since  0.0.1
 	 */
 	titleChanged: function (oldValue)
 	{
@@ -199,6 +215,8 @@ enyo.kind({
 	 * @param   oldValue  string  The message old value
 	 *
 	 * @return  void
+	 *
+	 * @since  0.0.1
 	 */
 	messageChanged: function (oldValue)
 	{
@@ -214,6 +232,8 @@ enyo.kind({
 	 * @param   inEvent   Object		    Event fired
 	 *
 	 * @return  true
+	 *
+	 * @since  0.0.1
 	 */
 	keyDown: function(inSender, inEvent)
 	{

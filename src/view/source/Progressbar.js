@@ -5,6 +5,8 @@
  * @subpackage  elang
  * @copyright   2013 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ *
+ * @since       0.0.1
  */
 enyo.kind({
 	/**
@@ -51,6 +53,8 @@ enyo.kind({
 	 * @param   oldValue  integer  The begin old value
 	 *
 	 * @return  void
+	 *
+	 * @since  0.0.1
 	 */
 	beginChanged: function (oldValue)
 	{
@@ -68,6 +72,8 @@ enyo.kind({
 	 * @param   oldValue  integer  The end old value
 	 *
 	 * @return  void
+	 *
+	 * @since  0.0.1
 	 */
 	endChanged: function (oldValue)
 	{
@@ -85,6 +91,8 @@ enyo.kind({
 	 * @param   oldValue  integer  The success old value
 	 *
 	 * @return  void
+	 *
+	 * @since  0.0.1
 	 */
 	successChanged: function (oldValue)
 	{
@@ -99,6 +107,8 @@ enyo.kind({
 	 * @param   oldValue  integer  The info old value
 	 *
 	 * @return  void
+	 *
+	 * @since  0.0.1
 	 */
 	infoChanged: function (oldValue)
 	{
@@ -113,6 +123,8 @@ enyo.kind({
 	 * @param   oldValue  integer  The warning old value
 	 *
 	 * @return  void
+	 *
+	 * @since  0.0.1
 	 */
 	warningChanged: function (oldValue)
 	{
@@ -127,6 +139,8 @@ enyo.kind({
 	 * @param   oldValue  integer  The danger old value
 	 *
 	 * @return  void
+	 *
+	 * @since  0.0.1
 	 */
 	dangerChanged: function (oldValue)
 	{
@@ -142,6 +156,8 @@ enyo.kind({
 	 * @param   newValue   integer  The new data value
 	 *
 	 * @return  this
+	 *
+	 * @since  0.0.1
 	 */
 	setData: function (component, newValue)
 	{
@@ -162,4 +178,3 @@ enyo.kind({
 		return this;
 	},
 });
-

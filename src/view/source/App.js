@@ -5,6 +5,8 @@
  * @subpackage  elang
  * @copyright   2013 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ *
+ * @since       0.0.1
  */
 enyo.kind({
 	/**
@@ -16,9 +18,10 @@ enyo.kind({
 	 * Published properties:
 	 * - url: server url
 	 * - timeout: server timeout in milliseconds
+	 * - callbackName: the callback name for a jsonp request
 	 * Each property will have public setter and a getter methods
 	 */
-	published: {url: null, timeout: null},
+	published: {url: null, timeout: null, callbackName: null},
 
 	/**
 	 * Handlers:
@@ -112,6 +115,109 @@ enyo.kind({
 	],
 
 	/**
+	 * The request object
+	 *
+	 * @protected
+	 *
+	 * @since  0.0.3
+	 */
+	request: null,
+
+	/**
+	 * Create method
+	 *
+	 * @protected
+	 *
+	 * @since  0.0.3
+	 */
+	create: function ()
+	{
+		this.inherited(arguments);
+		this.callbackNameChanged();
+	},
+
+	/**
+	 * Detect a change in the callbackName property
+	 *
+	 * @protected
+	 *
+	 * @param   oldValue  string|null  The callbackName old value
+	 *
+	 * @since  0.0.3
+	 */
+	callbackNameChanged: function (oldValue)
+	{
+		if (this.callbackName == null)
+		{
+			// Request creation. The handleAs parameter is 'json' by default
+			this.request = new enyo.Ajax(
+				{
+					// Set the URL
+					url: this.url,
+
+					// Choose the method 'GET' or 'POST'
+					method: 'POST',
+
+					// Set the timeout
+					timeout: this.timeout,
+				}
+			);
+		}
+		else if (oldValue == null)
+		{
+			this.request = new enyo.JsonpRequest(
+				{
+					// Set the URL
+					url: this.url,
+
+					// Choose the method 'GET' or 'POST'
+					method: 'POST',
+
+					// Set the timeout
+					timeout: this.timeout,
+
+					// Set the jsonp callback
+					callbackName: this.callbackName
+				}
+			);
+		}
+		else
+		{
+			this.request.setCallbackName(this.callbackName);
+		}
+		this.$.input.setRequest(this.request);
+	},
+
+
+	/**
+	 * Detect a change in the url property
+	 *
+	 * @protected
+	 *
+	 * @param   oldValue  string  The url old value
+	 *
+	 * @since  0.0.3
+	 */
+	urlChanged: function (oldValue)
+	{
+		this.request.setUrl(this.url);
+	},
+
+	/**
+	 * Detect a change in the timeout property
+	 *
+	 * @protected
+	 *
+	 * @param   oldValue  integer  The timeout old value
+	 *
+	 * @since  0.0.3
+	 */
+	timeoutChanged: function (oldValue)
+	{
+		this.request.setTimeout(this.timeout);
+	},
+
+	/**
 	 * Handle fail event
 	 *
 	 * @protected
@@ -120,6 +226,8 @@ enyo.kind({
 	 * @param   inEvent   Object		    Event fired
 	 *
 	 * @return  true
+	 *
+	 * @since  0.0.1
 	 */
 	fail: function (inSender, inEvent)
 	{
@@ -162,31 +270,19 @@ enyo.kind({
 	 * @public
 	 *
 	 * @return  void
+	 *
+	 * @since  0.0.1
 	 */
 	requestData: function ()
 	{
-		// Request creation. The handleAs parameter is 'json' by default
-		var request = new enyo.Ajax(
-			{
-				// Set the URL
-				url: this.url,
-
-				// Choose the method 'GET' or 'POST'
-				method: 'POST',
-
-				// Set the timeout
-				timeout: this.timeout
-			}
-		);
-
 		// Tells Ajax what the callback success function is
-		request.response(enyo.bind(this, 'success'));
+		this.request.response(enyo.bind(this, 'success'));
 
 		// Tells Ajax what the callback failure function is
-		request.error(enyo.bind(this, 'failure'));
+		this.request.error(enyo.bind(this, 'failure'));
 
 		// Makes the Ajax call with parameters
-		request.go({task: 'data'});
+		this.request.go({task: 'data'});
 	},
 
 	/**
@@ -198,6 +294,8 @@ enyo.kind({
 	 * @param   inError    string|number  Error code
 	 *
 	 * @return  void
+	 *
+	 * @since  0.0.1
 	 */
 	failure: function (inRequest, inError)
 	{
@@ -214,6 +312,8 @@ enyo.kind({
 	 * @param   inResponse  object     Response bject
 	 *
 	 * @return  void
+	 *
+	 * @since  0.0.1
 	 */
 	success: function (inRequest, inResponse)
 	{
@@ -232,8 +332,7 @@ enyo.kind({
 		this.$.cues.setLimit(inResponse.limit).setElements(inResponse.cues).render();
 
 		// Construct the input object
-		this.$.input.setUrl(this.url);
-		this.$.input.setTimeout(this.timeout);
+		this.$.input.setRequest(this.request);
 
 		// Construct the video object
 		for (var source in inResponse.sources)
@@ -261,6 +360,8 @@ enyo.kind({
 	 * @param   inEvent   Object		    Event fired
 	 *
 	 * @return  true
+	 *
+	 * @since  0.0.1
 	 */
 	cueSelect: function (inSender, inEvent)
 	{
@@ -289,6 +390,8 @@ enyo.kind({
 	 * @param   inEvent   Object		    Event fired
 	 *
 	 * @return  true
+	 *
+	 * @since  0.0.1
 	 */
 	cueDeselect: function (inSender, inEvent)
 	{
@@ -312,6 +415,8 @@ enyo.kind({
 	 * @param   inEvent   Object		    Event fired
 	 *
 	 * @return  true
+	 *
+	 * @since  0.0.1
 	 */
 	trackChange: function (inSender, inEvent)
 	{
@@ -330,6 +435,8 @@ enyo.kind({
 	 * @param   inEvent   Object		    Event fired
 	 *
 	 * @return  true
+	 *
+	 * @since  0.0.1
 	 */
 	timeUpdate: function (inSender, inEvent)
 	{

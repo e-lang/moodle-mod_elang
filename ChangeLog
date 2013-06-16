@@ -25,6 +25,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+2013-06-16  Christophe Demko
+ + Adding jsonp support
+
 2013-06-15  Christophe Demko
  ^ Removing .gitmodule file
  ^ Deleting build directory when preparing

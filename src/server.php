@@ -236,7 +236,7 @@ switch ($task)
 		$limit = isset($options['limit']) ? $options['limit'] : 10;
 
 		// Send the data
-		echo json_encode(
+		Elang\sendResponse(
 			array(
 				'title' => $elang->name,
 				'description' => $elang->intro,
@@ -335,11 +335,11 @@ switch ($task)
 
 		if ($elements[$number]['content'] == $text)
 		{
-			echo json_encode(array('status' => 'success', 'cue' => $cue_text, 'content' => $text));
+			Elang\sendResponse(array('status' => 'success', 'cue' => $cue_text, 'content' => $text));
 		}
 		else
 		{
-			echo json_encode(array('status' => 'failure', 'cue' => $cue_text));
+			Elang\sendResponse(array('status' => 'failure', 'cue' => $cue_text));
 		}
 
 		die;
@@ -419,7 +419,9 @@ switch ($task)
 		}
 
 		$cue_text = Elang\generateCueText($elements, $data, '-', $repeatedunderscore);
-		echo json_encode(array('cue' => $cue_text, 'content' => $elements[$number]['content']));
+
+		// Send the response
+		Elang\sendResponse(array('cue' => $cue_text, 'content' => $elements[$number]['content']));
 		die;
 		break;
 
