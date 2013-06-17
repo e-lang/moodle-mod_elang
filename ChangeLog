@@ -26,6 +26,7 @@ $ -> Language fix or change
 ! -> Note
 
 2013-06-17  Christophe Demko
+ # Converting string number to number
  +$ Adding globalization to student view + reorganizing code
 
 2013-06-16  Christophe Demko

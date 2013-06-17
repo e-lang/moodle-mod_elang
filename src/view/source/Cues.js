@@ -164,9 +164,10 @@ enyo.kind({
 	 */
 	limitChanged: function (oldValue)
 	{
+		this.limit = Number(this.limit);
 		if (this.limit > 0)
 		{
-			var index = [5, 10, 15, 20, 25].indexOf(Number(this.limit));
+			var index = [5, 10, 15, 20, 25].indexOf(this.limit);
 			if (index > 0)
 			{
 				this.$.limit.setSelected(index);
