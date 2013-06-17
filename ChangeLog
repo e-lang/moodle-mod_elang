@@ -25,6 +25,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+2013-06-17  Christophe Demko
+ +$ Adding globalization to student view + reorganizing code
+
 2013-06-16  Christophe Demko
  + Implementing a limit select list for the user
  + Adding jsonp support

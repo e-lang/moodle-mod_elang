@@ -9,6 +9,7 @@
  * @since       0.0.1
  */
 enyo.depends(
+	"$lib/g11n",
 	"$lib/jquery.js",
 	"$lib/bootstrap/js/bootstrap.js",
 	"$lib/bootstrap/css/bootstrap.css",

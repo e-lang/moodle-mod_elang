@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="moodle-mod_elang" default="build" basedir=".">
 
-	<property name="version" value="2013061600" />
+	<property name="version" value="2013061700" />
 	<property name="requires" value="2012062500" />
 	<property name="release" value="alpha-0.0.3" />
 	<property name="maturity" value="MATURITY_ALPHA" />
@@ -21,14 +21,16 @@
 		<get src="http://twitter.github.io/bootstrap/assets/bootstrap.zip" dest="tmp/bootstrap.zip" />
 		<get src="http://code.jquery.com/jquery.js" dest="tmp/jquery.js" />
 		<get src="https://github.com/enyojs/enyo/archive/master.zip" dest="tmp/enyo.zip" />
+		<get src="https://github.com/enyojs/g11n/archive/master.zip" dest="tmp/g11n.zip" />
 	</target>
 
 	<target name="prepare" description="Prepare files">
 		<delete dir="build" />
 		<copy todir="build/elang">
-			<fileset dir="src">
-				<exclude name="version.tpl"/>
-			</fileset>
+			<fileset dir="src" excludes="version.tpl,view/**" />
+		</copy>
+		<copy todir="build/elang">
+			<fileset dir="src/view" />
 		</copy>
 		<copy file="src/version.tpl" tofile="build/elang/version.php" overwrite="true" />
 		<replace file="build/elang/version.php" token="@VERSION@" value="${version}" summary="true" />
@@ -36,21 +38,23 @@
 		<replace file="build/elang/version.php" token="@RELEASE@" value="${release}" summary="true" />
 		<replace file="build/elang/version.php" token="@MATURITY@" value="${maturity}" summary="true" />
 
-		<unzip src="tmp/bootstrap.zip" dest="build/elang/view/lib" />
-		<unzip src="tmp/enyo.zip" dest="build/elang/view" />
-		<move file="build/elang/view/enyo-master" tofile="build/elang/view/enyo"/>
-		<copy file="tmp/jquery.js" tofile="build/elang/view/lib/jquery.js" />
+		<unzip src="tmp/bootstrap.zip" dest="build/elang/lib" />
+		<unzip src="tmp/enyo.zip" dest="build/elang" />
+		<move file="build/elang/enyo-master" tofile="build/elang/enyo"/>
+		<unzip src="tmp/g11n.zip" dest="build/elang/lib" />
+		<move file="build/elang/lib/g11n-master" tofile="build/elang/lib/g11n"/>
+		<copy file="tmp/jquery.js" tofile="build/elang/lib/jquery.js" />
 	</target>
 
 	<target name="debug" description="Zip files for debug version">
-		<zip destfile="${ant.project.name}-${release}-${version}-debug.zip" basedir="build" excludes="**/*~,elang/view/build,elang/view/deploy" />
+		<zip destfile="${ant.project.name}-${release}-${version}-debug.zip" basedir="build" excludes="**/*~,elang/build/**,elang/deploy/**" />
 	</target>
 
 	<target name="compressed" description="Zip files for compressed version">
-		<chmod file="build/elang/view/enyo/tools/deploy.js" perm="u+x" />
-		<exec dir="build/elang/view" executable="enyo/tools/deploy.js" />
-		<zip destfile="${ant.project.name}-${release}-${version}.zip" basedir="build" excludes="**/*~,elang/view/" />
-		<zip destfile="${ant.project.name}-${release}-${version}.zip" update="true" basedir="build" includes="elang/view/build/*,elang/view/lib/bootstrap/img/*" />
+		<chmod file="build/elang/enyo/tools/deploy.js" perm="u+x" />
+		<exec dir="build/elang" executable="enyo/tools/deploy.js" />
+		<zip destfile="${ant.project.name}-${release}-${version}.zip" basedir="build" excludes="**/*~,elang/source/,elang/lib/,elang/deploy/,elang/enyo/" />
+		<zip destfile="${ant.project.name}-${release}-${version}.zip" update="true" basedir="build" includes="elang/build/*,elang/lib/bootstrap/img/*" />
 	</target>
 
 </project>

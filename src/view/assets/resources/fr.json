@@ -1,0 +1,18 @@
+{
+	"#": "#",
+	"Bad Request": "Mauvaise requête",
+	"Close": "Fermer",
+	"Cue Listing": "Liste des séquences",
+	"Error": "Erreur",
+	"Forbidden": "Interdit",
+	" Get a pdf version": " Obtenir une version pdf",
+	"Internal Server Error": "Erreur interne du serveur",
+	"Limit per page": "Limite par page",
+	"Not Found": "Non trouvé",
+	"Not Implemented": "Non implanté",
+	"Service Timeout": "Temps limite dépassé",
+	"Service Unavailable": "Service indisponible",
+	"Timeout with the server": "Le serveur n'a pas répondu dans le temps imparti",
+	"Unauthorized": "Non autorisé"
+}
+

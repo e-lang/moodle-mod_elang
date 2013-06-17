@@ -62,14 +62,14 @@ $config = get_config('elang');
 		<meta name="apple-mobile-web-app-capable" content="yes"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 
-<?php if (file_exists(dirname(__FILE__) . '/view/build')): ?>
-		<link href="view/build/enyo.css" rel="stylesheet"/>
-		<link href="view/build/app.css" rel="stylesheet"/>
-		<script src="view/build/enyo.js"></script>
-		<script src="view/build/app.js"></script>
+<?php if (file_exists(dirname(__FILE__) . '/build')): ?>
+		<link href="build/enyo.css" rel="stylesheet"/>
+		<link href="build/app.css" rel="stylesheet"/>
+		<script src="build/enyo.js"></script>
+		<script src="build/app.js"></script>
 <?php else: ?>
-		<script src="view/enyo/enyo.js" type="text/javascript"></script>
-		<script src="view/source/package.js" type="text/javascript"></script>
+		<script src="enyo/enyo.js" type="text/javascript"></script>
+		<script src="source/package.js" type="text/javascript"></script>
 <?php endif; ?>
 
 	</head>

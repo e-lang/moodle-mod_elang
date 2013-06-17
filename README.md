@@ -9,7 +9,7 @@ Build
 -----
 
 * Run `ant get` for getting [bootstrap](http://twitter.github.io/bootstrap/assets/bootstrap.zip),
-[jquery](http://code.jquery.com/jquery.js) and [enyojs](https://github.com/enyojs/enyo/archive/master.zip)
+[jquery](http://code.jquery.com/jquery.js), [enyojs](https://github.com/enyojs/enyo/archive/master.zip) and [g11n](https://github.com/enyojs/g11n/archive/master.zip)
 
 * Run `ant prepare` for preparing files
 
