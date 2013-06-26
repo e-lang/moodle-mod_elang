@@ -675,7 +675,7 @@ function saveFiles(\stdClass $elang)
 
 				if (empty($title) || is_numeric($title))
 				{
-					$title = preg_replace('/(\[[^\]]*\])/', '...', $text);
+					$title = preg_replace('/(\[[^\]]*\]|{[^}]*})/', '...', $text);
 
 					if (mb_strlen($title, 'UTF-8') > $elang->titlelength)
 					{
@@ -694,19 +694,26 @@ function saveFiles(\stdClass $elang)
 				$cue->begin	= $elt->getBegin();
 				$cue->end = $elt->getend();
 				$cue->number = $i + 1;
-				$texts = preg_split('/(\[[^\]]*\])/', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
+				$texts = preg_split('/(\[[^\]]*\]|{[^}]*})/', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
 				$data = array();
 				$i = 1;
 
 				foreach ($texts as $text)
 				{
-					if (isset($text[0]) && $text[0] == '[' && $text[strlen($text) - 1] == ']')
+					if (isset($text[0]))
 					{
-						$data[] = array('type' => 'input', 'content' => substr($text, 1, strlen($text) - 2), 'order' => $i++);
-					}
-					else
-					{
-						$data[] = array('type' => 'text', 'content' => $text);
+						if ($text[0] == '[' && $text[strlen($text) - 1] == ']')
+						{
+							$data[] = array('type' => 'input', 'content' => substr($text, 1, strlen($text) - 2), 'order' => $i++, 'help' => true);
+						}
+						elseif ($text[0] == '{' && $text[strlen($text) - 1] == '}')
+						{
+							$data[] = array('type' => 'input', 'content' => substr($text, 1, strlen($text) - 2), 'order' => $i++, 'help' => false);
+						}
+						else
+						{
+							$data[] = array('type' => 'text', 'content' => $text);
+						}
 					}
 				}
 

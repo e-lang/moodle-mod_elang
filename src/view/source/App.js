@@ -97,7 +97,7 @@ enyo.kind({
 						{kind: 'Elang.Progressbar', name: 'progressbar'},
 
 						// input
-						{kind: 'Elang.Input', name: 'input'}
+						{kind: 'Elang.Form', name: 'form'}
 					]
 				},
 				{
@@ -185,7 +185,7 @@ enyo.kind({
 		{
 			this.request.setCallbackName(this.callbackName);
 		}
-		this.$.input.setRequest(this.request);
+		this.$.form.setRequest(this.request);
 	},
 
 
@@ -234,6 +234,9 @@ enyo.kind({
 		var error = inEvent.error;
 		switch (inEvent.error)
 		{
+			case 0:
+				this.$.modal.setData($L('Error'), 'danger', error, $L('Request failed')).render().show();
+				break;
 			case 400:
 				this.$.modal.setData($L('Error'), 'danger', error, $L('Bad Request')).render().show();
 				break;
@@ -331,8 +334,8 @@ enyo.kind({
 		// Construct the cues object
 		this.$.cues.setLimit(inResponse.limit).setElements(inResponse.cues).render();
 
-		// Construct the input object
-		this.$.input.setRequest(this.request);
+		// Construct the form object
+		this.$.form.setRequest(this.request);
 
 		// Construct the video object
 		for (var source in inResponse.sources)
@@ -372,7 +375,7 @@ enyo.kind({
 		this.$.video.setTime(begin);
 		this.$.video.setEnd(end);
 
-		this.$.input.setCue(cue);
+		this.$.form.setCue(cue);
 
 		this.$.progressbar.setBegin(begin).setWarning(begin).setEnd(end);
 		this.$.progressbar.show();
@@ -398,7 +401,7 @@ enyo.kind({
 		this.$.video.setBegin(0);
 		this.$.video.setEnd(Infinity);
 
-		this.$.input.setCue(null);
+		this.$.form.setCue(null);
 
 		this.$.progressbar.hide();
 

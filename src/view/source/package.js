@@ -19,6 +19,7 @@ enyo.depends(
 	"Head.js",
 	"Modal.js",
 	"Input.js",
+	"Form.js",
 	"Progressbar.js",
 	"Pagination.js",
 	"Cues.js",

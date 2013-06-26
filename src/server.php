@@ -186,7 +186,8 @@ switch ($task)
 							$elements[] = array(
 								'type' => 'input',
 								'size' => ((int) (mb_strlen($element['content'], 'UTF-8') - 1) / 10 + 1) * 10,
-								'content' => ''
+								'content' => '',
+								'help' => $element['help']
 							);
 						}
 						elseif ($user[$number]['content'] == $element['content'])
@@ -199,9 +200,10 @@ switch ($task)
 						else
 						{
 							$elements[] = array(
-								'type' => 'failure',
+								'type' => 'input',
 								'size' => ((int) (mb_strlen($element['content'], 'UTF-8') - 1) / 10 + 1) * 10,
-								'content' => $user[$number]['content']
+								'content' => $user[$number]['content'],
+								'help' => $element['help']
 							);
 						}
 					}
@@ -210,7 +212,8 @@ switch ($task)
 						$elements[] = array(
 							'type' => 'input',
 							'size' => ((int) (mb_strlen($element['content'], 'UTF-8') - 1) / 10 + 1) * 10,
-							'content' => ''
+							'content' => '',
+							'help' => $element['help']
 						);
 					}
 				}

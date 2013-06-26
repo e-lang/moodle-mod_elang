@@ -1,12 +1,12 @@
 /**
- * Cues kind
+ * Input kind
  *
  * @package     mod
  * @subpackage  elang
  * @copyright   2013 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
- * @since       0.0.1
+ * @since       0.0.3
  */
 enyo.kind({
 	/**
@@ -15,108 +15,139 @@ enyo.kind({
 	name: "Elang.Input",
 
 	/**
-	 * Published properties:
-	 * - cue: the current cue
-	 * - request: the request object
-	 * Each property will have public setter and getter methods
+	 * Tag of the kind
 	 */
-	published: {cue: null, request: null},
+	tag: 'span',
 
 	/**
-	 * Events:
-	 * - onTrackChange: fired when the text track associated with the cue change
-	 * - onFail: fired when an ajax request failed
+	 * css classes
 	 */
-	events: {onTrackChange: '', onFail: ''},
+	classes: 'input-append control-group',
+
+	/**
+	 * Published properties:
+	 * - value: the current input value
+	 * - error: the error state (true or false)
+	 * - size: the size of the input
+	 * - number: the item number
+	 * Each property will have public setter and getter methods
+	 */
+	published: {value: null, error: null, help: null, size: null, number: null},
 
 	/**
 	 * Named components:
-	 * - content: input content
+	 * - input: The input control
 	 */
-	components: [{tag: 'p', name: 'content'}],
+	components: [
+		{
+			kind: 'Input',
+			name: 'input',
+			onchange: 'textChange',
+			attributes: {type: 'text'}
+		},
+	],
 
 	/**
-	 * Detect a change in the cue property
+	 * Events:
+	 * - onTextChange: fired when the input text has changed
+	 * - onHelpTap: fired when the help button was tapped
+	 */
+	events: {onTextChange: '', onHelpTap: ''},
+
+	/**
+	 * Detect a change in the value property
 	 *
 	 * @protected
 	 *
-	 * @param   oldValue  string  The cue old value
+	 * @param   oldValue  string|null  The old value
 	 *
-	 * @since  0.0.1
+	 * @since  0.0.3
 	 */
-	cueChanged: function (oldValue)
+	valueChanged: function (oldValue)
 	{
-		this.$.content.destroyClientControls();
-		if (this.cue != null)
+		this.$.input.setValue(this.value);
+	},
+
+	/**
+	 * Detect a change in the error property
+	 *
+	 * @protected
+	 *
+	 * @param   oldValue  boolean|null  The error old value
+	 *
+	 * @since  0.0.3
+	 */
+	errorChanged: function (oldValue)
+	{
+		if (this.error)
 		{
-			var elements = this.cue.getData().elements;
-			for (var i in elements)
-			{
-				var element = elements[i];
-				switch (element.type)
-				{
-					case 'text':
-						this.$.content.createComponents(
-							[
-								{tag: 'span', 'content': element.content},
-								{tag: 'span', 'content': ' '},
-							],
-							{owner: this}
-						);
-	 					break;
-					case 'success':
-						this.$.content.createComponents(
-							[
-								{tag: 'span', classes: 'alert-success', 'content': element.content},
-								{tag: 'span', 'content': ' '},
-							],
-							{owner: this}
-						);
-	 					break;
-					case 'help':
-						this.$.content.createComponents(
-							[
-								{tag: 'span', classes: 'alert-info', 'content': element.content},
-								{tag: 'span', 'content': ' '},
-							],
-							{owner: this}
-						);
-	 					break;
-					case 'input':
-					case 'failure':
-						this.$.content.createComponents(
-							[
-								{
-									tag: 'span',
-									classes: 'input-append control-group' + (element.type == 'failure' ? ' error' : ''),
-									components: [
-										{
-											kind: 'Input',
-											name: i,
-											classes: element.size > 50 ? 'input-xxlarge' : element.size > 40 ? 'input-xlarge' : element.size > 30 ? 'input-large' : '',
-											onchange: 'textChange',
-											value: element.content,
-											attributes: {type: 'text'}
-										},
-										{
-											tag: 'a',
-											ontap: 'helpTap',
-											number: i,
-											classes: 'btn',
-											attibutes: {href: '#'},
-											components: [{tag: 'i', classes: 'icon-info-sign'}]
-										}
-									]
-								},
-								{tag: 'span', content: ' '},
-							],
-							{owner: this}
-						);
-					break;
-				}
-			}
+			this.addClass('error');
 		}
-		this.render();
+		else
+		{
+			this.removeClass('error');
+		}
+	},
+
+	/**
+	 * Detect a change in the size property
+	 *
+	 * @protected
+	 *
+	 * @param   oldValue  integer|null  The size old value
+	 *
+	 * @since  0.0.3
+	 */
+	sizeChanged: function (oldValue)
+	{
+		this.$.input.setClassAttribute(this.size > 50 ? 'input-xxlarge' : this.size > 40 ? 'input-xlarge' : this.size > 30 ? 'input-large' : '');
+	},
+
+	/**
+	 * Detect a change in the help property
+	 *
+	 * @protected
+	 *
+	 * @param   oldValue  boolean|null  The help old value
+	 *
+	 * @since  0.0.3
+	 */
+	helpChanged: function (oldValue)
+	{
+		if (this.help)
+		{
+			this.createComponent(
+				{
+					name: 'help',
+					tag: 'a',
+					ontap: 'helpTap',
+					classes: 'btn',
+					attibutes: {href: '#'},
+					components: [{tag: 'i', classes: 'icon-info-sign'}]
+				}
+			);
+		}
+		else if (oldValue)
+		{
+			this.$.help.destroy();
+			this.render();
+		}
+	},
+
+	/**
+	 * Create method
+	 *
+	 * @protected
+	 *
+	 * @since  0.0.3
+	 */
+	create: function ()
+	{
+		this.inherited(arguments);
+		this.valueChanged();
+		this.sizeChanged();
+		this.helpChanged();
+		this.errorChanged();
 	},
 
 	/**
@@ -125,25 +156,16 @@ enyo.kind({
 	 * @protected
 	 *
 	 * @param   inSender  enyo.instance  Sender of the event
-	 * @param   inEvent   Object		    Event fired
+	 * @param   inEvent   Object		 Event fired
 	 *
 	 * @return  true
 	 *
-	 * @since  0.0.1
+	 * @since  0.0.3
 	 */
 	textChange: function (inSender, inEvent)
 	{
-		// Tells Ajax what the callback success function is
-		this.request.response(enyo.bind(this, 'success'));
-
-		// Tells Ajax what the callback failure function is
-		this.request.error(enyo.bind(this, 'failure'));
-
-		// Set the input number
-		this.request.sender = inSender;
-
-		// Makes the Ajax call with parameters
-		this.request.go({task: 'check', id_cue: this.cue.getData().id, number: inSender.name, text: inSender.value});
+		this.value = inSender.getValue();
+		this.doTextChange();
 
 		// Prevents event propagation
 		return true;
@@ -155,105 +177,17 @@ enyo.kind({
 	 * @protected
 	 *
 	 * @param   inSender  enyo.instance  Sender of the event
-	 * @param   inEvent   Object		    Event fired
+	 * @param   inEvent   Object		 Event fired
 	 *
 	 * @return  true
 	 *
-	 * @since  0.0.1
+	 * @since  0.0.3
 	 */
 	helpTap: function (inSender, inEvent)
 	{
-		// Tells Ajax what the callback success function is
-		this.request.response(enyo.bind(this, 'help'));
-
-		// Tells Ajax what the callback failure function is
-		this.request.error(enyo.bind(this, 'failure'));
-
-		// Set the input number
-		this.request.sender = inSender;
-
-		// Makes the Ajax call with parameters
-		this.request.go({task: 'help', id_cue: this.cue.getData().id, number: inSender.number});
+		this.doHelpTap();
 
 		// Prevents event propagation
 		return true;
 	},
-
-	/**
-	 * Callback failure function
-	 *
-	 * @param   inRequest  enyo.Ajax      Request use for Ajax
-	 * @param   inError    string|number  Error code
-	 *
-	 * @return  void
-	 *
-	 * @since  0.0.1
-	 */
-	failure: function (inRequest, inError)
-	{
-		this.doFail({error: inError});
-		inRequest.fail(inError);
-	},
-
-	/**
-	 * Callback success function
-	 *
-	 * @param   inRequest   enyo.Ajax  Request use for Ajax
-	 * @param   inResponse  object     Response bject
-	 *
-	 * @return  void
-	 *
-	 * @since  0.0.1
-	 */
-	success: function (inRequest, inResponse)
-	{
-		var data = this.cue.getData();
-		switch (inResponse.status)
-		{
-			case 'success':
-				data.elements[inRequest.sender.name] = {content: inResponse.content, type: 'success'};
-				this.cueChanged();
-				this.render();
-				this.doTrackChange({number: data.number, text: inResponse.cue});
-				break;
-			case 'failure':
-				if (inRequest.sender.value == '')
-				{
-					data.elements[inRequest.sender.name] = {
-						content: '', type: 'input',
-						size: data.elements[inRequest.sender.name].size
-					};
-				}
-				else
-				{
-					data.elements[inRequest.sender.name] = {
-						content: inRequest.sender.value,
-						type: 'failure',
-						size: data.elements[inRequest.sender.name].size
-					};
-				}
-				this.cueChanged();
-				this.render();
-				this.doTrackChange({number: data.number, text: inResponse.cue});
-				break;
-		}
-	},
-
-	/**
-	 * Callback success function
-	 *
-	 * @param   inRequest   enyo.Ajax  Request use for Ajax
-	 * @param   inResponse  object     Response bject
-	 *
-	 * @return  void
-	 *
-	 * @since  0.0.1
-	 */
-	help: function (inRequest, inResponse)
-	{
-		this.cue.getData().elements[inRequest.sender.number] = {content: inResponse.content, type: 'help'};
-		this.cueChanged();
-		this.render();
-		this.doTrackChange({number: this.cue.getData().number, text: inResponse.cue});
-	}
 });

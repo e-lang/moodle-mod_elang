@@ -25,6 +25,10 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+
+2013-06-26  Christophe Demko
+ + Add support for {} markup
+
 2013-06-17  Christophe Demko
  # Converting string number to number
  +$ Adding globalization to student view + reorganizing code
