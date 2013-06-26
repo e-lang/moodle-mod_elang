@@ -27,6 +27,7 @@ $ -> Language fix or change
 
 
 2013-06-26  Christophe Demko
+ + Compare strings ignoring case
  ! Prepare for backup
  + Add support for {} markup
 

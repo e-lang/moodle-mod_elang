@@ -294,6 +294,13 @@ switch ($task)
 
 		$text = optional_param('text', '', PARAM_TEXT);
 
+		// Compare strings ignoring case
+		// TODO: insert here the use of the Levenstein distance
+		if (mb_strtolower($text, 'UTF-8') == mb_strtolower($elements[$number]['content'], 'UTF-8'))
+		{
+			$text = $elements[$number]['content'];
+		}
+
 		// Log action
 		add_to_log(
 			$course->id,
