@@ -148,6 +148,12 @@ class mod_elang_mod_form extends moodleform_mod
 
 		// Add standard buttons, common to all modules
 		$this->add_action_buttons();
+
+		// Add a warning when a module is being updated
+		if (!empty($this->current->instance))
+		{
+			$mform->addElement('warning', null, null, get_string('update_warning', 'elang'));
+		}
 	}
 
 	/**

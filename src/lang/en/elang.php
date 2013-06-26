@@ -74,6 +74,7 @@ $string['top_config'] = 'This defines the pdf top margin in millimeters';
 $string['top_error'] = 'You should enter a number here. Typical value is 20.';
 $string['top_help'] = 'This defines the pdf top margin in millimeters';
 $string['top'] = 'Pdf top margin';
+$string['update_warning'] = 'If you modify an exercise, all students activity will be discarded';
 $string['upload'] = 'Upload files for the video exercise';
 $string['videomaxsize_config'] = 'Set the maximum video size in bytes';
 $string['videomaxsize'] = 'Maximum video size';
