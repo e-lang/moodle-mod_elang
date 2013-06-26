@@ -494,6 +494,8 @@ class WebVTT implements \Iterator
  */
 function sendResponse($response)
 {
+	header('Content-type: application/json');
+
 	// Get the optional jsonp callback
 	$callback = optional_param('callback', '', PARAM_ALPHANUMEXT);
 
@@ -506,6 +508,8 @@ function sendResponse($response)
 	{
 		echo $callback . '(' . json_encode($response) . ');';
 	}
+
+	die;
 }
 
 /**

@@ -73,7 +73,6 @@ switch ($task)
 {
 	// Get the data for preparing the exercise
 	case 'data':
-		header('Content-type: application/json');
 		$fs = get_file_storage();
 
 		// Get the video files
@@ -256,7 +255,6 @@ switch ($task)
 				'language' => $elang->language
 			)
 		);
-		die;
 		break;
 
 	case 'check':
@@ -292,6 +290,18 @@ switch ($task)
 			die;
 		}
 
+		$user = $DB->get_record('elang_users', array('id_cue' => $id_cue, 'id_user' => $USER->id));
+		if ($user)
+		{
+			$data = json_decode($user->json, true);
+			if (isset($data[$number]['help']) && $data[$number]['help'])
+			{
+				// Help has been already asked
+				header('HTTP/1.1 400 Bad Request');
+				die;
+			}
+		}
+
 		$text = optional_param('text', '', PARAM_TEXT);
 
 		// Compare strings ignoring case
@@ -302,30 +312,29 @@ switch ($task)
 		}
 
 		// Log action
-		add_to_log(
-			$course->id,
-			'elang',
-			'add check',
-			'view.php?id=' . $cm->id,
-			$DB->insert_record(
-				'elang_check',
-				array(
-					'id_elang' => $elang->id,
-					'cue' => $cue->number,
-					'guess' => $elements[$number]['order'],
-					'info' => $elements[$number]['content'],
-					'user' => $text,
-				)
-			),
-			$cm->id
-		);
-
-		header('Content-type: application/json');
-		$user = $DB->get_record('elang_users', array('id_cue' => $id_cue, 'id_user' => $USER->id));
+		if (!empty($text))
+		{
+			add_to_log(
+				$course->id,
+				'elang',
+				'add check',
+				'view.php?id=' . $cm->id,
+				$DB->insert_record(
+					'elang_check',
+					array(
+						'id_elang' => $elang->id,
+						'cue' => $cue->number,
+						'guess' => $elements[$number]['order'],
+						'info' => $elements[$number]['content'],
+						'user' => $text,
+					)
+				),
+				$cm->id
+			);
+		}
 
 		if ($user)
 		{
-			$data = json_decode($user->json, true);
 			$data[$number] = array('help' => false, 'content' => $text);
 			$user->json = json_encode($data);
 			$DB->update_record('elang_users', $user);
@@ -355,7 +364,6 @@ switch ($task)
 			Elang\sendResponse(array('status' => 'failure', 'cue' => $cue_text));
 		}
 
-		die;
 		break;
 
 	case 'help':
@@ -391,6 +399,25 @@ switch ($task)
 			die;
 		}
 
+		// Detect a forbidden help
+		if (!$elements[$number]['help'])
+		{
+			header('HTTP/1.1 403 Forbidden');
+			die;
+		}
+
+		$user = $DB->get_record('elang_users', array('id_cue' => $id_cue, 'id_user' => $USER->id));
+		if ($user)
+		{
+			$data = json_decode($user->json, true);
+			if (isset($data[$number]['help']) && $data[$number]['help'])
+			{
+				// Help has been already asked
+				header('HTTP/1.1 400 Bad Request');
+				die;
+			}
+		}
+
 		// Log action
 		add_to_log(
 			$course->id,
@@ -409,12 +436,8 @@ switch ($task)
 			$cm->id
 		);
 
-		header('Content-type: application/json');
-		$user = $DB->get_record('elang_users', array('id_cue' => $id_cue, 'id_user' => $USER->id));
-
 		if ($user)
 		{
-			$data = json_decode($user->json, true);
 			$data[$number] = array('help' => true, 'content' => '');
 			$user->json = json_encode($data);
 			$DB->update_record('elang_users', $user);
@@ -437,7 +460,6 @@ switch ($task)
 
 		// Send the response
 		Elang\sendResponse(array('cue' => $cue_text, 'content' => $elements[$number]['content']));
-		die;
 		break;
 
 	default:

@@ -27,6 +27,7 @@ $ -> Language fix or change
 
 
 2013-06-26  Christophe Demko
+ + Verify forbidden actions
  +$ Add french translation
  + Add help button on limit field
  + Detect video subtitles capability
