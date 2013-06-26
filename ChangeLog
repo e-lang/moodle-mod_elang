@@ -27,6 +27,7 @@ $ -> Language fix or change
 
 
 2013-06-26  Christophe Demko
+ ! Prepare for backup
  + Add support for {} markup
 
 2013-06-17  Christophe Demko
