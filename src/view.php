@@ -75,9 +75,16 @@ $config = get_config('elang');
 	</head>
 	<body>
 		<script>
-			var app=new Elang.App(
-				<?php echo json_encode(array('url' => (string) new moodle_url('/mod/elang/server.php', array('id' => $cm->id)), 'timeout' => $config->timeout));?>
-			).renderInto(document.body).requestData();
+			if (!!document.createElement('video').textTracks)
+			{
+				new Elang.App(
+					<?php echo json_encode(array('url' => (string) new moodle_url('/mod/elang/server.php', array('id' => $cm->id)), 'timeout' => $config->timeout));?>
+				).renderInto(document.body).requestData();
+			}
+			else
+			{
+				alert($L('Your browser is not compatible with files subtitle on HTML5 video'));
+			}
 		</script>
 	</body>
 </html>
