@@ -27,6 +27,7 @@ $ -> Language fix or change
 
 
 2013-06-26  Christophe Demko
+ +$ Add french translation
  + Add help button on limit field
  + Detect video subtitles capability
  ^ Change the logging structure
