@@ -8,4 +8,4 @@ Installation
 Use
 ---
 
-See http://chdemko.github.io/moodle-mod_elang/ for conditions of use.
+See http://e-lang.github.io/moodle-mod_elang/ for conditions of use.
