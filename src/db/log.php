@@ -19,6 +19,16 @@ $logs = array(
 	array('module' => 'elang', 'action' => 'view', 'mtable' => 'elang', 'field' => 'name'),
 	array('module' => 'elang', 'action' => 'view all', 'mtable' => 'elang', 'field' => 'name'),
 
-	array('module' => 'elang', 'action' => 'view help', 'mtable' => 'elang_logs', 'field' => 'info'),
-	array('module' => 'elang', 'action' => 'add check', 'mtable' => 'elang_logs', 'field' => 'info'),
+	array(
+		'module' => 'elang',
+		'action' => 'view help',
+		'mtable' => 'elang_help',
+		'field' => $DB->sql_concat('cue', "','", 'guess', "','", "'['", 'info', "']'")
+	),
+	array(
+		'module' => 'elang',
+		'action' => 'add check',
+		'mtable' => 'elang_check',
+		'field' => $DB->sql_concat('cue', "','", 'guess', "','", "'['", 'info', "']=['", 'user', "']'")
+	),
 );

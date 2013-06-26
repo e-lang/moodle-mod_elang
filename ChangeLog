@@ -27,6 +27,7 @@ $ -> Language fix or change
 
 
 2013-06-26  Christophe Demko
+ ^ Change the logging structure
  ^ Update README.txt to be linked on new project url
  + Display a warning when a module is updated
  + Add the display of the creation date in the pdf

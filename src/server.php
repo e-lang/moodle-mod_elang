@@ -308,10 +308,13 @@ switch ($task)
 			'add check',
 			'view.php?id=' . $cm->id,
 			$DB->insert_record(
-				'elang_logs',
+				'elang_check',
 				array(
-					'info' => $cue->number . ',' . $elements[$number]['order'] . ',[' . $text . ']=[' . $elements[$number]['content'] . ']',
-					'id_elang' => $elang->id
+					'id_elang' => $elang->id,
+					'cue' => $cue->number,
+					'guess' => $elements[$number]['order'],
+					'info' => $elements[$number]['content'],
+					'user' => $text,
 				)
 			),
 			$cm->id
@@ -395,10 +398,12 @@ switch ($task)
 			'view help',
 			'view.php?id=' . $cm->id,
 			$DB->insert_record(
-				'elang_logs',
+				'elang_help',
 				array(
-					'info' => $cue->number . ',' . $elements[$number]['order'] . ',[' . $elements[$number]['content'] . ']',
-					'id_elang' => $elang->id
+					'id_elang' => $elang->id,
+					'cue' => $cue->number,
+					'guess' => $elements[$number]['order'],
+					'info' => $elements[$number]['content'],
 				)
 			),
 			$cm->id

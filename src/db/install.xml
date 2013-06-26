@@ -43,7 +43,7 @@
 			</INDEXES>
 		</TABLE>
 
-		<TABLE NAME="elang_users" COMMENT="Users' activity" PREVIOUS="elang_cues" NEXT="elang_logs">
+		<TABLE NAME="elang_users" COMMENT="Users' activity" PREVIOUS="elang_cues" NEXT="elang_help">
 			<FIELDS>
 				<FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="id_elang"/>
 				<FIELD NAME="id_elang" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="id_cue"/>
@@ -59,16 +59,35 @@
 			</KEYS>
 		</TABLE>
 
-		<TABLE NAME="elang_logs" COMMENT="Users' activity" PREVIOUS="elang_users">
+		<TABLE NAME="elang_help" COMMENT="Users' activity - Help" PREVIOUS="elang_users" NEXT="elang_check">
 			<FIELDS>
 				<FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="id_elang"/>
-				<FIELD NAME="id_elang" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="info"/>
-				<FIELD NAME="info" TYPE="text" LENGTH="big" NOTNULL="true" SEQUENCE="false" PREVIOUS="id_elang"/>
+				<FIELD NAME="id_elang" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="cue"/>
+				<FIELD NAME="cue" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id_elang" NEXT="guess"/>
+				<FIELD NAME="guess" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="cue" NEXT="info"/>
+				<FIELD NAME="info" TYPE="text" LENGTH="big" NOTNULL="true" SEQUENCE="false" PREVIOUS="guess"/>
 			</FIELDS>
 			<KEYS>
 				<KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="felang"/>
 				<KEY NAME="felang" TYPE="foreign" FIELDS="id_elang" REFTABLE="elang" REFFIELDS="id" PREVIOUS="primary"/>
 			</KEYS>
 		</TABLE>
+
+
+		<TABLE NAME="elang_check" COMMENT="Users' activity - Check" PREVIOUS="elang_help">
+			<FIELDS>
+				<FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="id_elang"/>
+				<FIELD NAME="id_elang" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="cue"/>
+				<FIELD NAME="cue" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id_elang" NEXT="guess"/>
+				<FIELD NAME="guess" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="cue" NEXT="info"/>
+				<FIELD NAME="info" TYPE="text" LENGTH="big" NOTNULL="true" SEQUENCE="false" PREVIOUS="guess" NEXT="user"/>
+				<FIELD NAME="user" TYPE="text" LENGTH="big" NOTNULL="true" SEQUENCE="false" PREVIOUS="info"/>
+			</FIELDS>
+			<KEYS>
+				<KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="felang"/>
+				<KEY NAME="felang" TYPE="foreign" FIELDS="id_elang" REFTABLE="elang" REFFIELDS="id" PREVIOUS="primary"/>
+			</KEYS>
+		</TABLE>
+
 	</TABLES>
 </XMLDB>
