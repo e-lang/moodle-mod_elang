@@ -42,6 +42,7 @@ function elang_supports($feature)
 			return true;
 
 		// Usefull for backup, restore and clone action
+		// TODO: implement backup
 //		case FEATURE_BACKUP_MOODLE2:
 //			return true;
 		default:
@@ -559,7 +560,7 @@ function elang_pluginfile($course, $cm, $context, $filearea, array $args, $force
 		$doc->setPrintFooter(false);
 		$doc->AddPage();
 		$doc->WriteHtml('<h1>' . sprintf(get_string('pdftitle', 'elang'), $course->fullname) . '</h1>');
-		$doc->WriteHtml('<h2>' . sprintf(get_string('pdfsubtitle', 'elang'), Elang\generateTitle($elang, $options)) . '</h2>');
+		$doc->WriteHtml('<h2>' . sprintf(get_string('pdfsubtitle', 'elang'), Elang\generateTitle($elang, $options), userdate($elang->timecreated, get_string('strftimedaydate'))) . '</h2>');
 		$doc->WriteHtml($elang->intro);
 
 		$i = 1;

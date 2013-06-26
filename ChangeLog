@@ -27,6 +27,7 @@ $ -> Language fix or change
 
 
 2013-06-26  Christophe Demko
+ + Add the display of the creation date in the pdf
  + Compare strings ignoring case
  ! Prepare for backup
  + Add support for {} markup
