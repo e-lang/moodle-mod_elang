@@ -412,6 +412,7 @@ function elang_get_file_areas($course, $cm, $context)
 	return array(
 		'poster' => get_string('filearea_poster', 'elang'),
 		'videos' => get_string('filearea_videos', 'elang'),
+		'subtitle' => get_string('filearea_subtitle', 'elang'),
 	);
 }
 
@@ -445,9 +446,8 @@ function elang_get_file_info($browser, $areas, $course, $cm, $context, $filearea
 	}
 
 	$fs = get_file_storage();
-	$urlbase = $CFG->wwwroot . '/pluginfile.php';
 
-	if ($filearea === 'videos' || $filearea === 'poster')
+	if ($filearea === 'videos' || $filearea === 'poster' || $filearea === 'subtitle')
 	{
 		$filepath = is_null($filepath) ? '/' : $filepath;
 		$filename = is_null($filename) ? '.' : $filename;
@@ -456,18 +456,11 @@ function elang_get_file_info($browser, $areas, $course, $cm, $context, $filearea
 
 		if (!$storedfile = $fs->get_file($context->id, 'mod_elang', $filearea, 0, $filepath, $filename))
 		{
-			if ($filepath === '/' and $filename === '.')
-			{
-				$storedfile = new virtual_root_file($context->id, 'mod_elang', $filearea, 0);
-			}
-			else
-			{
-				// Not found
-				return null;
-			}
+			// Not found
+			return null;
 		}
 
-		return new file_info_stored($browser, $context, $storedfile, $urlbase, $areas[$filearea], true, true, true, false);
+		return new file_info_stored($browser, $context, $storedfile, $urlbase, $areas[$filearea], false, true, true, false);
 	}
 
 	// Not found
@@ -513,7 +506,7 @@ function elang_pluginfile($course, $cm, $context, $filearea, array $args, $force
 	{
 		$vtt = new Elang\WebVTT;
 
-		$idlang = reset($args);
+		$idlang = $cm->instance;
 		$records = $DB->get_records('elang_cues', array('id_elang' => $idlang), 'begin ASC');
 		$elang = $DB->get_record('elang', array('id' => $idlang));
 		$options = json_decode($elang->options, true);
@@ -544,7 +537,7 @@ function elang_pluginfile($course, $cm, $context, $filearea, array $args, $force
 	}
 	elseif ($filearea == 'pdf')
 	{
-		$idlang = reset($args);
+		$idlang = $cm->instance;
 		$records = $DB->get_records('elang_cues', array('id_elang' => $idlang), 'begin ASC');
 		$elang = $DB->get_record('elang', array('id' => $idlang));
 		$options = json_decode($elang->options, true);
@@ -584,7 +577,7 @@ function elang_pluginfile($course, $cm, $context, $filearea, array $args, $force
 	{
 		$fs = get_file_storage();
 		$relativepath = implode('/', $args);
-		$fullpath = rtrim('/' . $context->id . '/mod_elang/' . $filearea . '/' . $relativepath, '/');
+		$fullpath = rtrim('/' . $context->id . '/mod_elang/' . $filearea . '/0/' . $relativepath, '/');
 		$file = $fs->get_file_by_hash(sha1($fullpath));
 
 		if (!$file)

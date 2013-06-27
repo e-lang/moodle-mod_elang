@@ -88,7 +88,7 @@ switch ($task)
 						$file->get_contextid(),
 						$file->get_component(),
 						$file->get_filearea(),
-						$file->get_itemid(),
+						null,
 						$file->get_filepath(),
 						$file->get_filename()
 					),
@@ -109,7 +109,7 @@ switch ($task)
 					$file->get_contextid(),
 					$file->get_component(),
 					$file->get_filearea(),
-					$file->get_itemid(),
+					null,
 					$file->get_filepath(),
 					$file->get_filename()
 				);
@@ -118,7 +118,7 @@ switch ($task)
 		}
 
 		// Get the subtitle and the pdf file
-		$files = $fs->get_area_files($context->id, 'mod_elang', 'subtitle', $elang->id);
+		$files = $fs->get_area_files($context->id, 'mod_elang', 'subtitle', 0);
 		$subtitle = '';
 
 		foreach ($files as $file)
@@ -130,7 +130,7 @@ switch ($task)
 					$file->get_contextid(),
 					$file->get_component(),
 					$file->get_filearea(),
-					$file->get_itemid(),
+					null,
 					$file->get_filepath(),
 					$path_parts['filename'] . '.vtt'
 				);
@@ -138,7 +138,7 @@ switch ($task)
 					$file->get_contextid(),
 					$file->get_component(),
 					'pdf',
-					$file->get_itemid(),
+					null,
 					$file->get_filepath(),
 					$path_parts['filename'] . '.pdf'
 				);

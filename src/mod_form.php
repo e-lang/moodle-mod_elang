@@ -35,6 +35,8 @@ class mod_elang_mod_form extends moodleform_mod
 	 */
 	public function definition()
 	{
+		global $CFG;
+
 		// Get the setting for elang
 		$config = get_config('elang');
 
@@ -90,12 +92,16 @@ class mod_elang_mod_form extends moodleform_mod
 		$mform->addHelpButton('videos', 'videos', 'elang');
 		$mform->addRule('videos', null, 'required', null, 'client');
 
+		require_once $CFG->libdir . '/filelib.php';
+		$info = & get_mimetypes_array();
+		$info['vtt'] = array ('type'=>'text/vtt', 'icon'=>'text', 'defaulticon'=>true);
+		$info['srt'] = array ('type'=>'text/plain', 'icon'=>'text', 'defaulticon'=>true);
 		$mform->addElement(
 			'filemanager',
 			'subtitle',
 			get_string('subtitle', 'elang'),
 			null,
-			array('subdirs' => 0, 'maxbytes' => $config->subtitlemaxsize, 'maxfiles' => 1, 'accepted_types' => array('.vtt', '.srt'))
+			array('subdirs' => 0, 'maxbytes' => $config->subtitlemaxsize, 'maxfiles' => 1, 'accepted_types' => array('.srt', '.vtt'))
 		);
 		$mform->addHelpButton('subtitle', 'subtitle', 'elang');
 		$mform->addRule('subtitle', null, 'required', null, 'client');
@@ -188,7 +194,7 @@ class mod_elang_mod_form extends moodleform_mod
 				$this->context->id,
 				'mod_elang',
 				'subtitle',
-				$this->current->id
+				0
 			);
 			$default_values['subtitle'] = $draftitemid;
 

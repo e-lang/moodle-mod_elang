@@ -637,7 +637,7 @@ function saveFiles(\stdClass $elang)
 			$context->id,
 			'mod_elang',
 			'subtitle',
-			$id
+			0
 		);
 	}
 
@@ -660,7 +660,7 @@ function saveFiles(\stdClass $elang)
 	$DB->delete_records('elang_users', array('id_elang' => $id));
 
 	$fs = get_file_storage();
-	$files = $fs->get_area_files($context->id, 'mod_elang', 'subtitle', $id);
+	$files = $fs->get_area_files($context->id, 'mod_elang', 'subtitle', 0);
 
 	foreach ($files as $file)
 	{
