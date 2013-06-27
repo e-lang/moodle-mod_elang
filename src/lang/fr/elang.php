@@ -22,6 +22,7 @@ $string['elangname_help'] = "Entrez le nom de l'exercice";
 $string['elangname'] = "Titre de l'exercice";
 $string['elang:view'] = 'Vue';
 $string['filearea_poster'] = 'Posters';
+$string['filearea_subtitle'] = 'Sous-titres';
 $string['filearea_videos'] = 'Vidéos';
 $string['formatname'] = '%s [%s]';
 $string['language_config'] = 'Sélectionnez la liste des langues possibles pour ce site moodle';
