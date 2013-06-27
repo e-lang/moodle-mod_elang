@@ -57,6 +57,10 @@
 				<KEY NAME="fcue" TYPE="foreign" FIELDS="id_cue" REFTABLE="elang_cue" REFFIELDS="id" PREVIOUS="felang" NEXT="fuser"/>
 				<KEY NAME="fuser" TYPE="foreign" FIELDS="id_user" REFTABLE="user" REFFIELDS="id" PREVIOUS="fcue"/>
 			</KEYS>
+			<INDEXES>
+				<INDEX NAME="ielanguser" UNIQUE="false" FIELDS="id_elang,id_user" NEXT="icueuser"/>
+				<INDEX NAME="icueuser" UNIQUE="true" FIELDS="id_cue,id_user" PREVIOUS="ielanguser"/>
+			</INDEXES>
 		</TABLE>
 
 		<TABLE NAME="elang_help" COMMENT="Users' activity - Help" PREVIOUS="elang_users" NEXT="elang_check">
