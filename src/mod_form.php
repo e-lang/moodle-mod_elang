@@ -92,16 +92,17 @@ class mod_elang_mod_form extends moodleform_mod
 		$mform->addHelpButton('videos', 'videos', 'elang');
 		$mform->addRule('videos', null, 'required', null, 'client');
 
-		require_once $CFG->libdir . '/filelib.php';
-		$info = & get_mimetypes_array();
-		$info['vtt'] = array ('type'=>'text/vtt', 'icon'=>'text', 'defaulticon'=>true);
-		$info['srt'] = array ('type'=>'text/plain', 'icon'=>'text', 'defaulticon'=>true);
+		// TODO deal with specific mimetype (moodle does not seem to take this code into account when file is uploaded
+		// require_once $CFG->libdir . '/filelib.php';
+		// $info = & get_mimetypes_array();
+		// $info['vtt'] = array('type' => 'text/vtt', 'icon'=>'text', 'defaulticon'=>true, 'groups' => array('subtitle'));
+		// $info['srt'] = array('type' => 'text/plain', 'icon'=>'text', 'defaulticon'=>true, 'groups' => array('subtitle'));
 		$mform->addElement(
 			'filemanager',
 			'subtitle',
 			get_string('subtitle', 'elang'),
 			null,
-			array('subdirs' => 0, 'maxbytes' => $config->subtitlemaxsize, 'maxfiles' => 1, 'accepted_types' => array('.srt', '.vtt'))
+			array('subdirs' => 0, 'maxbytes' => $config->subtitlemaxsize, 'maxfiles' => 1, 'accepted_types' => array('subtitle'))
 		);
 		$mform->addHelpButton('subtitle', 'subtitle', 'elang');
 		$mform->addRule('subtitle', null, 'required', null, 'client');
