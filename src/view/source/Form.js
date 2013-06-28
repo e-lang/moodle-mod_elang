@@ -162,13 +162,13 @@ enyo.kind({
 		switch (inResponse.status)
 		{
 			case 'success':
-				data.elements[inRequest.sender.name] = {content: inResponse.content, type: 'success'};
-				this.cue.setRemaining(this.cue.getRemaining() - 1).render();
-				this.doSuccessIncrement();
-				if (inRequest.sender.getValue() != '')
+				if (data.elements[inRequest.sender.name].content != '')
 				{
 					this.doErrorDecrement();
 				}
+				data.elements[inRequest.sender.name] = {content: inResponse.content, type: 'success'};
+				this.cue.setRemaining(this.cue.getRemaining() - 1).render();
+				this.doSuccessIncrement();
 				this.cueChanged();
 				this.render();
 				break;

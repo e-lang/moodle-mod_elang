@@ -27,6 +27,7 @@ $ -> Language fix or change
 
 
 2013-06-27  Christophe Demko
+ # Correct an error in the indicator
  # Moodle does not take into account new mimetype
  + Implement the indicator progress bar + badges
  $ Change some language strings
