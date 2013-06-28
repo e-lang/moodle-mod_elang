@@ -1,9 +1,9 @@
 moodle-mod_elang
 ================
 
-[![Build Status](https://travis-ci.org/chdemko/moodle-mod_elang.png?branch=master)](https://travis-ci.org/chdemko/moodle-mod_elang)
+[![Build Status](https://travis-ci.org/e-lang/moodle-mod_elang.png?branch=master)](https://travis-ci.org/e-lang/moodle-mod_elang)
 
-See [http://chdemko.github.io/moodle-mod_elang](http://chdemko.github.io/moodle-mod_elang) for description, license, authors and contributors.
+See [http://e-lang.github.io/moodle-mod_elang](http://e-lang.github.io/moodle-mod_elang) for description, license, authors and contributors.
 
 Build
 -----
