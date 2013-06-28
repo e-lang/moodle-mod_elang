@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="moodle-mod_elang" default="build" basedir=".">
 
-	<property name="version" value="2013061700" />
+	<property name="version" value="2013062800" />
 	<property name="requires" value="2012062500" />
-	<property name="release" value="alpha-0.0.3" />
-	<property name="maturity" value="MATURITY_ALPHA" />
+	<property name="release" value="beta-0.1.0" />
+	<property name="maturity" value="MATURITY_BETA" />
 
 	<target name="build" depends="clean, get, prepare, debug, compressed" />
 
