@@ -10,9 +10,12 @@
 	"Limit per page": "Limite par page",
 	"Not Found": "Non trouvé",
 	"Not Implemented": "Non implanté",
+	"Request failed": "Erreur de requête",
 	"Service Timeout": "Temps limite dépassé",
 	"Service Unavailable": "Service indisponible",
+	"Status": "État",
 	"Timeout with the server": "Le serveur n'a pas répondu dans le temps imparti",
-	"Unauthorized": "Non autorisé"
+	"Unauthorized": "Non autorisé",
+	"Your browser is not compatible with files subtitle on HTML5 video": "Votre navigateur n'est pas compatible avec les fichiers de sous-titre sur les vidéos HTML5"
 }
 

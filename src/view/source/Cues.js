@@ -76,6 +76,7 @@ enyo.kind({
 							tag: 'tr',
 							components: [
 								{tag: 'th', attributes: {width: '7%'}, content: $L('#')},
+								{tag: 'th', attributes: {width: '7%'}, content: $L('Status')},
 								{tag: 'th', content: $L('Title')}
 							]
 						}
@@ -249,7 +250,7 @@ enyo.kind({
 	 * - data: data hold by the cue
 	 * Each property will have public setter and getter methods
 	 */
-	published: {number: 0, data: {}},
+	published: {number: 0, data: {}, remaining: 0},
 
 	/**
 	 * Events:
@@ -270,6 +271,12 @@ enyo.kind({
 	 */
 	components: [
 		{name: 'number', tag: 'td'},
+		{
+			tag: 'td',
+			components: [
+				{tag: 'span', classes: 'badge badge-warning', name: 'remaining'},
+			],
+		},
 		{tag: 'td', components: [{name: 'title', tag: 'a', ontap: 'cueTap', attributes: {href:'#'}}]}
 	],
 
@@ -285,6 +292,11 @@ enyo.kind({
 		this.inherited(arguments);
 		this.$.number.content = this.number;
 		this.$.title.content = this.data.title;
+		this.remaining = this.data.remaining;
+		if (this.data.remaining != '0')
+		{
+			this.$.remaining.content = this.data.remaining;
+		}
 	},
 
 	/**
@@ -315,4 +327,27 @@ enyo.kind({
 		// Prevents event propagation
 		return true;
 	},
+
+	/**
+	 * Detect a change in the remaining value
+	 *
+	 * @protected
+	 *
+	 * @param  oldValue  array  Old remaining value
+	 *
+	 * @return  void
+	 *
+	 * @since  0.0.1
+	 */
+	remainingChanged: function (oldValue)
+	{
+		if (this.remaining == 0)
+		{
+			this.$.remaining.content = '';
+		}
+		else
+		{
+			this.$.remaining.content = this.remaining;
+		}
+	}
 });

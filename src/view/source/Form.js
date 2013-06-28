@@ -42,9 +42,13 @@ enyo.kind({
 	/**
 	 * Events:
 	 * - onTrackChange: fired when the text track associated with the cue change
+	 * - onHelpIncrement: fired when the help count is incremented
+	 * - onSuccessIncrement: fired when the success count is incremented
+	 * - onErrorIncrement: fired when the error count is incremented
+	 * - onErrorDecrement: fired when the error count is decremented
 	 * - onFail: fired when an ajax request failed
 	 */
-	events: {onTrackChange: '', onFail: ''},
+	events: {onTrackChange: '', onHelpIncrement: '', onSuccessIncrement: '', onErrorIncrement: '', onErrorDecrement: '', onFail: ''},
 
 	/**
 	 * Detect a change in the cue property
@@ -159,12 +163,27 @@ enyo.kind({
 		{
 			case 'success':
 				data.elements[inRequest.sender.name] = {content: inResponse.content, type: 'success'};
+				this.cue.setRemaining(this.cue.getRemaining() - 1).render();
+				this.doSuccessIncrement();
+				if (inRequest.sender.getValue() != '')
+				{
+					this.doErrorDecrement();
+				}
 				this.cueChanged();
 				this.render();
 				break;
 			case 'failure':
 				data.elements[inRequest.sender.name].content = inRequest.sender.getValue();
-				inRequest.sender.setError(inRequest.sender.getValue() != '');
+				if (inRequest.sender.getValue() == '')
+				{
+					inRequest.sender.setError(false);
+					this.doErrorDecrement();
+				}
+				else
+				{
+					inRequest.sender.setError(true);
+					this.doErrorIncrement();
+				}
 				break;
 		}
 		this.doTrackChange({number: data.number, text: inResponse.cue});
@@ -215,6 +234,12 @@ enyo.kind({
 		this.cue.getData().elements[inRequest.sender.number] = {content: inResponse.content, type: 'help'};
 		this.cueChanged();
 		this.render();
+		this.cue.setRemaining(this.cue.getRemaining() - 1).render();
 		this.doTrackChange({number: this.cue.getData().number, text: inResponse.cue});
+		this.doHelpIncrement();
+		if (inRequest.sender.getValue() != '')
+		{
+			this.doErrorDecrement();
+		}
 	}
 });

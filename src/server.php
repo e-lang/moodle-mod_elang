@@ -151,9 +151,19 @@ switch ($task)
 		$records = $DB->get_records('elang_cues', array('id_elang' => $elang->id), 'begin ASC');
 		$users = $DB->get_records('elang_users', array('id_elang' => $elang->id, 'id_user' => $USER->id), '', 'id_cue,json');
 
+		$total = 0;
+		$error = 0;
+		$success = 0;
+		$help = 0;
+
 		// Get the cues
 		foreach ($records as $id => $record)
 		{
+			$cueTotal = 0;
+			$cueError = 0;
+			$cueSuccess = 0;
+			$cueHelp = 0;
+
 			$data = json_decode($record->json, true);
 
 			if (isset($users[$id]))
@@ -171,10 +181,14 @@ switch ($task)
 			{
 				if ($element['type'] == 'input')
 				{
+					$total++;
+					$cueTotal++;
 					if (isset($user[$number]))
 					{
 						if ($user[$number]['help'])
 						{
+							$help++;
+							$cueHelp++;
 							$elements[] = array(
 								'type' => 'help',
 								'content' => $element['content']
@@ -191,6 +205,8 @@ switch ($task)
 						}
 						elseif ($user[$number]['content'] == $element['content'])
 						{
+							$success++;
+							$cueSuccess++;
 							$elements[] = array(
 								'type' => 'success',
 								'content' => $element['content']
@@ -198,6 +214,8 @@ switch ($task)
 						}
 						else
 						{
+							$error++;
+							$cueError++;
 							$elements[] = array(
 								'type' => 'input',
 								'size' => ((int) (mb_strlen($element['content'], 'UTF-8') - 1) / 10 + 1) * 10,
@@ -231,7 +249,8 @@ switch ($task)
 				'title' => $record->title,
 				'begin' => $record->begin / 1000,
 				'end' => $record->end / 1000,
-				'elements' => $elements
+				'elements' => $elements,
+				'remaining' => $cueTotal - $cueSuccess - $cueHelp,
 			);
 		}
 
@@ -242,10 +261,10 @@ switch ($task)
 			array(
 				'title' => $elang->name,
 				'description' => $elang->intro,
-				'number' => 150,
-				'success' => 50,
-				'error' => 20,
-				'help' => 10,
+				'total' => $total,
+				'success' => $success,
+				'error' => $error,
+				'help' => $help,
 				'cues' => $cues,
 				'limit' => $limit,
 				'sources' => $sources,

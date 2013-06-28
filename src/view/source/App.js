@@ -29,6 +29,10 @@ enyo.kind({
 	 - onPageChange: fired when a new page is selected
 	 - onCueDeselect: fired when a cue is deselected
 	 - onTrackChange: fired when a text track is changed
+	 - onHelpIncrement: fired when an help increment is fired
+	 - onSuccessIncrement: fired when a success increment is fired,
+	 - onErrorIncrement: fired when an error increment is fired,
+	 - onErrorDecrement: fired when an error decrement is fired,
 	 - ontimeupdate: fired when the video time changed
 	 - onFail: fired when an ajax error occurred
 	 */
@@ -37,6 +41,10 @@ enyo.kind({
 		onPageChange: 'cueDeselect',
 		onCueDeselect: 'cueDeselect',
 		onTrackChange: 'trackChange',
+		onHelpIncrement: 'helpIncrement',
+		onSuccessIncrement: 'successIncrement',
+		onErrorIncrement: 'errorIncrement',
+		onErrorDecrement: 'errorDecrement',
 		ontimeupdate: 'timeUpdate',
 		onFail: 'fail'
 	},
@@ -324,12 +332,14 @@ enyo.kind({
 
 		// Construct the header
 		this.$.head.setTitle(inResponse.title);
-/*		this.$.head.setNumber(inResponse.number);
-		this.$.head.setSuccess(inResponse.success);
-		this.$.head.setError(inResponse.error);
-		this.$.head.setHelp(inResponse.help);*/
 		this.$.head.setPdf(inResponse.pdf);
 		this.$.head.render();
+
+		// Construct the indicator
+		this.$.indicator.setEnd(inResponse.total);
+		this.$.indicator.setSuccess(inResponse.success);
+		this.$.indicator.setDanger(inResponse.error);
+		this.$.indicator.setInfo(inResponse.help);
 
 		// Construct the cues object
 		this.$.cues.setLimit(inResponse.limit).setElements(inResponse.cues).render();
@@ -415,7 +425,7 @@ enyo.kind({
 	 * @protected
 	 *
 	 * @param   inSender  enyo.instance  Sender of the event
-	 * @param   inEvent   Object		    Event fired
+	 * @param   inEvent   Object		 Event fired
 	 *
 	 * @return  true
 	 *
@@ -424,6 +434,86 @@ enyo.kind({
 	trackChange: function (inSender, inEvent)
 	{
 		this.$.video.changeCue(inEvent.number, inEvent.text);
+
+		// Prevents event propagation
+		return true;
+	},
+
+	/**
+	 * Handle help increment event
+	 *
+	 * @protected
+	 *
+	 * @param   inSender  enyo.instance  Sender of the event
+	 * @param   inEvent   Object		 Event fired
+	 *
+	 * @return  true
+	 *
+	 * @since  0.0.3
+	 */
+	helpIncrement: function (inSender, inEvent)
+	{
+		this.$.indicator.setInfo(this.$.indicator.getInfo() + 1);
+
+		// Prevents event propagation
+		return true;
+	},
+
+	/**
+	 * Handle success increment event
+	 *
+	 * @protected
+	 *
+	 * @param   inSender  enyo.instance  Sender of the event
+	 * @param   inEvent   Object		 Event fired
+	 *
+	 * @return  true
+	 *
+	 * @since  0.0.3
+	 */
+	successIncrement: function (inSender, inEvent)
+	{
+		this.$.indicator.setSuccess(this.$.indicator.getSuccess() + 1);
+
+		// Prevents event propagation
+		return true;
+	},
+
+	/**
+	 * Handle error increment event
+	 *
+	 * @protected
+	 *
+	 * @param   inSender  enyo.instance  Sender of the event
+	 * @param   inEvent   Object		 Event fired
+	 *
+	 * @return  true
+	 *
+	 * @since  0.0.3
+	 */
+	errorIncrement: function (inSender, inEvent)
+	{
+		this.$.indicator.setDanger(this.$.indicator.getDanger() + 1);
+
+		// Prevents event propagation
+		return true;
+	},
+
+	/**
+	 * Handle error decrement event
+	 *
+	 * @protected
+	 *
+	 * @param   inSender  enyo.instance  Sender of the event
+	 * @param   inEvent   Object		 Event fired
+	 *
+	 * @return  true
+	 *
+	 * @since  0.0.3
+	 */
+	errorDecrement: function (inSender, inEvent)
+	{
+		this.$.indicator.setDanger(this.$.indicator.getDanger() - 1);
 
 		// Prevents event propagation
 		return true;
