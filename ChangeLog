@@ -1,0 +1,69 @@
+0. Metadata
+-----------
+Copyright:  2013 University of La Rochelle, France
+License:    http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+
+1. Copyright and disclaimer
+---------------------------
+This application is opensource software released under the CeCILL-B license. Please
+see source code at https://github.com/chdemko/moodle-mod_elang.
+
+2. Changelog
+------------
+This is a non-exhaustive (but still near complete) changelog for
+moodle-mod_elang, including alpha and beta versions.
+Our thanks to all those people who've contributed bug reports and
+code fixes.
+
+Legend:
+
+* -> Security Fix
+# -> Issue Fix
+$ -> Language fix or change
++ -> Addition
+^ -> Change
+- -> Removed
+! -> Note
+
+
+2013-06-27  Christophe Demko
+ ! Publishing version beta-0.1.0
+
+2013-06-27  Christophe Demko
+ # Correct an error in the indicator
+ # Moodle does not take into account new mimetype
+ + Implement the indicator progress bar + badges
+ $ Change some language strings
+ ^ Accept to share files between exercises
+ $ Correcting language files
+ + Add indexes on tables
+
+2013-06-26  Christophe Demko
+ + Verify forbidden actions
+ +$ Add french translation
+ + Add help button on limit field
+ + Detect video subtitles capability
+ ^ Change the logging structure
+ ^ Update README.txt to be linked on new project url
+ + Display a warning when a module is updated
+ + Add the display of the creation date in the pdf
+ + Compare strings ignoring case
+ ! Prepare for backup
+ + Add support for {} markup
+
+2013-06-17  Christophe Demko
+ # Converting string number to number
+ +$ Adding globalization to student view + reorganizing code
+
+2013-06-16  Christophe Demko
+ + Implementing a limit select list for the user
+ + Adding jsonp support
+
+2013-06-15  Christophe Demko
+ ^ Removing .gitmodule file
+ ^ Deleting build directory when preparing
+ +^ Adding some comments and cleaning test files
+
+2013-06-15  Christophe Demko
+ ! Publishing version alpha-0.0.2
+
