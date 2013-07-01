@@ -667,6 +667,15 @@ function saveFiles(\stdClass $elang)
 		if ($file->get_source())
 		{
 			$contents = $file->get_content();
+
+			// Detect bom
+			$bom = pack("CCC", 0xef, 0xbb, 0xbf);
+
+			if (0 == strncmp($contents, $bom, 3))
+			{
+				$contents = substr($contents, 3);
+			}
+
 			$vtt = new WebVTT($contents);
 
 			$cue = new \stdClass;

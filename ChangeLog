@@ -26,6 +26,9 @@ $ -> Language fix or change
 ! -> Note
 
 
+2013-07-01  Christophe Demko
+ # Detect BOM
+
 2013-06-27  Christophe Demko
  ! Publishing version beta-0.1.0
 
