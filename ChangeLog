@@ -26,6 +26,9 @@ $ -> Language fix or change
 ! -> Note
 
 
+2013-07-02  Christophe Demko
+ # Correct the increment of errors
+
 2013-07-01  Christophe Demko
  # Detect BOM
 

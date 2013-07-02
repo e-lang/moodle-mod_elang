@@ -173,7 +173,6 @@ enyo.kind({
 				this.render();
 				break;
 			case 'failure':
-				data.elements[inRequest.sender.name].content = inRequest.sender.getValue();
 				if (inRequest.sender.getValue() == '')
 				{
 					inRequest.sender.setError(false);
@@ -182,8 +181,12 @@ enyo.kind({
 				else
 				{
 					inRequest.sender.setError(true);
-					this.doErrorIncrement();
+					if (data.elements[inRequest.sender.name].content == '')
+					{
+						this.doErrorIncrement();
+					}
 				}
+				data.elements[inRequest.sender.name].content = inRequest.sender.getValue();
 				break;
 		}
 		this.doTrackChange({number: data.number, text: inResponse.cue});
