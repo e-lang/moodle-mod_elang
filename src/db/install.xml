@@ -54,7 +54,7 @@
 			<KEYS>
 				<KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="felang"/>
 				<KEY NAME="felang" TYPE="foreign" FIELDS="id_elang" REFTABLE="elang" REFFIELDS="id" PREVIOUS="primary" NEXT="fcue"/>
-				<KEY NAME="fcue" TYPE="foreign" FIELDS="id_cue" REFTABLE="elang_cue" REFFIELDS="id" PREVIOUS="felang" NEXT="fuser"/>
+				<KEY NAME="fcue" TYPE="foreign" FIELDS="id_cue" REFTABLE="elang_cues" REFFIELDS="id" PREVIOUS="felang" NEXT="fuser"/>
 				<KEY NAME="fuser" TYPE="foreign" FIELDS="id_user" REFTABLE="user" REFFIELDS="id" PREVIOUS="fcue"/>
 			</KEYS>
 			<INDEXES>
