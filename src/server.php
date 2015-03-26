@@ -8,7 +8,7 @@
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013 University of La Rochelle, France
+ * @copyright   2013-2015 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
  * @since       0.0.1
@@ -17,6 +17,9 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/config.php';
 require_once dirname(__FILE__) . '/lib.php';
 require_once dirname(__FILE__) . '/locallib.php';
+
+// Get the moodle version
+$version = moodle_major_version(true);
 
 $task = optional_param('task', '', PARAM_ALPHA);
 $id = optional_param('id', 0, PARAM_INT);
@@ -84,7 +87,7 @@ switch ($task)
 			if ($file->get_source())
 			{
 				$sources[] = array(
-					'url' => (string) moodle_url::make_pluginfile_url(
+					'src' => (string) moodle_url::make_pluginfile_url(
 						$file->get_contextid(),
 						$file->get_component(),
 						$file->get_filearea(),
@@ -324,7 +327,7 @@ switch ($task)
 		$text = optional_param('text', '', PARAM_TEXT);
 
 		// Compare strings ignoring case
-		// TODO: insert here the use of the Levenstein distance
+		// TODO: insert here the use of the Levenshtein distance
 		if (mb_strtolower($text, 'UTF-8') == mb_strtolower($elements[$number]['content'], 'UTF-8'))
 		{
 			$text = $elements[$number]['content'];
@@ -333,23 +336,38 @@ switch ($task)
 		// Log action
 		if (!empty($text))
 		{
-			add_to_log(
-				$course->id,
-				'elang',
-				'add check',
-				'view.php?id=' . $cm->id,
-				$DB->insert_record(
-					'elang_check',
-					array(
-						'id_elang' => $elang->id,
-						'cue' => $cue->number,
-						'guess' => $elements[$number]['order'],
-						'info' => $elements[$number]['content'],
-						'user' => $text,
-					)
-				),
-				$cm->id
+			$check_id = $DB->insert_record(
+				'elang_check',
+				array(
+					'id_elang' => $elang->id,
+					'cue' => $cue->number,
+					'guess' => $elements[$number]['order'],
+					'info' => $elements[$number]['content'],
+					'user' => $text,
+				)
 			);
+
+			if (version_compare($version, '2.6') < 0)
+			{
+				add_to_log($course->id, 'elang', 'add check', 'view.php?id=' . $cm->id, $check_id, $cm->id);
+			}
+			else
+			{
+				$event = \mod_elang\event\check_added::create(
+					array(
+						'objectid' => $check_id,
+						'context' => $context,
+						'courseid' => $course->id,
+						'other' => array(
+							'cue' => $cue->number,
+							'guess' => $elements[$number]['order'],
+							'info' => $elements[$number]['content'],
+							'user' => $text
+						)	
+					)
+				);
+				$event->trigger();				
+			}
 		}
 
 		if ($user)
@@ -438,22 +456,35 @@ switch ($task)
 		}
 
 		// Log action
-		add_to_log(
-			$course->id,
-			'elang',
-			'view help',
-			'view.php?id=' . $cm->id,
-			$DB->insert_record(
-				'elang_help',
-				array(
-					'id_elang' => $elang->id,
-					'cue' => $cue->number,
-					'guess' => $elements[$number]['order'],
-					'info' => $elements[$number]['content'],
-				)
-			),
-			$cm->id
+		$help_id = $DB->insert_record(
+			'elang_help',
+			array(
+				'id_elang' => $elang->id,
+				'cue' => $cue->number,
+				'guess' => $elements[$number]['order'],
+				'info' => $elements[$number]['content'],
+			)
 		);
+		if (version_compare($version, '2.6') < 0)
+		{
+			add_to_log($course->id, 'elang', 'view help', 'view.php?id=' . $cm->id, $help_id, $cm->id);
+		}
+		else
+		{
+			$event = \mod_elang\event\help_viewed::create(
+				array(
+					'objectid' => $help_id,
+					'context' => $context,
+					'courseid' => $course->id,
+					'other' => array(
+						'cue' => $cue->number,
+						'guess' => $elements[$number]['order'],
+						'info' => $elements[$number]['content'],
+					)	
+				)
+			);
+			$event->trigger();				
+		}
 
 		if ($user)
 		{

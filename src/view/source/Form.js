@@ -3,7 +3,7 @@
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013 University of La Rochelle, France
+ * @copyright   2013-2015 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
  * @since       0.0.1
@@ -112,6 +112,18 @@ enyo.kind({
 		this.render();
 	},
 
+	/**
+	 * Handle text change event
+	 *
+	 * @protected
+	 *
+	 * @param   inSender  enyo.instance  Sender of the event
+	 * @param   inEvent   Object		 Event fired
+	 *
+	 * @return  true
+	 *
+	 * @since  0.0.1
+	 */
 	textChange: function(inSender, inEvent)
 	{
 		// Tells Ajax what the callback success function is
@@ -198,7 +210,7 @@ enyo.kind({
 	 * @protected
 	 *
 	 * @param   inSender  enyo.instance  Sender of the event
-	 * @param   inEvent   Object		    Event fired
+	 * @param   inEvent   Object		 Event fired
 	 *
 	 * @return  true
 	 *

@@ -8,8 +8,8 @@ See [http://e-lang.github.io/moodle-mod_elang](http://e-lang.github.io/moodle-mo
 Build
 -----
 
-* Run `ant get` for getting [bootstrap](http://twitter.github.io/bootstrap/assets/bootstrap.zip),
-[jquery](http://code.jquery.com/jquery.js), [enyojs](https://github.com/enyojs/enyo/archive/master.zip) and [g11n](https://github.com/enyojs/g11n/archive/master.zip)
+* Run `ant get` for getting [bootstrap 3.3.4](http://getbootstrap.com),
+[jquery 1.11.2](https://jquery.com), [enyojs 2.5.1.1](https://github.com/enyojs/enyo) and [enyo-ilib 2.5.1.1](https://github.com/enyojs/enyo-ilib)
 
 * Run `ant prepare` for preparing files
 

@@ -3,7 +3,7 @@
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013 University of La Rochelle, France
+ * @copyright   2013-2015 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
  * @since       0.0.1
@@ -76,10 +76,10 @@ enyo.kind({
 	components: [
 		// Title and indicator
 		{
-			classes: 'row-fluid',
+			classes: 'row',
 			components: [
 				{
-					classes: 'span12',
+					classes: 'col-md-12',
 					components: [
 						// title
 						{kind: 'Elang.Head', name: 'head'},
@@ -93,13 +93,13 @@ enyo.kind({
 
 		// Video, progressbar, input and cues list
 		{
-			classes: 'row-fluid',
+			classes: 'row',
 			components: [
 				{
-					classes: 'span6',
+					classes: 'col-md-6',
 					components: [
 						// video
-						{kind: 'Elang.Video', name: 'video'},
+						{kind: 'Elang.Video', name: 'video', showControls: true},
 
 						// progressbar
 						{kind: 'Elang.Progressbar', name: 'progressbar'},
@@ -109,7 +109,7 @@ enyo.kind({
 					]
 				},
 				{
-					classes: 'span6',
+					classes: 'col-md-6',
 					components: [
 						// cues
 						{kind: 'Elang.Cues', name: 'cues'}
@@ -130,6 +130,27 @@ enyo.kind({
 	 * @since  0.0.3
 	 */
 	request: null,
+
+	/**
+	 * Request the data
+	 *
+	 * @public
+	 *
+	 * @return  void
+	 *
+	 * @since  0.0.1
+	 */
+	requestData: function ()
+	{
+		// Tells Ajax what the callback success function is
+		this.request.response(enyo.bind(this, 'success'));
+
+		// Tells Ajax what the callback failure function is
+		this.request.error(enyo.bind(this, 'failure'));
+
+		// Makes the Ajax call with parameters
+		this.request.go({task: 'data'});
+	},
 
 	/**
 	 * Create method
@@ -231,7 +252,7 @@ enyo.kind({
 	 * @protected
 	 *
 	 * @param   inSender  enyo.instance  Sender of the event
-	 * @param   inEvent   Object		    Event fired
+	 * @param   inEvent   Object		 Event fired
 	 *
 	 * @return  true
 	 *
@@ -273,27 +294,6 @@ enyo.kind({
 
 		// Prevents event propagation
 		return true;
-	},
-
-	/**
-	 * Request the data
-	 *
-	 * @public
-	 *
-	 * @return  void
-	 *
-	 * @since  0.0.1
-	 */
-	requestData: function ()
-	{
-		// Tells Ajax what the callback success function is
-		this.request.response(enyo.bind(this, 'success'));
-
-		// Tells Ajax what the callback failure function is
-		this.request.error(enyo.bind(this, 'failure'));
-
-		// Makes the Ajax call with parameters
-		this.request.go({task: 'data'});
 	},
 
 	/**
@@ -342,16 +342,13 @@ enyo.kind({
 		this.$.indicator.setInfo(inResponse.help);
 
 		// Construct the cues object
-		this.$.cues.setLimit(inResponse.limit).setElements(inResponse.cues).render();
+		this.$.cues.setLimit(inResponse.limit).setElements(inResponse.cues);
 
 		// Construct the form object
 		this.$.form.setRequest(this.request);
 
 		// Construct the video object
-		for (var source in inResponse.sources)
-		{
-			this.$.video.addSource(inResponse.sources[source].url, inResponse.sources[source].type);
-		}
+		this.$.video.setSourceComponents(inResponse.sources);
 		if (inResponse.poster)
 		{
 			this.$.video.setPoster(inResponse.poster);
@@ -370,7 +367,7 @@ enyo.kind({
 	 * @protected
 	 *
 	 * @param   inSender  enyo.instance  Sender of the event
-	 * @param   inEvent   Object		    Event fired
+	 * @param   inEvent   Object		 Event fired
 	 *
 	 * @return  true
 	 *
@@ -382,7 +379,7 @@ enyo.kind({
 
 		this.$.video.pause();
 		this.$.video.setBegin(begin);
-		this.$.video.setTime(begin);
+		this.$.video.setCurrentTime(begin);
 		this.$.video.setEnd(end);
 
 		this.$.form.setCue(cue);
@@ -400,7 +397,7 @@ enyo.kind({
 	 * @protected
 	 *
 	 * @param   inSender  enyo.instance  Sender of the event
-	 * @param   inEvent   Object		    Event fired
+	 * @param   inEvent   Object		 Event fired
 	 *
 	 * @return  true
 	 *
@@ -525,7 +522,7 @@ enyo.kind({
 	 * @protected
 	 *
 	 * @param   inSender  enyo.instance  Sender of the event
-	 * @param   inEvent   Object		    Event fired
+	 * @param   inEvent   Object		 Event fired
 	 *
 	 * @return  true
 	 *
@@ -533,9 +530,9 @@ enyo.kind({
 	 */
 	timeUpdate: function (inSender, inEvent)
 	{
-		this.$.progressbar.setWarning(inEvent.time);
+		this.$.progressbar.setWarning(inEvent.originator.getCurrentTime());
 
 		// Prevents event propagation
-		return true;
+		return false;
 	},
 });

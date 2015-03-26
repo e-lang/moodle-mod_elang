@@ -3,7 +3,7 @@
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013 University of La Rochelle, France
+ * @copyright   2013-2015 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
  * @since       0.0.1
@@ -27,7 +27,7 @@ enyo.kind({
 	/**
 	 * css classes
 	 */
-	classes: 'modal hide fade',
+	classes: 'modal fade',
 
 	/**
 	 * Named components:
@@ -39,49 +39,59 @@ enyo.kind({
 	components: [
 		{kind: enyo.Signals, onkeydown: 'keyDown'},
 		{
-			classes: 'modal-header',
+			classes: 'modal-dialog',
 			components: [
 				{
-					tag: 'button',
-					type: 'button',
-					classes: 'close',
-					attributes: {'data-dismiss': 'modal', 'aria-hidden': 'true'},
-					allowHtml: true,
-					content: '&times;'
-				},
-
-				// head
-				{name: 'head', tag: 'h3'},
-			]
-		},
-		{
-			classes: 'modal-body',
-			components: [
-				// type
-				{
-					name: 'type',
-					classes: 'alert alert-block',
+					classes: 'modal-content',
 					components: [
-						// title
-						{name: 'title', tag: 'h4'},
+						{
+							classes: 'modal-header',
+							components: [
+								{
+									tag: 'button',
+									type: 'button',
+									classes: 'close',
+									attributes: {'data-dismiss': 'modal', 'aria-hidden': 'true'},
+									allowHtml: true,
+									content: '&times;'
+								},
 
-						// message
-						{name: 'message'}
-					],
+								// head
+								{name: 'head', tag: 'h3'},
+							]
+						},
+						{
+							classes: 'modal-body',
+							components: [
+								// type
+								{
+									name: 'type',
+									classes: 'alert alert-block',
+									components: [
+										// title
+										{name: 'title', tag: 'h4'},
+
+										// message
+										{name: 'message'}
+									],
+								}
+							]
+						},
+						{
+							classes: 'modal-footer',
+							components: [
+								{
+									tag: 'button',
+									classes: 'btn',
+									attributes: {'data-dismiss': 'modal', 'aria-hidden': 'true'},
+									content: $L('Close')
+								}
+							]
+						},
+					]
 				}
 			]
-		},
-		{
-			classes: 'modal-footer',
-			components: [
-				{
-					tag: 'button',
-					classes: 'btn',
-					attributes: {'data-dismiss': 'modal', 'aria-hidden': 'true'},
-					content: $L('Close')
-				}
-			]
-		},
+		}
 	],
 
 	/**
@@ -229,7 +239,7 @@ enyo.kind({
 	 * @protected
 	 *
 	 * @param   inSender  enyo.instance  Sender of the event
-	 * @param   inEvent   Object		    Event fired
+	 * @param   inEvent   Object		 Event fired
 	 *
 	 * @return  true
 	 *

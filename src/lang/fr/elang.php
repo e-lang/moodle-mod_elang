@@ -8,7 +8,7 @@
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013 University of La Rochelle, France
+ * @copyright   2013-2015 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
  * @since       0.0.3
@@ -16,6 +16,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['eventcheckadded'] = 'Essai ajouté';
+$string['eventhelpviewed'] = 'Aide demandée';
 $string['elang:addinstance'] = 'Ajouter une instance';
 $string['elang'] = "Paysage d'écoute";
 $string['elangname_help'] = "Entrez le nom de l'exercice";

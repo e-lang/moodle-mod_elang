@@ -3,7 +3,7 @@
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013 University of La Rochelle, France
+ * @copyright   2013-2015 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
  * @since       0.0.1
@@ -40,7 +40,11 @@ enyo.kind({
 							classes: 'btn btn-primary',
 							attributes: {href: '#'},
 							ontap: 'printTap',
-							components: [{tag :'i', classes: 'icon-print icon-white'}, {tag: 'span', content: $L(' Get a pdf version')}]
+							components: [
+								{tag :'span', classes: 'glyphicon glyphicon-print glyphicon-white', "aria-hidden": "true"},
+								{tag :'span', content: ' '},
+								{tag: 'span', content: $L('Get a pdf version')}
+							]
 						}
 					]
 				}
@@ -68,7 +72,7 @@ enyo.kind({
 	 * @protected
 	 *
 	 * @param   inSender  enyo.instance  Sender of the event
-	 * @param   inEvent   Object		    Event fired
+	 * @param   inEvent   Object		 Event fired
 	 *
 	 * @return  true
 	 *

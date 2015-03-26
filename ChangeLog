@@ -1,6 +1,6 @@
 0. Metadata
 -----------
-Copyright:  2013 University of La Rochelle, France
+Copyright:  2013-2015 University of La Rochelle, France
 License:    http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
 
 1. Copyright and disclaimer
@@ -25,19 +25,26 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
-2013-08-05  Christophe Demko
+2015-03-26  Christophe Demko <chdemko@gmail.com>
+ ! Publishing version rc1-1.0.0
+
+2015-03-25  Christophe Demko <chdemko@gmail.com>
+ ^ Update javascript code to the current version of enyojs and bootstrap
+ ^ Update PHP code to the new feature of moodle (add_to_log is now deprecated)
+
+2013-08-05  Christophe Demko <chdemko@gmail.com>
  # Correct foreign key (issue #47 https://github.com/e-lang/moodle-mod_elang/issues/47)
 
-2013-07-02  Christophe Demko
+2013-07-02  Christophe Demko <chdemko@gmail.com>
  # Correct the increment of errors
 
-2013-07-01  Christophe Demko
+2013-07-01  Christophe Demko <chdemko@gmail.com>
  # Detect BOM
 
-2013-06-27  Christophe Demko
+2013-06-27  Christophe Demko <chdemko@gmail.com>
  ! Publishing version beta-0.1.0
 
-2013-06-27  Christophe Demko
+2013-06-27  Christophe Demko <chdemko@gmail.com>
  # Correct an error in the indicator
  # Moodle does not take into account new mimetype
  + Implement the indicator progress bar + badges
@@ -46,7 +53,7 @@ $ -> Language fix or change
  $ Correcting language files
  + Add indexes on tables
 
-2013-06-26  Christophe Demko
+2013-06-26  Christophe Demko <chdemko@gmail.com>
  + Verify forbidden actions
  +$ Add french translation
  + Add help button on limit field
@@ -59,19 +66,19 @@ $ -> Language fix or change
  ! Prepare for backup
  + Add support for {} markup
 
-2013-06-17  Christophe Demko
+2013-06-17  Christophe Demko <chdemko@gmail.com>
  # Converting string number to number
  +$ Adding globalization to student view + reorganizing code
 
-2013-06-16  Christophe Demko
+2013-06-16  Christophe Demko <chdemko@gmail.com>
  + Implementing a limit select list for the user
  + Adding jsonp support
 
-2013-06-15  Christophe Demko
+2013-06-15  Christophe Demko <chdemko@gmail.com>
  ^ Removing .gitmodule file
  ^ Deleting build directory when preparing
  +^ Adding some comments and cleaning test files
 
-2013-06-15  Christophe Demko
+2013-06-15  Christophe Demko <chdemko@gmail.com>
  ! Publishing version alpha-0.0.2
 

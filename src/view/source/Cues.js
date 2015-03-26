@@ -3,7 +3,7 @@
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013 University of La Rochelle, France
+ * @copyright   2013-2015 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
  * @since       0.0.1
@@ -25,6 +25,7 @@ enyo.kind({
 	/**
 	 * Handlers:
 	 * - onPageChange: fired when the page changes
+	 * - onCueSelect: fired when a cue is selected
 	 */
 	handlers: {onPageChange: 'pageChange', onCueSelect: 'cueSelect'},
 
@@ -36,6 +37,7 @@ enyo.kind({
 
 	/**
 	 * Named components:
+	 * - limit: select list
 	 * - pagination: table pagination
 	 * - body: table body
 	 */
@@ -51,7 +53,8 @@ enyo.kind({
 				{
 					name: 'limit',
 					kind: "Select",
-					selected: 2,
+					selected: 1,
+					value: 10,
 					onchange: "limitSelect",
 					components: [{content: 5, value: 5}, {content: 10, value: 10}, {content: 15, value: 15}, {content: 20, value: 20}, {content: 25, value: 25}]
 				},
@@ -96,7 +99,7 @@ enyo.kind({
 	 * @protected
 	 *
 	 * @param   inSender  enyo.instance  Sender of the event
-	 * @param   inEvent   Object		    Event fired
+	 * @param   inEvent   Object		 Event fired
 	 *
 	 * @return void
 	 *
@@ -149,7 +152,6 @@ enyo.kind({
 	{
 		this.setLimit(inSender.getValue());
 		this.doCueDeselect();
-		return true;
 	},
 
 	/**
@@ -220,11 +222,13 @@ enyo.kind({
 		var start = page * this.limit;
 		var elements = this.elements.slice(start, start + this.limit);
 		this.$.body.destroyClientControls();
-		for (var i=0; i < elements.length; i++)
+		for (var i = 0; i < elements.length; i++)
 		{
 			this.$.body.createComponent({kind: 'Elang.Cue', number: start + i + 1, data: elements[i]}, {owner: this});
 		}
-		return this.render();
+		this.$.body.render();
+		this.$.pagination.render();
+		return this;
 	},
 });
 
@@ -233,7 +237,7 @@ enyo.kind({
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013 University of La Rochelle, France
+ * @copyright   2013-2015 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
  * @since       0.0.1
@@ -248,6 +252,7 @@ enyo.kind({
 	 * Published properties:
 	 * - number: number of the cue
 	 * - data: data hold by the cue
+	 * - remaining: texts to find
 	 * Each property will have public setter and getter methods
 	 */
 	published: {number: 0, data: {}, remaining: 0},
@@ -267,14 +272,15 @@ enyo.kind({
 	/**
 	 * Named components:
 	 * - number: cue number
-	 * - data: cue data
+	 * - remaining: texts to find
+	 * - title: the cue title
 	 */
 	components: [
 		{name: 'number', tag: 'td'},
 		{
 			tag: 'td',
 			components: [
-				{tag: 'span', classes: 'badge badge-warning', name: 'remaining'},
+				{tag: 'span', classes: 'label label-warning', name: 'remaining'},
 			],
 		},
 		{tag: 'td', components: [{name: 'title', tag: 'a', ontap: 'cueTap', attributes: {href:'#'}}]}
@@ -305,7 +311,7 @@ enyo.kind({
 	 * @protected
 	 *
 	 * @param   inSender  enyo.instance  Sender of the event
-	 * @param   inEvent   Object		    Event fired
+	 * @param   inEvent   Object		 Event fired
 	 *
 	 * @return  true
 	 *

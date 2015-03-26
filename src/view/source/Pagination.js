@@ -3,7 +3,7 @@
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013 University of La Rochelle, France
+ * @copyright   2013-2015 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
  * @since       0.0.1
@@ -15,9 +15,14 @@ enyo.kind({
 	name: 'Elang.Pagination',
 
 	/**
+	 * Use the nav tag
+	 */
+	tag: 'nav',
+
+	/**
 	 * css classes
 	 */
-	classes: 'pagination pagination-centered',
+	classes: 'text-center',
 
 	/**
 	 * Published properties:
@@ -29,11 +34,11 @@ enyo.kind({
 	/**
 	 * Named components
 	 */
-	components: [{name: 'pages', tag: 'ul'}],
+	components: [{name: 'pages', tag: 'ul', classes: 'pagination'}],
 
 	/**
 	 * Events:
-	 * - onCueTap: fired when a page is tapped
+	 * - onPageChange: fired when a page is tapped
 	 */
 	events: {onPageChange: ''},
 
@@ -53,7 +58,7 @@ enyo.kind({
 		this.$.pages.destroyClientControls();
 		if (this.total > 1)
 		{
-			for (var i=0; i < this.total; i++)
+			for (var i = 0; i < this.total; i++)
 			{
 				this.$.pages.createComponent(
 					{

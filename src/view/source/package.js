@@ -3,17 +3,16 @@
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013 University of La Rochelle, France
+ * @copyright   2013-2015 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
  * @since       0.0.1
  */
 enyo.depends(
-	"$lib/g11n",
+	"$lib/enyo-ilib",
 	"$lib/jquery.js",
-	"$lib/bootstrap/js/bootstrap.js",
-	"$lib/bootstrap/css/bootstrap.css",
-	"$lib/bootstrap/css/bootstrap-responsive.css",
+	"$lib/bootstrap/js/bootstrap.min.js",
+	"$lib/bootstrap/css/bootstrap.min.css",
 	"App.js",
 	"Video.js",
 	"Head.js",

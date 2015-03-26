@@ -8,7 +8,7 @@
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013 University of La Rochelle, France
+ * @copyright   2013-2015 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
  * @since       0.0.1
@@ -16,6 +16,9 @@
 
 require_once dirname(dirname(dirname(__FILE__))) . '/config.php';
 require_once dirname(__FILE__) . '/lib.php';
+
+// Get the moodle version
+$version = moodle_major_version(true);
 
 // Get the course number
 $id = required_param('id', PARAM_INT);
@@ -26,11 +29,21 @@ $course = $DB->get_record('course', array('id' => $id), '*', MUST_EXIST);
 // Verify the login
 require_course_login($course);
 
-// Add a log
-add_to_log($course->id, 'elang', 'view all', 'index.php?id=' . $course->id, '');
+// Add a view all log
+if (version_compare($version, '2.6') < 0)
+{
+	add_to_log($course->id, 'elang', 'view all', 'index.php?id=' . $course->id, '');
+}
+else
+{
+	$event = \mod_elang\event\course_module_instance_list_viewed::create(array(
+		'context' => context_course::instance($course->id)
+	));
+	$event->trigger();
+}
 
 // Get the context from the course id
-$coursecontext = get_context_instance(CONTEXT_COURSE, $course->id);
+$coursecontext = context_course::instance($course->id);
 
 // Prepare the page output
 $PAGE->set_url('/mod/elang/index.php', array('id' => $id));

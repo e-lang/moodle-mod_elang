@@ -3,7 +3,7 @@
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013 University of La Rochelle, France
+ * @copyright   2013-2015 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
  * @since       0.0.3
@@ -22,12 +22,13 @@ enyo.kind({
 	/**
 	 * css classes
 	 */
-	classes: 'input-append control-group',
+	classes: 'input-group form-group',
 
 	/**
 	 * Published properties:
 	 * - value: the current input value
 	 * - error: the error state (true or false)
+	 * - help: the help state (true or false)
 	 * - size: the size of the input
 	 * - number: the item number
 	 * Each property will have public setter and getter methods
@@ -43,6 +44,7 @@ enyo.kind({
 			kind: 'Input',
 			name: 'input',
 			onchange: 'textChange',
+			classes: 'form-control',
 			attributes: {type: 'text'}
 		},
 	],
@@ -81,11 +83,11 @@ enyo.kind({
 	{
 		if (this.error)
 		{
-			this.addClass('error');
+			this.addClass('has-error');
 		}
 		else
 		{
-			this.removeClass('error');
+			this.removeClass('has-error');
 		}
 	},
 
@@ -100,7 +102,7 @@ enyo.kind({
 	 */
 	sizeChanged: function (oldValue)
 	{
-		this.$.input.setClassAttribute(this.size > 50 ? 'input-xxlarge' : this.size > 40 ? 'input-xlarge' : this.size > 30 ? 'input-large' : '');
+		this.$.input.applyStyle('width', (Math.ceil(this.size / 10) * 5) + 'em');
 	},
 
 	/**
@@ -121,9 +123,9 @@ enyo.kind({
 					name: 'help',
 					tag: 'a',
 					ontap: 'helpTap',
-					classes: 'btn',
+					classes: 'btn input-group-addon',
 					attibutes: {href: '#'},
-					components: [{tag: 'i', classes: 'icon-info-sign'}]
+					components: [{tag: 'span', classes: 'glyphicon glyphicon-info-sign'}]
 				}
 			);
 		}

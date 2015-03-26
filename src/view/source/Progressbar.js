@@ -3,7 +3,7 @@
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013 University of La Rochelle, France
+ * @copyright   2013-2015 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
  * @since       0.0.1
@@ -39,10 +39,10 @@ enyo.kind({
 	 * - danger
 	 */
 	components:  [
-		{name: 'success', classes: 'bar bar-success', style: 'width: 0%;'},
-		{name: 'info', classes: 'bar bar-info', style: 'width: 0%;'},
-		{name: 'warning', classes: 'bar bar-warning', style: 'width: 0%;'},
-		{name: 'danger', classes: 'bar bar-danger', style: 'width: 0%;'}
+		{name: 'success', classes: 'progress-bar progress-bar-success', style: 'width: 0%;'},
+		{name: 'info', classes: 'progress-bar progress-bar-info', style: 'width: 0%;'},
+		{name: 'warning', classes: 'progress-bar progress-bar-warning', style: 'width: 0%;'},
+		{name: 'danger', classes: 'progress-bar progress-bar-danger', style: 'width: 0%;'}
 	],
 
 	/**
