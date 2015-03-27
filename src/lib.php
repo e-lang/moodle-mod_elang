@@ -170,13 +170,35 @@ function elang_delete_instance($id)
 		return false;
 	}
 
-	// Delete any dependent records
-	$DB->delete_records('elang', array('id' => $id));
-	$DB->delete_records('elang_cues', array('id_lang' => $id));
-	$DB->delete_records('elang_users', array('id_lang' => $id));
-	$DB->delete_records('elang_logs', array('id_lang' => $id));
+	$result = true;
 
-	return true;
+	// Delete any dependent records
+    if (! $DB->delete_records('elang', array('id' => $elang->id)))
+    {
+        $result = false;
+    }
+
+    if (! $DB->delete_records('elang_cues', array('id_elang' => $elang->id)))
+    {
+        $result = false;
+    }
+
+    if (! $DB->delete_records('elang_users', array('id_elang' => $elang->id)))
+    {
+        $result = false;
+    }
+
+    if (! $DB->delete_records('elang_help', array('id_elang' => $elang->id)))
+    {
+        $result = false;
+    }
+
+    if (! $DB->delete_records('elang_check', array('id_elang' => $elang->id)))
+    {
+        $result = false;
+    }
+
+	return $result;
 }
 
 /**

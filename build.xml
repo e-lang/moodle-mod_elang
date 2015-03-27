@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="moodle-mod_elang" default="build" basedir=".">
 
-	<property name="version" value="2015032600" />
+	<property name="version" value="2015032700" />
 	<property name="requires" value="2012062500" />
-	<property name="release" value="rc1-1.0.0" />
+	<property name="release" value="rc2-1.0.0" />
 	<property name="maturity" value="MATURITY_RC" />
 
 	<target name="build" depends="clean, get, prepare, debug, compressed" />
