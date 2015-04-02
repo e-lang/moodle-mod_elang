@@ -65,7 +65,14 @@ enyo.kind({
 	 */
 	changeCue: function (number, text)
 	{
-		document.getElementById(this.id).textTracks[0].cues[number].text = text;
+	    try
+	    {
+       		document.getElementById(this.id).textTracks[0].cues[number].text = text;
+       	}
+       	catch (err)
+       	{
+       	    // For MSIE :(
+       	}
 		return this;
 	},
 

@@ -108,8 +108,28 @@ enyo.kind({
 	 					break;
 				}
 			}
+			this.focus();
 		}
 		this.render();
+	},
+
+    /**
+     * Set the focus to the first input field available
+     *
+     * @return  void
+     *
+     * @since 1.0.0
+     */
+    focus: function ()
+    {
+		for (var component in this.$)
+		{
+		    if (typeof this.$[component].$.input !== 'undefined')
+		    {
+				this.$[component].$.input.set('defaultFocus', true);
+				break;
+		    }
+		}
 	},
 
 	/**
@@ -182,7 +202,8 @@ enyo.kind({
 				this.cue.setRemaining(this.cue.getRemaining() - 1).render();
 				this.doSuccessIncrement();
 				this.cueChanged();
-				this.render();
+				this.focus();
+        		this.render();
 				break;
 			case 'failure':
 				if (inRequest.sender.getValue() == '')

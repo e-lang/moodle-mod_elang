@@ -17,9 +17,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/config.php';
 require_once dirname(__FILE__) . '/lib.php';
 
-// Get the moodle version
-$version = moodle_major_version(true);
-
 // Get the course number
 $id = required_param('id', PARAM_INT);
 
@@ -29,6 +26,9 @@ $course = $DB->get_record('course', array('id' => $id), '*', MUST_EXIST);
 // Verify the login
 require_course_login($course);
 
+// Get the moodle version
+$version = moodle_major_version(true);
+
 // Add a view all log
 if (version_compare($version, '2.6') < 0)
 {
@@ -36,9 +36,7 @@ if (version_compare($version, '2.6') < 0)
 }
 else
 {
-	$event = \mod_elang\event\course_module_instance_list_viewed::create(array(
-		'context' => context_course::instance($course->id)
-	));
+	$event = \mod_elang\event\course_module_instance_list_viewed::create(array('context' => context_course::instance($course->id)));
 	$event->trigger();
 }
 

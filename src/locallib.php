@@ -568,7 +568,23 @@ function generateCueText($data, $user, $char='-', $repeated = 10)
 					}
 					else
 					{
-						$text[] = '<c.error>' . $user[$number]['content'] . '</c>';
+						if (empty($_SERVER['HTTP_USER_AGENT']))
+						{
+							$text[] = str_repeat($char, ((int) ((mb_strlen($element['content'], 'UTF-8') - 1) / $repeated) + 1) * $repeated);
+						}
+						else
+						{
+							$user_agent = $_SERVER['HTTP_USER_AGENT'];
+
+							if (preg_match('/MSIE/i', $user_agent) || preg_match('/Trident/i', $user_agent))
+							{
+								$text[] = str_repeat($char, ((int) ((mb_strlen($element['content'], 'UTF-8') - 1) / $repeated) + 1) * $repeated);
+							}
+							else
+							{
+								$text[] = '<c.error><i>' . $user[$number]['content'] . '</i></c>';
+							}
+						}
 					}
 				}
 				elseif ($user[$number]['help'])
@@ -772,7 +788,7 @@ function mbStringToArray($string, $encoding = 'UTF-8')
  *
  * @since  0.0.1
  */
-function LevenshteinDistance($str1, $str2, $costReplace = 2, $encoding = 'UTF-8')
+function levenshteinDistance($str1, $str2, $costReplace = 2, $encoding = 'UTF-8')
 {
 	$d = array();
 	$mb_len1 = mb_strlen($str1, $encoding);

@@ -71,15 +71,19 @@ class mod_elang_mod_form extends moodleform_mod
 		require_once dirname(__FILE__) . '/locallib.php';
 		$languages = Elang\getLanguages();
 		$options = array();
+
 		foreach (explode(',', $config->language) as $key)
 		{
 			$options[$key] = $languages[$key];
 		}
+
 		$element = $mform->addElement('select', 'language', get_string('language', 'elang'), $options);
+
 		if ($options['en-GB'])
 		{
 			$element->setSelected('en-GB');
 		}
+
 		$mform->addRule('language', null, 'required', null, 'client');
 
 		$mform->addElement(
@@ -92,11 +96,12 @@ class mod_elang_mod_form extends moodleform_mod
 		$mform->addHelpButton('videos', 'videos', 'elang');
 		$mform->addRule('videos', null, 'required', null, 'client');
 
-		// TODO deal with specific mimetype (moodle does not seem to take this code into account when file is uploaded
-		// require_once $CFG->libdir . '/filelib.php';
-		// $info = & get_mimetypes_array();
-		// $info['vtt'] = array('type' => 'text/vtt', 'icon'=>'text', 'defaulticon'=>true, 'groups' => array('subtitle'));
-		// $info['srt'] = array('type' => 'text/plain', 'icon'=>'text', 'defaulticon'=>true, 'groups' => array('subtitle'));
+/**		//TODO deal with specific mimetype (moodle does not seem to take this code into account when file is uploaded
+		require_once $CFG->libdir . '/filelib.php';
+		$info = & get_mimetypes_array();
+		$info['vtt'] = array('type' => 'text/vtt', 'icon'=>'text', 'defaulticon'=>true, 'groups' => array('subtitle'));
+		$info['srt'] = array('type' => 'text/plain', 'icon'=>'text', 'defaulticon'=>true, 'groups' => array('subtitle'));
+*/
 		$mform->addElement(
 			'filemanager',
 			'subtitle',

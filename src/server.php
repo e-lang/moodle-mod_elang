@@ -18,9 +18,6 @@ require_once dirname(dirname(dirname(__FILE__))) . '/config.php';
 require_once dirname(__FILE__) . '/lib.php';
 require_once dirname(__FILE__) . '/locallib.php';
 
-// Get the moodle version
-$version = moodle_major_version(true);
-
 $task = optional_param('task', '', PARAM_ALPHA);
 $id = optional_param('id', 0, PARAM_INT);
 
@@ -68,6 +65,9 @@ if (!$course || !$elang)
 	header('HTTP/1.1 500 Internal Server Error');
 	die;
 }
+
+// Get the moodle version
+$version = moodle_major_version(true);
 
 $options = json_decode($elang->options, true);
 $repeatedunderscore = isset($options['repeatedunderscore']) ? $options['repeatedunderscore'] : 10;
@@ -186,6 +186,7 @@ switch ($task)
 				{
 					$total++;
 					$cueTotal++;
+
 					if (isset($user[$number]))
 					{
 						if ($user[$number]['help'])
@@ -313,9 +314,11 @@ switch ($task)
 		}
 
 		$user = $DB->get_record('elang_users', array('id_cue' => $id_cue, 'id_user' => $USER->id));
+
 		if ($user)
 		{
 			$data = json_decode($user->json, true);
+
 			if (isset($data[$number]['help']) && $data[$number]['help'])
 			{
 				// Help has been already asked
@@ -363,10 +366,10 @@ switch ($task)
 							'guess' => $elements[$number]['order'],
 							'info' => $elements[$number]['content'],
 							'user' => $text
-						)	
+						)
 					)
 				);
-				$event->trigger();				
+				$event->trigger();
 			}
 		}
 
@@ -444,9 +447,11 @@ switch ($task)
 		}
 
 		$user = $DB->get_record('elang_users', array('id_cue' => $id_cue, 'id_user' => $USER->id));
+
 		if ($user)
 		{
 			$data = json_decode($user->json, true);
+
 			if (isset($data[$number]['help']) && $data[$number]['help'])
 			{
 				// Help has been already asked
@@ -465,6 +470,7 @@ switch ($task)
 				'info' => $elements[$number]['content'],
 			)
 		);
+
 		if (version_compare($version, '2.6') < 0)
 		{
 			add_to_log($course->id, 'elang', 'view help', 'view.php?id=' . $cm->id, $help_id, $cm->id);
@@ -480,10 +486,10 @@ switch ($task)
 						'cue' => $cue->number,
 						'guess' => $elements[$number]['order'],
 						'info' => $elements[$number]['content'],
-					)	
+					)
 				)
 			);
-			$event->trigger();				
+			$event->trigger();
 		}
 
 		if ($user)

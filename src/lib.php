@@ -41,10 +41,12 @@ function elang_supports($feature)
 		case FEATURE_SHOW_DESCRIPTION:
 			return true;
 
+/**
 		// Usefull for backup, restore and clone action
 		// TODO: implement backup
-//		case FEATURE_BACKUP_MOODLE2:
-//			return true;
+		case FEATURE_BACKUP_MOODLE2:
+			return true;
+*/
 		default:
 			return null;
 	}
@@ -173,30 +175,30 @@ function elang_delete_instance($id)
 	$result = true;
 
 	// Delete any dependent records
-    if (! $DB->delete_records('elang', array('id' => $elang->id)))
-    {
-        $result = false;
-    }
+	if (! $DB->delete_records('elang', array('id' => $elang->id)))
+	{
+		$result = false;
+	}
 
-    if (! $DB->delete_records('elang_cues', array('id_elang' => $elang->id)))
-    {
-        $result = false;
-    }
+	if (! $DB->delete_records('elang_cues', array('id_elang' => $elang->id)))
+	{
+		$result = false;
+	}
 
-    if (! $DB->delete_records('elang_users', array('id_elang' => $elang->id)))
-    {
-        $result = false;
-    }
+	if (! $DB->delete_records('elang_users', array('id_elang' => $elang->id)))
+	{
+		$result = false;
+	}
 
-    if (! $DB->delete_records('elang_help', array('id_elang' => $elang->id)))
-    {
-        $result = false;
-    }
+	if (! $DB->delete_records('elang_help', array('id_elang' => $elang->id)))
+	{
+		$result = false;
+	}
 
-    if (! $DB->delete_records('elang_check', array('id_elang' => $elang->id)))
-    {
-        $result = false;
-    }
+	if (! $DB->delete_records('elang_check', array('id_elang' => $elang->id)))
+	{
+		$result = false;
+	}
 
 	return $result;
 }
@@ -548,7 +550,8 @@ function elang_pluginfile($course, $cm, $context, $filearea, array $args, $force
 			}
 
 			$cue = new Elang\Cue;
-			$cue->setTitle($i++ + 1);
+			$i++;
+			$cue->setTitle($i);
 			$cue->setBegin($record->begin);
 			$cue->setEnd($record->end);
 			$cue->setText(Elang\generateCueText(json_decode($record->json, true), $data, '-', $repeatedunderscore));
@@ -575,7 +578,13 @@ function elang_pluginfile($course, $cm, $context, $filearea, array $args, $force
 		$doc->setPrintFooter(false);
 		$doc->AddPage();
 		$doc->WriteHtml('<h1>' . sprintf(get_string('pdftitle', 'elang'), $course->fullname) . '</h1>');
-		$doc->WriteHtml('<h2>' . sprintf(get_string('pdfsubtitle', 'elang'), Elang\generateTitle($elang, $options), userdate($elang->timecreated, get_string('strftimedaydate'))) . '</h2>');
+		$doc->WriteHtml(
+			'<h2>' . sprintf(
+				get_string('pdfsubtitle', 'elang'),
+				Elang\generateTitle($elang, $options),
+				userdate($elang->timecreated, get_string('strftimedaydate'))
+			) . '</h2>'
+		);
 		$doc->WriteHtml($elang->intro);
 
 		$i = 1;

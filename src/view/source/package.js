@@ -9,10 +9,10 @@
  * @since       0.0.1
  */
 enyo.depends(
-	"$lib/enyo-ilib",
 	"$lib/jquery.js",
 	"$lib/bootstrap/js/bootstrap.min.js",
 	"$lib/bootstrap/css/bootstrap.min.css",
+	"i18n.js",
 	"App.js",
 	"Video.js",
 	"Head.js",

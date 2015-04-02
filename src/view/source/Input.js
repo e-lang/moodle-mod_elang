@@ -43,7 +43,6 @@ enyo.kind({
 		{
 			kind: 'Input',
 			name: 'input',
-			onchange: 'textChange',
 			classes: 'form-control',
 			attributes: {type: 'text'}
 		},
@@ -55,6 +54,12 @@ enyo.kind({
 	 * - onHelpTap: fired when the help button was tapped
 	 */
 	events: {onTextChange: '', onHelpTap: ''},
+
+    /**
+     * Handler:
+     * -onkeypress: fired when the user press a key in the input
+     */
+	handlers: {onkeypress: 'keyPress'},
 
 	/**
 	 * Detect a change in the value property
@@ -153,7 +158,7 @@ enyo.kind({
 	},
 
 	/**
-	 * Handle text change event
+	 * Handle keypress event
 	 *
 	 * @protected
 	 *
@@ -162,15 +167,20 @@ enyo.kind({
 	 *
 	 * @return  true
 	 *
-	 * @since  0.0.3
+	 * @since  1.0.0
 	 */
-	textChange: function (inSender, inEvent)
+	keyPress: function (inSender, inEvent)
 	{
-		this.value = inSender.getValue();
-		this.doTextChange();
+		if (inEvent.keyCode == 13 && this.value != inSender.getValue())
+		{
+			this.value = inSender.getValue();
+			this.doTextChange();
 
-		// Prevents event propagation
-		return true;
+			// Prevents event propagation
+			return true;
+		}
+
+		return false;
 	},
 
 	/**

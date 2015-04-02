@@ -99,7 +99,7 @@ enyo.kind({
 					classes: 'col-md-6',
 					components: [
 						// video
-						{kind: 'Elang.Video', name: 'video', showControls: true},
+						{kind: 'Elang.Video', name: 'video', showControls: true, preload: 'auto'},
 
 						// progressbar
 						{kind: 'Elang.Progressbar', name: 'progressbar'},

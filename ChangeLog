@@ -25,6 +25,19 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+2015-04-02  Christophe Demko <chdemko@gmail.com>
+ ! Publishing version stable-1.0.0
+
+2015-04-02  Christophe Demko <chdemko@gmail.com>
+ - Remove enyo-ilib
+ + Add a i18n.js file
+ + Add comment in src/classes/event/course_module_viewed.php for init function
+ ^ Move JS strings to moodle strings
+ # Fix IS behavior for changing subtitle
+ # Add a prelod="auto" for Safari browser
+ + Add a focus function is js code
+ + Handle a 'RETURN' key event instead of a 'textchange' event
+
 2015-03-27  Christophe Demko <chdemko@gmail.com>
  ! Publishing version rc2-1.0.0
 

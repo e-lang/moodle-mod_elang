@@ -9,7 +9,7 @@ Build
 -----
 
 * Run `ant get` for getting [bootstrap 3.3.4](http://getbootstrap.com),
-[jquery 1.11.2](https://jquery.com), [enyojs 2.5.1.1](https://github.com/enyojs/enyo) and [enyo-ilib 2.5.1.1](https://github.com/enyojs/enyo-ilib)
+[jquery 1.11.2](https://jquery.com), [enyojs 2.5.1.1](https://github.com/enyojs/enyo)
 
 * Run `ant prepare` for preparing files
 

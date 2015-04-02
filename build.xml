@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="moodle-mod_elang" default="build" basedir=".">
 
-	<property name="version" value="2015032700" />
+	<property name="version" value="2015040200" />
 	<property name="requires" value="2012062500" />
-	<property name="release" value="rc2-1.0.0" />
-	<property name="maturity" value="MATURITY_RC" />
+	<property name="release" value="stable-1.0.0" />
+	<property name="maturity" value="MATURITY_STABLE" />
 
 	<target name="build" depends="clean, get, prepare, debug, compressed" />
 
@@ -21,7 +21,6 @@
 		<get src="https://github.com/twbs/bootstrap/releases/download/v3.3.4/bootstrap-3.3.4-dist.zip" dest="tmp/bootstrap-3.3.4-dist.zip" />
 		<get src="http://code.jquery.com/jquery-1.11.2.js" dest="tmp/jquery-1.11.2.js" />
 		<get src="https://github.com/enyojs/enyo/archive/2.5.1.1.zip" dest="tmp/enyo-2.5.1.1.zip" />
-		<get src="https://github.com/enyojs/enyo-ilib/archive/2.5.1.1.zip" dest="tmp/enyo-ilib-2.5.1.1.zip" />
 	</target>
 
 	<target name="prepare" description="Prepare files">
@@ -42,8 +41,6 @@
 		<move file="build/elang/lib/bootstrap-3.3.4-dist" tofile="build/elang/lib/bootstrap"/>
 		<unzip src="tmp/enyo-2.5.1.1.zip" dest="build/elang" />
 		<move file="build/elang/enyo-2.5.1.1" tofile="build/elang/enyo"/>
-		<unzip src="tmp/enyo-ilib-2.5.1.1.zip" dest="build/elang/lib" />
-		<move file="build/elang/lib/enyo-ilib-2.5.1.1" tofile="build/elang/lib/enyo-ilib"/>
 		<copy file="tmp/jquery-1.11.2.js" tofile="build/elang/lib/jquery.js" />
 	</target>
 

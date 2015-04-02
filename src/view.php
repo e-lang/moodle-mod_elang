@@ -77,8 +77,15 @@ $config = get_config('elang');
 		<title><?php echo format_string($title); ?></title>
 
 		<link rel="shortcut icon" href="pix/icon.ico"/>
-
-<?php if (file_exists(dirname(__FILE__) . '/build')): ?>
+		<script>
+			var Elang = Elang || {};
+			Elang.strings =
+<?php
+	include dirname(__FILE__) . '/lang/en/elang.php';
+	echo json_encode(get_strings(array_keys($string), 'elang'));
+?>;
+		</script>
+<?php if (file_exists(dirname(__FILE__) . '/build')) : ?>
 		<link href="build/enyo.css" rel="stylesheet" />
 		<link href="build/app.css" rel="stylesheet" />
 		<script src="build/enyo.js"></script>
@@ -94,7 +101,9 @@ $config = get_config('elang');
 			if (!!document.createElement('video').textTracks)
 			{
 				new Elang.App(
-					<?php echo json_encode(array('url' => (string) new moodle_url('/mod/elang/server.php', array('id' => $cm->id)), 'timeout' => $config->timeout));?>
+<?php
+	echo json_encode(array('url' => (string) new moodle_url('/mod/elang/server.php', array('id' => $cm->id)), 'timeout' => $config->timeout));
+?>
 				).renderInto(document.body).requestData();
 			}
 			else
