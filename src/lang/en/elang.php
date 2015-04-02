@@ -61,11 +61,9 @@ $string['poster_help'] = 'Upload a picture (or screenshot...) which represent th
 $string['postermaxsize_config'] = 'Set the maximum poster size in bytes';
 $string['postermaxsize'] = 'Maximum poster size';
 $string['poster'] = 'Poster';
-$string['repeatedunderscore_config'] = 'This defines the number of repeated underscores to display text to guess. ' .
-	'i.e. if this number is 10, the text "guess this text" will be represented by 20 underscores';
+$string['repeatedunderscore_config'] = 'This defines the number of repeated underscores to display text to guess. i.e. if this number is 10, the text "guess this text" will be represented by 20 underscores';
 $string['repeatedunderscore_error'] = 'You should enter a number here. Typical value is 10.';
-$string['repeatedunderscore_help'] = 'This defines the number of repeated underscores to display text to guess. ' .
-	'i.e. if this number is 10, the text "guess this text" will be represented by 20 underscores';
+$string['repeatedunderscore_help'] = 'This defines the number of repeated underscores to display text to guess. i.e. if this number is 10, the text "guess this text" will be represented by 20 underscores';
 $string['repeatedunderscore'] = 'Repeated underscores';
 $string['Request failed'] = 'Request failed';
 $string['Service Timeout'] = 'Service Timeout';
@@ -101,5 +99,4 @@ $string['videomaxsize_config'] = 'Set the maximum video size in bytes';
 $string['videomaxsize'] = 'Maximum video size';
 $string['videos_help'] = 'You can upload several videos with corrects extensions (ogv, wemb, mp4).';
 $string['videos'] = 'Videos';
-$string['Your browser is not compatible with files subtitle on HTML5 video'] = 'Your browser is not compatible with files subtitle on HTML5 video. ' .
-	'See http://caniuse.com/webvtt.';
+$string['Your browser is not compatible with files subtitle on HTML5 video'] = 'Your browser is not compatible with files subtitle on HTML5 video. See http://caniuse.com/webvtt.';

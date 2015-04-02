@@ -61,11 +61,9 @@ $string['poster_help'] = 'Déposez une image qui représente la vidéo.';
 $string['postermaxsize_config'] = 'Cela définit la taille maximum des posters en octets';
 $string['postermaxsize'] = 'Taille maximum des posters';
 $string['poster'] = 'Poster';
-$string['repeatedunderscore_config'] = 'Cela définit le nombre de sous-tirets utilisés pour afficher les textes à deviner. ' .
-	'i.e. si ce nombre est 10, le texte «devinez ce texte» sera représenté par 20 sous-tirets';
+$string['repeatedunderscore_config'] = 'Cela définit le nombre de sous-tirets utilisés pour afficher les textes à deviner. i.e. si ce nombre est 10, le texte «devinez ce texte» sera représenté par 20 sous-tirets';
 $string['repeatedunderscore_error'] = 'Vous devez entrez un nombre. 10 est une valeur typique.';
-$string['repeatedunderscore_help'] = 'Cela définit le nombre de sous-tirets utilisés pour afficher les textes à deviner. ' .
-	'i.e. si ce nombre est 10, le texte «devinez ce texte» sera représenté par 20 sous-tirets';
+$string['repeatedunderscore_help'] = 'Cela définit le nombre de sous-tirets utilisés pour afficher les textes à deviner. i.e. si ce nombre est 10, le texte «devinez ce texte» sera représenté par 20 sous-tirets';
 $string['repeatedunderscore'] = 'Nombre de sous-tiret répétés';
 $string['Request failed'] = 'Erreur de requête';
 $string['Service Timeout'] = 'Temps limite dépassé';
@@ -101,5 +99,4 @@ $string['videomaxsize_config'] = 'Cela définit la taille maximum des fichiers d
 $string['videomaxsize'] = 'Taille maximum des fichiers vidéos';
 $string['videos_help'] = 'Vous pouvez déposez plusieurs vidéos en utilisant les extensions communément admises pour le web (ogv, wemb, mp4).';
 $string['videos'] = 'Vidéos';
-$string['Your browser is not compatible with files subtitle on HTML5 video'] = 'Votre navigateur n\'est pas compatible avec les fichiers de ' .
-	'sous-titres sur les vidéos HTML5. Voir http://caniuse.com/webvtt';
+$string['Your browser is not compatible with files subtitle on HTML5 video'] = 'Votre navigateur n\'est pas compatible avec les fichiers de sous-titres sur les vidéos HTML5. Voir http://caniuse.com/webvtt';
