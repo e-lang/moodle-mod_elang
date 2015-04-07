@@ -55,10 +55,10 @@ enyo.kind({
 	 */
 	events: {onTextChange: '', onHelpTap: ''},
 
-    /**
-     * Handler:
-     * -onkeypress: fired when the user press a key in the input
-     */
+	/**
+	 * Handler:
+	 * -onkeypress: fired when the user press a key in the input
+	 */
 	handlers: {onkeypress: 'keyPress'},
 
 	/**

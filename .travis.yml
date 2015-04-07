@@ -2,3 +2,18 @@ language: php
 php:
   - 5.3
   - 5.4
+  - 5.5
+
+before_install:
+  - composer self-update
+
+before_script:
+  - composer update
+  - pyrus install -f pear/PHP_CodeSniffer-1.5.2
+  - git clone https://github.com/joomla/coding-standards.git `pyrus get php_dir | tail -1`/PHP/CodeSniffer/Standards/Joomla
+  - phpenv rehash
+
+script:
+  - ant phpcs
+  - ant phpunit
+

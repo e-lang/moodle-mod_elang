@@ -70,6 +70,7 @@ enyo.kind({
 					{owner: this}
 				);
 			}
+
 			this.$.pages.show();
 		}
 		else if (this.total == 0)

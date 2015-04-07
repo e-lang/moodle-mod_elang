@@ -197,6 +197,7 @@ enyo.kind({
 			this.type = oldValue;
 			throw new RangeError('Type value "' + type + '" is incorrect');
 		}
+
 		this.$.type.addClass('alert-' + this.type);
 		this.$.type.removeClass('alert-' + oldValue);
 	},

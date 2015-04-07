@@ -65,14 +65,14 @@ enyo.kind({
 	 */
 	changeCue: function (number, text)
 	{
-	    try
-	    {
-       		document.getElementById(this.id).textTracks[0].cues[number].text = text;
-       	}
-       	catch (err)
-       	{
-       	    // For MSIE :(
-       	}
+		try
+		{
+			document.getElementById(this.id).textTracks[0].cues[number].text = text;
+		}
+		catch (err)
+		{
+			// For MSIE :(
+		}
 		return this;
 	},
 
@@ -111,6 +111,7 @@ enyo.kind({
 			this.pause();
 			this.setCurrentTime(this.begin);
 		}
+
 		return false;
 	},
 

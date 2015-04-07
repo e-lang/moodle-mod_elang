@@ -78,7 +78,7 @@ enyo.kind({
 							],
 							{owner: this}
 						);
-	 					break;
+						break;
 					case 'success':
 						this.createComponents(
 							[
@@ -87,7 +87,7 @@ enyo.kind({
 							],
 							{owner: this}
 						);
-	 					break;
+						break;
 					case 'help':
 						this.createComponents(
 							[
@@ -96,7 +96,7 @@ enyo.kind({
 							],
 							{owner: this}
 						);
-	 					break;
+						break;
 					case 'input':
 						this.createComponents(
 							[
@@ -105,30 +105,32 @@ enyo.kind({
 							],
 							{owner: this}
 						);
-	 					break;
+						break;
 				}
 			}
+
 			this.focus();
 		}
+
 		this.render();
 	},
 
-    /**
-     * Set the focus to the first input field available
-     *
-     * @return  void
-     *
-     * @since 1.0.0
-     */
-    focus: function ()
-    {
+	/**
+	 * Set the focus to the first input field available
+	 *
+	 * @return  void
+	 *
+	 * @since 1.0.0
+	 */
+	focus: function ()
+	{
 		for (var component in this.$)
 		{
-		    if (typeof this.$[component].$.input !== 'undefined')
-		    {
+			if (typeof this.$[component].$.input !== 'undefined')
+			{
 				this.$[component].$.input.set('defaultFocus', true);
 				break;
-		    }
+			}
 		}
 	},
 
@@ -198,12 +200,13 @@ enyo.kind({
 				{
 					this.doErrorDecrement();
 				}
+
 				data.elements[inRequest.sender.name] = {content: inResponse.content, type: 'success'};
 				this.cue.setRemaining(this.cue.getRemaining() - 1).render();
 				this.doSuccessIncrement();
 				this.cueChanged();
 				this.focus();
-        		this.render();
+				this.render();
 				break;
 			case 'failure':
 				if (inRequest.sender.getValue() == '')
@@ -214,14 +217,17 @@ enyo.kind({
 				else
 				{
 					inRequest.sender.setError(true);
+
 					if (data.elements[inRequest.sender.name].content == '')
 					{
 						this.doErrorIncrement();
 					}
 				}
+
 				data.elements[inRequest.sender.name].content = inRequest.sender.getValue();
 				break;
 		}
+
 		this.doTrackChange({number: data.number, text: inResponse.cue});
 	},	
 

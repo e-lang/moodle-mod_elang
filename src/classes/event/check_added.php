@@ -21,12 +21,7 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * The mod_elang instance add check event class.
  *
- * @package     mod
- * @subpackage  elang
- * @copyright   2013-2015 University of La Rochelle, France
- * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
- *
- * @since       1.0.0
+ * @since  1.0.0
  */
 class check_added extends \core\event\base
 {

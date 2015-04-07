@@ -398,7 +398,7 @@ function elang_get_coursemodule_info($coursemodule)
  */
 function elang_get_view_actions()
 {
-	return array('view','view help');
+	return array('view', 'view help');
 }
 
 /**

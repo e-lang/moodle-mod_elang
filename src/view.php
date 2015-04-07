@@ -85,7 +85,7 @@ $config = get_config('elang');
 	echo json_encode(get_strings(array_keys($string), 'elang'));
 ?>;
 		</script>
-<?php if (file_exists(dirname(__FILE__) . '/build')) : ?>
+<?php if (file_exists(dirname(__FILE__) . '/build')): ?>
 		<link href="build/enyo.css" rel="stylesheet" />
 		<link href="build/app.css" rel="stylesheet" />
 		<script src="build/enyo.js"></script>

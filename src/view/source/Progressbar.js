@@ -162,6 +162,7 @@ enyo.kind({
 	setData: function (component, newValue)
 	{
 		var percent, numerator = newValue - this.begin, denominator = this.end - this.begin;
+
 		if (numerator < 0 || denominator == 0)
 		{
 			percent = 0;
@@ -174,6 +175,7 @@ enyo.kind({
 		{
 			percent = (numerator / denominator) * 100;
 		}
+
 		this.$[component].applyStyle('width', percent + '%');
 		return this;
 	},

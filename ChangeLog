@@ -25,6 +25,11 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+2015-04-07  Christophe Demko <chdemko@gmail.com>
+ + Add PHP Code Style sniffs using Joomla standard
+
+----------------------------------------- stable-1.0.0 -----------------------------------------
+
 2015-04-02  Christophe Demko <chdemko@gmail.com>
  ! Publishing version stable-1.0.0
 
@@ -38,11 +43,15 @@ $ -> Language fix or change
  + Add a focus function is js code
  + Handle a 'RETURN' key event instead of a 'textchange' event
 
+----------------------------------------- rc2-1.0.0 -----------------------------------------
+
 2015-03-27  Christophe Demko <chdemko@gmail.com>
  ! Publishing version rc2-1.0.0
 
 2015-03-26  Christophe Demko <chdemko@gmail.com>
  # Correcting bad field name in elang_delete_instance
+
+----------------------------------------- rc1-1.0.0 -----------------------------------------
 
 2015-03-26  Christophe Demko <chdemko@gmail.com>
  ! Publishing version rc1-1.0.0
@@ -59,6 +68,8 @@ $ -> Language fix or change
 
 2013-07-01  Christophe Demko <chdemko@gmail.com>
  # Detect BOM
+
+----------------------------------------- beta-0.1.0 -----------------------------------------
 
 2013-06-27  Christophe Demko <chdemko@gmail.com>
  ! Publishing version beta-0.1.0
@@ -97,6 +108,8 @@ $ -> Language fix or change
  ^ Removing .gitmodule file
  ^ Deleting build directory when preparing
  +^ Adding some comments and cleaning test files
+
+----------------------------------------- alpha-0.0.2 -----------------------------------------
 
 2013-06-15  Christophe Demko <chdemko@gmail.com>
  ! Publishing version alpha-0.0.2

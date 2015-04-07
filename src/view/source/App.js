@@ -214,6 +214,7 @@ enyo.kind({
 		{
 			this.request.setCallbackName(this.callbackName);
 		}
+
 		this.$.form.setRequest(this.request);
 	},
 
@@ -349,12 +350,20 @@ enyo.kind({
 
 		// Construct the video object
 		this.$.video.setSourceComponents(inResponse.sources);
+
+		// Add an optional poster
 		if (inResponse.poster)
 		{
 			this.$.video.setPoster(inResponse.poster);
 		}
+
+		// Set the language
 		this.$.video.setLanguage(inResponse.language);
+
+		// Set the subtitles
 		this.$.video.setTrack(inResponse.track);
+
+		// Render the video
 		this.$.video.render();
 
 		// Hide the progressbar

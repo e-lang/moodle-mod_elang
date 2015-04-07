@@ -178,12 +178,12 @@ class WebVTTTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	* Test the addCue method and the getCueList method
-	*
-	* @return void
-	*
-	* @since   0.0.1
-	*/
+	 * Test the addCue method and the getCueList method
+	 *
+	 * @return void
+	 *
+	 * @since   0.0.1
+	 */
 	public function testAddCue()
 	{
 		$cue1 = new Elang\Cue;

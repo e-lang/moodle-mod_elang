@@ -8,6 +8,18 @@
 
 	<target name="build" depends="clean, get, prepare, debug, compressed" />
 
+	<target name="phpcs" description="PHP Code style">
+		<exec executable="phpcs" >
+			<arg value="--standard=ruleset.xml" />
+			<arg value="src/" />
+			<arg value="test/" />
+		</exec>
+	</target>
+
+	<target name="phpunit" description="Run unit tests using PHPUnit">
+		<exec executable="phpunit" />
+	</target>
+
 	<target name="clean" description="Clean up">
 		<delete dir="build" />
 		<delete dir="tmp" />

@@ -168,7 +168,7 @@ class Cue
 	 *
 	 * @since  0.0.1
 	 */
-	public function getend()
+	public function getEnd()
 	{
 		return $this->end;
 	}

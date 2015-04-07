@@ -171,6 +171,7 @@ enyo.kind({
 		if (this.limit > 0)
 		{
 			var index = [5, 10, 15, 20, 25].indexOf(this.limit);
+
 			if (index > 0)
 			{
 				this.$.limit.setSelected(index);
@@ -179,6 +180,7 @@ enyo.kind({
 			{
 				this.$.limit.setSelected(0);
 			}
+
 			this.fillCues(0);
 		}
 		else
@@ -222,10 +224,12 @@ enyo.kind({
 		var start = page * this.limit;
 		var elements = this.elements.slice(start, start + this.limit);
 		this.$.body.destroyClientControls();
+
 		for (var i = 0; i < elements.length; i++)
 		{
 			this.$.body.createComponent({kind: 'Elang.Cue', number: start + i + 1, data: elements[i]}, {owner: this});
 		}
+
 		this.$.body.render();
 		this.$.pagination.render();
 		return this;
