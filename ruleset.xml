@@ -31,6 +31,4 @@
 		<exclude-pattern>*.css</exclude-pattern>
 	</rule>
 
-
-
 </ruleset>
