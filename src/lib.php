@@ -190,6 +190,16 @@ function elang_delete_instance($id)
 		$result = false;
 	}
 
+	if (! $DB->delete_records('elang_help', array('id_elang' => $elang->id)))
+	{
+		$result = false;
+	}
+
+	if (! $DB->delete_records('elang_check', array('id_elang' => $elang->id)))
+	{
+		$result = false;
+	}
+
 	return $result;
 }
 
