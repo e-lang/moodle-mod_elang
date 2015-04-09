@@ -25,6 +25,10 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+2015-04-09  Christophe Demko <chdemko@gmail.com>
+ # Don't purge elang_help and elang_check table when deleting activity module instance
+ # Don't translate the client when the moodle site is on debugging mode
+
 2015-04-07  Christophe Demko <chdemko@gmail.com>
  + Add PHP Code Style sniffs using Joomla standard
 
