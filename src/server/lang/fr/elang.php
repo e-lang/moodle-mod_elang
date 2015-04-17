@@ -84,6 +84,7 @@ $string['subtitle'] = 'Sous-titres';
 $string['timeout_config'] = "Temps d'attente maximum entre le serveur moodle et le navigateur pour les requêtes";
 $string['timeout'] = "Temps d'attente";
 $string['Timeout with the server'] = 'Le serveur n\'a pas répondu dans le temps imparti';
+$string['Title'] = 'Titre';
 $string['titlelength_config'] = 'Cela définit la longueur du titre des séquences';
 $string['titlelength_error'] = 'Vous devez entrez un nombre. 100 est une valeur typique.';
 $string['titlelength_help'] = 'Cela définit la longueur du titre des séquences';

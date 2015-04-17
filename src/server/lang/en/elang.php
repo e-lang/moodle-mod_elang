@@ -84,6 +84,7 @@ $string['subtitle'] = 'Subtitle';
 $string['timeout_config'] = 'Timeout between the moodle server and client browser';
 $string['timeout'] = 'Timeout';
 $string['Timeout with the server'] = 'Timeout with the server';
+$string['Title'] = 'Title';
 $string['titlelength_config'] = 'This defines cue title length';
 $string['titlelength'] = 'Cue title length';
 $string['titlelength_error'] = 'You should enter a number here. Typical value is 100.';
