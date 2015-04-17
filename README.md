@@ -9,13 +9,15 @@ Build
 -----
 
 * Run
-~~~sh
-composer --stability="dev" create-project e-lang/moodle-mod_elang; cd moodle-mod_elang
-~~~
-    for getting the project
+
+    ~~~sh
+    composer --stability="dev" create-project e-lang/moodle-mod_elang; cd moodle-mod_elang
+    ~~~
+  for getting the project
 * Run
-~~~sh
-composer package
-~~~
-    for creating creating zip files ready to be unzipped in the `mod` folder of the moodle directory
+
+    ~~~sh
+    composer package
+    ~~~
+  for creating creating zip files ready to be unzipped in the `mod` folder of the moodle directory
 
