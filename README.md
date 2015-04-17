@@ -11,7 +11,8 @@ Build
 * Run
 
     ~~~sh
-    composer --stability="dev" create-project e-lang/moodle-mod_elang; cd moodle-mod_elang
+    composer --stability="dev" create-project e-lang/moodle-mod_elang
+    cd moodle-mod_elang
     ~~~
   for getting the project
 * Run
