@@ -29,7 +29,6 @@
 			"role": "conceptor"
 		}
 	],
-	"minimum-stability": "stable",
 	"scripts": {
 		"post-install-cmd": [
 			"bower install"

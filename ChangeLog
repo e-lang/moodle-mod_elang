@@ -25,6 +25,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+2015-04-17  Christophe Demko <chdemko@gmail.com>
+ ^ Move to composer and bower
+
 2015-04-09  Christophe Demko <chdemko@gmail.com>
  # Don't translate the client when the moodle site is on debugging mode
 
