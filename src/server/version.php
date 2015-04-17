@@ -18,7 +18,7 @@ defined('MOODLE_INTERNAL') || die();
 $module->version   = @VERSION@;
 
 // Requires this Moodle version
-$module->requires  = @REQUIRES@;
+$module->requires  = 2012062500;
 
 // Period for cron to check this module (secs)
 $module->cron      = 0;
@@ -30,5 +30,4 @@ $module->component = 'mod_elang';
 $module->release   = '@RELEASE@';
 
 // Maturity: MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC, MATURITY_STABLE
-$module->maturity  = @MATURITY@;
-
+$module->maturity  = MATURITY_STABLE;

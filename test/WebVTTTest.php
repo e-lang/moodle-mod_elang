@@ -8,7 +8,7 @@
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  */
 
-require __DIR__ . '/../src/locallib.php';
+require __DIR__ . '/../src/server/locallib.php';
 
 /**
  * Test class for parseWebVTT.php

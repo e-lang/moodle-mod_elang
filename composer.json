@@ -1,0 +1,66 @@
+{
+	"name": "e-lang/moodle-mod_elang",
+	"description": "A moodle module for learning foreign languages",
+	"type": "project",
+	"keywords": [
+		"moodle",
+		"activity module",
+		"learning",
+		"teaching",
+		"foreign language"
+	],
+	"homepage": "http://e-lang.github.io/moodle-mod_elang/",
+	"license": "CECILL-B",
+	"support": {
+		"wiki": "https://github.com/e-lang/moodle-mod_elang/wiki",
+		"issues": "https://github.com/e-lang/moodle-mod_elang/issues",
+		"source": "https://github.com/e-lang/moodle-mod_elang"
+	},
+	"authors": [
+		{
+			"name": "Christophe Demko",
+			"email": "christophe.demko@univ-lr.fr",
+			"role": "developer",
+			"homepage": "http://chdemko.com"
+		},
+		{
+			"name": "Alfred Knapp",
+			"email": "alfred.knapp@univ-lr.fr",
+			"role": "conceptor"
+		}
+	],
+	"minimum-stability": "stable",
+	"scripts": {
+		"post-install-cmd": [
+			"bower install"
+		],
+		"post-update-cmd": [
+			"bower update"
+		],
+		"test": [
+			"phpunit",
+			"phpcs --standard=ruleset.xml src/ test/"
+		],
+		"package": [
+			"rm -f moodle-mod_elang-`cat RELEASE`-`cat VERSION`-debug.zip",
+			"rm -Rf build",
+			"mkdir -p build/elang",
+			"cp -Rf src/server/* build/elang",
+			"sed -i 's/@RELEASE@/'`cat RELEASE`'/' build/elang/version.php",
+			"sed -i 's/@VERSION@/'`cat VERSION`'/' build/elang/version.php",
+			"cp -Rf src/client/* build/elang",
+			"mkdir -p build/elang/lib/bootstrap",
+			"mkdir -p build/elang/lib/jquery",
+			"cp -Rf bower_components/bootstrap/dist/* build/elang/lib/bootstrap",
+			"cp -Rf bower_components/jquery/dist/jquery.min.* build/elang/lib/jquery",
+			"cp -Rf bower_components/enyojs build/elang/enyo",
+			"cd build; zip -ru ../moodle-mod_elang-`cat ../RELEASE`-`cat ../VERSION`-debug.zip elang/ -x \\*~; cd ..",
+			"rm -f moodle-mod_elang-`cat RELEASE`-`cat VERSION`.zip",
+			"chmod u+x build/elang/enyo/tools/deploy.js",
+			"cd build/elang; ./enyo/tools/deploy.js; cd ../..",
+			"cd build; zip -ru ../moodle-mod_elang-`cat ../RELEASE`-`cat ../VERSION`.zip * -x \\*~ -x /elang/deploy/* -x /elang/enyo/* -x /elang/lib/* -x /elang/source/* -x /elang/index.html -x /elang/icon.png; cd ..",
+			"cd build/elang/deploy; zip -ru ../../../moodle-mod_elang-`cat ../../../RELEASE`-`cat ../../../VERSION`.zip elang/build; cd ../../..",
+			"cd build; zip -ru ../moodle-mod_elang-`cat ../RELEASE`-`cat ../VERSION`.zip elang/lib/bootstrap/fonts/; cd .."
+		]
+	}
+}
