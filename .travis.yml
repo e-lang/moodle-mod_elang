@@ -10,6 +10,5 @@ before_script:
   - phpenv rehash
 
 script:
-  - ant phpcs
-  - ant phpunit
+  - composer test
 
