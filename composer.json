@@ -29,6 +29,9 @@
 			"role": "conceptor"
 		}
 	],
+	"require": {
+		"captioning/captioning": "2.*"
+	},
 	"scripts": {
 		"post-install-cmd": [
 			"bower install"
@@ -45,6 +48,7 @@
 			"rm -Rf build",
 			"mkdir -p build/elang",
 			"cp -Rf src/server/* build/elang",
+			"cp -Rf vendor/ build/elang",
 			"sed -i 's/@RELEASE@/'`cat RELEASE`'/' build/elang/version.php",
 			"sed -i 's/@VERSION@/'`cat VERSION`'/' build/elang/version.php",
 			"cp -Rf src/client/* build/elang",

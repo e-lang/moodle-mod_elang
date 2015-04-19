@@ -18,470 +18,7 @@ namespace Elang;
 
 defined('MOODLE_INTERNAL') || die();
 
-/**
- * Class Cue
- *
- * @since  0.0.1
- */
-class Cue
-{
-	/**
-	 * @var  $title  string  Cue title
-	 */
-	protected $title;
-
-	/**
-	 * @var  $begin  integer  Cue beginning
-	 */
-	protected $begin;
-
-	/**
-	 * @var  $end  integer  Cue ending
-	 */
-	protected $end;
-
-	/**
-	 * @var  $text  string  Cue text
-	 */
-	protected $text;
-
-	/**
-	 * Convert string to milliseconds
-	 *
-	 * @param   string  $string  String representation of time
-	 *
-	 * @return  integer  Time in milliseconds
-	 *
-	 * @since  0.0.1
-	 */
-	public static function millisecondsFromString($string)
-	{
-		if (strlen($string) == 9)
-		{
-			// If the begin or the end use format 00:00.000
-			$hour = 0;
-			$minute = intval(substr($string, 0, 2));
-			$second = intval(substr($string, 3, 2));
-			$ms = intval(substr($string, 6, 3));
-		}
-		else
-		{
-			// If the begin or the end use format 00:00:00.000
-			$hour = intval(substr($string, 0, 2));
-			$minute = intval(substr($string, 3, 2));
-			$second = intval(substr($string, 6, 2));
-			$ms = intval(substr($string, 9, 3));
-		}
-
-		$res = $ms + ($second * 1000) + ($minute * 60000) + ($hour * 3600000);
-
-		return $res;
-	}
-
-	/**
-	 * Convert milliseconds to string
-	 *
-	 * @param   integer  $ms  Time in milliseconds
-	 *
-	 * @return  string  String representation of time
-	 *
-	 * @since  0.0.1
-	 */
-	public static function millisecondsToString($ms)
-	{
-		// Millisecond
-		$uSec = $ms % 1000;
-		$ms = floor($ms / 1000);
-
-		// Second
-		$second = $ms % 60;
-		$ms = floor($ms / 60);
-
-		// Minute
-		$minute = $ms % 60;
-		$ms = floor($ms / 60);
-
-		// Hour
-		$hour = $ms % 60;
-		$ms = floor($ms / 60);
-
-		return  sprintf("%02d", $hour) . ":" . sprintf("%02d", $minute) . ":" . sprintf("%02d", $second) . "." . sprintf("%03d", $uSec);
-	}
-
-	/**
-	 * toString magic method
-	 *
-	 * @return  string  String representation of $this
-	 *
-	 * @since  0.0.1
-	 */
-	public function __toString()
-	{
-		$res = "";
-
-		// Title
-		if ($this->title)
-		{
-			$res .= $this->title;
-			$res .= "\n";
-		}
-
-		// Time
-		$res .= self::millisecondsToString($this->begin) . ' --> ' . self::millisecondsToString($this->end);
-		$res .= "\n";
-
-		// Text
-		$res .= $this->text;
-		$res .= "\n";
-
-		return $res;
-	}
-
-	/**
-	 * title getter
-	 *
-	 * @return  string  The cue title
-	 *
-	 * @since  0.0.1
-	 */
-	public function getTitle()
-	{
-		return $this->title;
-	}
-
-	/**
-	 * begin getter
-	 *
-	 * @return  integer  The cue begin
-	 *
-	 * @since  0.0.1
-	 */
-	public function getBegin()
-	{
-		return $this->begin;
-	}
-
-	/**
-	 * end getter
-	 *
-	 * @return  integer  The cue end
-	 *
-	 * @since  0.0.1
-	 */
-	public function getEnd()
-	{
-		return $this->end;
-	}
-
-	/**
-	 * text getter
-	 *
-	 * @return  string  The cue text
-	 *
-	 * @since  0.0.1
-	 */
-	public function getText()
-	{
-		return $this->text;
-	}
-
-	/**
-	 * title setter
-	 *
-	 * @param   string  $title  The new title
-	 *
-	 * @return  $this  For chaining
-	 *
-	 * @since  0.0.1
-	 */
-	public function setTitle($title)
-	{
-		$this->title = $title;
-	}
-
-	/**
-	 * begin setter
-	 *
-	 * @param   integer  $begin  The new begin
-	 *
-	 * @return  $this  For chaining
-	 *
-	 * @since  0.0.1
-	 */
-	public function setBegin($begin)
-	{
-		$this->begin = $begin;
-	}
-
-	/**
-	 * end setter
-	 *
-	 * @param   integer  $end  The new end
-	 *
-	 * @return  $this  For chaining
-	 *
-	 * @since  0.0.1
-	 */
-	public function setEnd($end)
-	{
-		$this->end = $end;
-	}
-
-	/**
-	 * text setter
-	 *
-	 * @param   string  $text  The new text
-	 *
-	 * @return  $this  For chaining
-	 *
-	 * @since  0.0.1
-	 */
-	public function setText($text)
-	{
-		$this->text = $text;
-	}
-}
-
-/**
- * Parse file WebVTT to return list of cue objects.
- *
- * @since  0.0.1
- */
-class WebVTT implements \Iterator
-{
-	/**
-	 * @var  integer  $position  Current cue index
-	 */
-	private $position = 0;
-
-	/**
-	 * @var  array  $cueList  Cue list
-	 */
-	protected $cueList = array();
-
-	/**
-	 * Define state of the line (number, time or text)
-	 */
-	const WEBVTT_STATE_TIME = 1;
-	const WEBVTT_STATE_TEXT = 2;
-
-	/**
-	 * Regular expression to parse the subtitle string
-	 */
-	const REGEXP_TIME1 = "/^[0-9]{2}:[0-9]{2}[.,][0-9]{3}/";
-	const REGEXP_TIME2 = "/^[0-9]{2}:[0-9]{2}:[0-9]{2}[,.][0-9]{3}/";
-
-	/**
-	 * Constructor
-	 *
-	 * @param   string|null  $content  Content to parse
-	 *
-	 * @since  0.0.1
-	 */
-	public function __construct($content = null)
-	{
-		if ($content !== null)
-		{
-			// Create list of cues from the webVtt content
-			$this->setCueList($this->parseWebVTT($content));
-		}
-
-		$this->position = 0;
-	}
-
-	/**
-	 * Add a cue
-	 *
-	 * @param   Cue  $cue  The cue to be added
-	 *
-	 * @return  $this
-	 *
-	 * @since  0.0.1
-	 */
-	public function addCue($cue)
-	{
-		$this->cueList[] = $cue;
-
-		return $this;
-	}
-
-	/**
-	 * Change the cue list
-	 *
-	 * @param   array  $list  New list of cues
-	 *
-	 * @return  $this
-	 *
-	 * @since  0.0.1
-	 */
-	public function setCueList($list)
-	{
-		$this->cueList = $list;
-
-		return $this;
-	}
-
-	/**
-	 * Get the cue list
-	 *
-	 * @return  array  List of cues
-	 *
-	 * @since  0.0.1
-	 */
-	public function getCueList()
-	{
-		return $this->cueList;
-	}
-
-	/**
-	 * Rewind the iterator
-	 *
-	 * @return  void
-	 *
-	 * @since  0.0.1
-	 */
-	public function rewind()
-	{
-		$this->position = 0;
-	}
-
-	/**
-	 * Get the current cue
-	 *
-	 * @return  Cue
-	 *
-	 * @since  0.0.1
-	 */
-	public function current()
-	{
-		return $this->cueList[$this->position];
-	}
-
-	/**
-	 * Get the current cue number
-	 *
-	 * @return  integer
-	 *
-	 * @since  0.0.1
-	 */
-	public function key()
-	{
-		return $this->position;
-	}
-
-	/**
-	 * Go to the next cue
-	 *
-	 * @return  void
-	 *
-	 * @since  0.0.1
-	 */
-	public function next()
-	{
-		$this->position++;
-	}
-
-	/**
-	 * Is the iterator valid
-	 *
-	 * @return  boolean
-	 *
-	 * @since  0.0.1
-	 */
-	public function valid()
-	{
-		return isset($this->cueList[$this->position]);
-	}
-
-	/**
-	 * toString magic method
-	 *
-	 * @return  string  String representation of $this
-	 *
-	 * @since  0.0.1
-	 */
-	public function __toString()
-	{
-		// Header of WebVtt file
-		$res = "WEBVTT";
-		$res .= "\n\n";
-
-		foreach ($this as $key => $value)
-		{
-			// Each Cue (call function Cue's toString function)
-			$res .= $value;
-			$res .= "\n";
-		}
-
-		return $res;
-	}
-
-	/**
-	 * Parse a string
-	 *
-	 * @param   string  $content  Subtitle string
-	 *
-	 * @return  $this
-	 *
-	 * @since  0.0.1
-	 */
-	private function parseWebVTT($content)
-	{
-		// Split the file text into a list in function of : \r\n => windows, \n => linux, \r=> mac
-		$lines   = preg_split("/(\r\n|\n|\r)/", $content);
-		$subs    = array();
-		$state   = self::WEBVTT_STATE_TIME;
-		$subNum  = "";
-		$subText = '';
-		$subTime = '';
-
-		// Variable to access to the first line
-		$loop = false;
-		$lineBefore;
-
-		foreach ($lines as $line)
-		{
-			if ($loop || strpos($line, "-->"))
-			{
-				switch ($state)
-				{
-					case self::WEBVTT_STATE_TIME:
-						if (strpos($line, "-->"))
-						{
-							$subTime = trim($line);
-							$subNum = trim($lineBefore);
-							$state   = self::WEBVTT_STATE_TEXT;
-						}
-						break;
-					case self::WEBVTT_STATE_TEXT:
-							$sub = new Cue;
-							$sub->setTitle($subNum);
-							list($begin, $end) = explode(' --> ', $subTime);
-
-							// Just get the end time without information as 'align:end size:50%'
-							if (preg_match(self::REGEXP_TIME1, $end, $matches) || preg_match(self::REGEXP_TIME2, $end, $matches))
-							{
-								$sub->setEnd(Cue::millisecondsFromString($matches[0]));
-							}
-
-							$sub->setBegin(Cue::millisecondsFromString($begin));
-							$subText = $line;
-							$sub->setText($subText);
-							$subText     = '';
-							$state       = self::WEBVTT_STATE_TIME;
-							$subs[]      = $sub;
-						break;
-				}
-
-				$loop = true;
-			}
-
-			$lineBefore = $line;
-		}
-
-		return $subs;
-	}
-}
+require_once dirname(__FILE__) . '/vendor/autoload.php';
 
 /**
  * Send a json response
@@ -613,13 +150,14 @@ function generateCueText($data, $user, $char='-', $repeated = 10)
 /**
  * Save files for an instance
  *
- * @param   object  $elang  An object from the form in mod_form.php
+ * @param   object               $elang  An object from the form in mod_form.php
+ * @param   \mod_elang_mod_form  $mform  The form
  *
  * @return void
  *
  * @since  0.0.1
  */
-function saveFiles(\stdClass $elang)
+function saveFiles(\stdClass $elang, \mod_elang_mod_form $mform)
 {
 	global $DB;
 
@@ -675,81 +213,51 @@ function saveFiles(\stdClass $elang)
 	$DB->delete_records('elang_cues', array('id_elang' => $id));
 	$DB->delete_records('elang_users', array('id_elang' => $id));
 
-	$fs = get_file_storage();
-	$files = $fs->get_area_files($context->id, 'mod_elang', 'subtitle', 0);
+	$cue = new \stdClass;
 
-	foreach ($files as $file)
+	foreach ($mform->getVtt()->getCues() as $i => $elt)
 	{
-		if ($file->get_source())
+		$cue->id_elang = $id;
+		$text = strip_tags($elt->getText());
+
+		$title = preg_replace('/(\[[^\]]*\]|{[^}]*})/', '...', $text);
+
+		if (mb_strlen($title, 'UTF-8') > $elang->titlelength)
 		{
-			$contents = $file->get_content();
+			$cue->title = preg_replace('/ [^ ]*$/', ' ...', mb_substr($title, 0, $elang->titlelength, 'UTF-8'));
+		}
+		else
+		{
+			$cue->title = $title;
+		}
 
-			// Detect bom
-			$bom = pack("CCC", 0xef, 0xbb, 0xbf);
+		$cue->begin	= $elt->getStartMS();
+		$cue->end = $elt->getStopMS();
+		$cue->number = $i + 1;
+		$texts = preg_split('/(\[[^\]]*\]|{[^}]*})/', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
+		$data = array();
 
-			if (0 == strncmp($contents, $bom, 3))
+		foreach ($texts as $text)
+		{
+			if (isset($text[0]))
 			{
-				$contents = substr($contents, 3);
-			}
-
-			$vtt = new WebVTT($contents);
-
-			$cue = new \stdClass;
-
-			foreach ($vtt->getCueList() as $i => $elt)
-			{
-				$cue->id_elang = $id;
-				$title = $elt->getTitle();
-				$text = strip_tags($elt->getText());
-
-				if (empty($title) || is_numeric($title))
+				if ($text[0] == '[' && $text[strlen($text) - 1] == ']')
 				{
-					$title = preg_replace('/(\[[^\]]*\]|{[^}]*})/', '...', $text);
-
-					if (mb_strlen($title, 'UTF-8') > $elang->titlelength)
-					{
-						$cue->title = preg_replace('/ [^ ]*$/', ' ...', mb_substr($title, 0, $elang->titlelength, 'UTF-8'));
-					}
-					else
-					{
-						$cue->title = $title;
-					}
+					$data[] = array('type' => 'input', 'content' => substr($text, 1, strlen($text) - 2), 'order' => $i++, 'help' => true);
+				}
+				elseif ($text[0] == '{' && $text[strlen($text) - 1] == '}')
+				{
+					$data[] = array('type' => 'input', 'content' => substr($text, 1, strlen($text) - 2), 'order' => $i++, 'help' => false);
 				}
 				else
 				{
-					$cue->title	= $title;
+					$data[] = array('type' => 'text', 'content' => $text);
 				}
-
-				$cue->begin	= $elt->getBegin();
-				$cue->end = $elt->getend();
-				$cue->number = $i + 1;
-				$texts = preg_split('/(\[[^\]]*\]|{[^}]*})/', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
-				$data = array();
-				$i = 1;
-
-				foreach ($texts as $text)
-				{
-					if (isset($text[0]))
-					{
-						if ($text[0] == '[' && $text[strlen($text) - 1] == ']')
-						{
-							$data[] = array('type' => 'input', 'content' => substr($text, 1, strlen($text) - 2), 'order' => $i++, 'help' => true);
-						}
-						elseif ($text[0] == '{' && $text[strlen($text) - 1] == '}')
-						{
-							$data[] = array('type' => 'input', 'content' => substr($text, 1, strlen($text) - 2), 'order' => $i++, 'help' => false);
-						}
-						else
-						{
-							$data[] = array('type' => 'text', 'content' => $text);
-						}
-					}
-				}
-
-				$cue->json = json_encode($data);
-				$DB->insert_record('elang_cues', $cue);
 			}
 		}
+
+		$cue->json = json_encode($data);
+		$DB->insert_record('elang_cues', $cue);
 	}
 }
 

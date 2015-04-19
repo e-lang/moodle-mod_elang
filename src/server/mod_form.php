@@ -27,6 +27,25 @@ require_once $CFG->dirroot . '/course/moodleform_mod.php';
 class mod_elang_mod_form extends moodleform_mod
 {
 	/**
+	 * The \Captioning\Format\WebvttFile object is successfull
+	 *
+	 * @since  0.0.1
+	 */
+	protected $vtt;
+
+	/**
+	 * Get the vtt object
+	 *
+	 * @return  \Captioning\Format\WebvttFile  The vtt object
+	 *
+	 * @since  0.0.1
+	 */
+	public function getVtt()
+	{
+		return $this->vtt;
+	}
+
+	/**
 	 * Defines forms elements
 	 *
 	 * @return  void
@@ -234,5 +253,78 @@ class mod_elang_mod_form extends moodleform_mod
 			$default_values['top'] = $config->top;
 			$default_values['size'] = $config->size;
 		}
+	}
+
+	/**
+	 * Perform minimal validation on the settings form
+	 *
+	 * @param   array  $data   Data to be validated
+	 * @param   array  $files  Files to be validated
+	 *
+	 * @return  array
+	 */
+	public function validation($data, $files)
+	{
+		$errors = parent::validation($data, $files);
+
+		global $USER;
+		$fs = get_file_storage();
+		$context = context_user::instance($USER->id);
+		$files = $fs->get_area_files($context->id, 'user', 'draft', $data['subtitle'], 'id DESC', false);
+
+		$noerror = false;
+
+		foreach ($files as $file)
+		{
+			try
+			{
+				$filepath = $file->copy_content_to_temp();
+			}
+			catch (\Exception $e)
+			{
+				$errors['subtitle'] = get_string('subtitleunabletosave', 'elang');
+				break;
+			}
+
+			try
+			{
+				$caption = new \Captioning\Format\WebvttFile($filepath);
+				$noerror = true;
+				break;
+			}
+			catch (\Exception $e)
+			{
+			}
+
+			try
+			{
+				$caption = new \Captioning\Format\SubripFile($filepath);
+				$noerror = true;
+				break;
+			}
+			catch (\Exception $e)
+			{
+			}
+		}
+
+		if ($noerror)
+		{
+			$this->vtt = new \Captioning\Format\WebvttFile;
+
+			foreach ($caption->getCues() as $cue)
+			{
+				$this->vtt->addCue(
+					$cue->getText(),
+					\Captioning\Format\WebvttCue::ms2tc($cue->getStartMS()),
+					\Captioning\Format\WebvttCue::ms2tc($cue->getStopMS())
+				);
+			}
+		}
+		elseif (!isset($errors['subtitle']))
+		{
+			$errors['subtitle'] = get_string('subtitleinvalidformat', 'elang');
+		}
+
+		return $errors;
 	}
 }

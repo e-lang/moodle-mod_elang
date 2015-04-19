@@ -93,7 +93,7 @@ function elang_add_instance(stdClass $elang, mod_elang_mod_form $mform = null)
 
 	// Storage of files
 	require_once dirname(__FILE__) . '/locallib.php';
-	Elang\saveFiles($elang);
+	Elang\saveFiles($elang, $mform);
 
 	return $elang->id;
 }
@@ -138,7 +138,7 @@ function elang_update_instance(stdClass $elang, mod_elang_mod_form $mform = null
 	{
 		// Storage of files
 		require_once dirname(__FILE__) . '/locallib.php';
-		Elang\saveFiles($elang);
+		Elang\saveFiles($elang, $mform);
 
 		return true;
 	}
@@ -528,7 +528,7 @@ function elang_pluginfile($course, $cm, $context, $filearea, array $args, $force
 
 	if ($filearea == 'subtitle')
 	{
-		$vtt = new Elang\WebVTT;
+		$vtt = new \Captioning\Format\WebvttFile;
 
 		$idlang = $cm->instance;
 		$records = $DB->get_records('elang_cues', array('id_elang' => $idlang), 'begin ASC');
@@ -549,16 +549,18 @@ function elang_pluginfile($course, $cm, $context, $filearea, array $args, $force
 				$data = array();
 			}
 
-			$cue = new Elang\Cue;
+			$cue = new \Captioning\Format\WebvttCue(
+				\Captioning\Format\WebvttCue::ms2tc($record->begin),
+				\Captioning\Format\WebvttCue::ms2tc($record->end),
+				Elang\generateCueText(json_decode($record->json, true), $data, '-', $repeatedunderscore)
+			);
+
 			$i++;
-			$cue->setTitle($i);
-			$cue->setBegin($record->begin);
-			$cue->setEnd($record->end);
-			$cue->setText(Elang\generateCueText(json_decode($record->json, true), $data, '-', $repeatedunderscore));
+			$cue->setIdentifier($i);
 			$vtt->addCue($cue);
 		}
 
-		send_file((string) $vtt, end($args), 0, 0, true, false, 'text/vtt');
+		send_file($vtt->build()->getFileContent(), end($args), 0, 0, true, false, 'text/vtt');
 	}
 	elseif ($filearea == 'pdf')
 	{

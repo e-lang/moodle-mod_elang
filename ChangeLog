@@ -25,6 +25,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+2015-04-19  Christophe Demko <chdemko@gmail.com>
+ ^ Use https://github.com/captioning/captioning library.
+
 2015-04-17  Christophe Demko <chdemko@gmail.com>
  ^ Move to composer and bower
 
