@@ -25,6 +25,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+2015-04-21  Christophe Demko <chdemko@gmail.com>
+ ^ Change sed command to work with MAC OS
+
 2015-04-19  Christophe Demko <chdemko@gmail.com>
  ^ Use https://github.com/captioning/captioning library.
 
