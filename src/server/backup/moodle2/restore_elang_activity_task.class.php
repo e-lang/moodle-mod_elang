@@ -1,24 +1,4 @@
 <?php
-/* This file is part of Moodle - http://moodle.org/
-
- Moodle is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
-
- Moodle is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
- along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-
-
-	// Because it exists (must)
-require_once $CFG->dirroot . '/mod/elang/backup/moodle2/restore_elang_stepslib.php';
 /**
  * elang restore task that provides all the settings 
  * and steps to perform one complete restore of the activity
@@ -28,7 +8,21 @@ require_once $CFG->dirroot . '/mod/elang/backup/moodle2/restore_elang_stepslib.p
  * @copyright   2013-2015 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
- * @since       0.0.1
+ * @since       1.1.0
+ */
+	// Because it exists (must)
+require_once $CFG->dirroot . '/mod/elang/backup/moodle2/restore_elang_stepslib.php';
+
+/**
+ * elang restore task that provides all the settings 
+ * and steps to perform one complete restore of the activity
+ *
+ * @package     Mod
+ * @subpackage  elang
+ * @copyright   2013-2015 University of La Rochelle, France
+ * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ *
+ * @since       1.1.0
  */
 class restore_elang_activity_task extends restore_activity_task
 {

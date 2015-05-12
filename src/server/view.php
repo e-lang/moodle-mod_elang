@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Prints a particular instance of elang
  *
