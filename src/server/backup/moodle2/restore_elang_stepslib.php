@@ -35,14 +35,14 @@ class restore_elang_activity_structure_step extends restore_activity_structure_s
 	 */
 	protected function define_structure()
 	{
-	$paths = array();
-	$userinfo = $this->get_setting_value('userinfo');
+		$paths = array();
+		$userinfo = $this->get_setting_value('userinfo');
 
-	$paths[] = new restore_path_element('elang', '/activity/elang');
-	$paths[] = new restore_path_element('elang_cue', '/activity/elang/cues/cue');
+		$paths[] = new restore_path_element('elang', '/activity/elang');
+		$paths[] = new restore_path_element('elang_cue', '/activity/elang/cues/cue');
 
-	// Return the paths wrapped into standard activity structure
-	return $this->prepare_activity_structure($paths);
+		// Return the paths wrapped into standard activity structure
+		return $this->prepare_activity_structure($paths);
 	}
 
 	/**
@@ -54,21 +54,21 @@ class restore_elang_activity_structure_step extends restore_activity_structure_s
 	 */
 	protected function process_elang($data)
 	{
-	global $DB;
+		global $DB;
 
-	$data = (object) $data;
-	$oldid = $data->id;
-	$data->course = $this->get_courseid();
+		$data = (object) $data;
+		$oldid = $data->id;
+		$data->course = $this->get_courseid();
 
-	$data->timeopen = $this->apply_date_offset($data->timeopen);
-	$data->timeclose = $this->apply_date_offset($data->timeclose);
-	$data->timemodified = $this->apply_date_offset($data->timemodified);
+		$data->timeopen = $this->apply_date_offset($data->timeopen);
+		$data->timeclose = $this->apply_date_offset($data->timeclose);
+		$data->timemodified = $this->apply_date_offset($data->timemodified);
 
-	// Insert the elang record
-	$newitemid = $DB->insert_record('elang', $data);
+		// Insert the elang record
+		$newitemid = $DB->insert_record('elang', $data);
 
-	// Immediately after inserting "activity" record, call this
-	$this->apply_activity_instance($newitemid);
+		// Immediately after inserting "activity" record, call this
+		$this->apply_activity_instance($newitemid);
 	}
 
 	/**
@@ -80,16 +80,16 @@ class restore_elang_activity_structure_step extends restore_activity_structure_s
 	 */
 	protected function process_elang_cue($data)
 	{
-	global $DB;
+		global $DB;
 
-	$data = (object) $data;
-	$oldid = $data->id;
+		$data = (object) $data;
+		$oldid = $data->id;
 
-	$data->id_elang = $this->get_new_parentid('elang');
-	$data->timemodified = $this->apply_date_offset($data->timemodified);
+		$data->id_elang = $this->get_new_parentid('elang');
+		$data->timemodified = $this->apply_date_offset($data->timemodified);
 
-	$newitemid = $DB->insert_record('elang_cues', $data);
-	$this->set_mapping('elang_cue', $oldid, $newitemid);
+		$newitemid = $DB->insert_record('elang_cues', $data);
+		$this->set_mapping('elang_cue', $oldid, $newitemid);
 	}
 
 	/**
@@ -99,8 +99,8 @@ class restore_elang_activity_structure_step extends restore_activity_structure_s
 	 */
 	protected function after_execute()
 	{
-	// Add elang related files, no need to match by itemname (just internally handled context)
-	$this->add_related_files('mod_elang', 'videos', null);
-	$this->add_related_files('mod_elang', 'subtitle', null);
+		// Add elang related files, no need to match by itemname (just internally handled context)
+		$this->add_related_files('mod_elang', 'videos', null);
+		$this->add_related_files('mod_elang', 'subtitle', null);
 	}
 }

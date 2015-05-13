@@ -33,7 +33,7 @@ class restore_elang_activity_task extends restore_activity_task
 	 */
 	protected function define_my_settings()
 	{
-	// No particular settings for this activity
+		// No particular settings for this activity
 	}
 
 	/**
@@ -43,8 +43,8 @@ class restore_elang_activity_task extends restore_activity_task
 	 */
 	protected function define_my_steps()
 	{
-	// Our elang only has one structure step
-	$this->add_step(new restore_elang_activity_structure_step('elang_structure', 'elang.xml'));
+		// Our elang only has one structure step
+		$this->add_step(new restore_elang_activity_structure_step('elang_structure', 'elang.xml'));
 	}
 
 	/**
@@ -55,9 +55,9 @@ class restore_elang_activity_task extends restore_activity_task
 	 */
 	static public function define_decode_contents()
 	{
-	$contents = array();
+		$contents = array();
 
-	return $contents;
+		return $contents;
 	}
 
 	/**
@@ -68,12 +68,12 @@ class restore_elang_activity_task extends restore_activity_task
 	 */
 	static public function define_decode_rules()
 	{
-	$rules = array();
+		$rules = array();
 
-	$rules[] = new restore_decode_rule('ELANGVIEWBYID', '/mod/elang/view.php?id=$1', 'course_module');
-	$rules[] = new restore_decode_rule('ELANGINDEX', '/mod/elang/index.php?id=$1', 'course');
+		$rules[] = new restore_decode_rule('ELANGVIEWBYID', '/mod/elang/view.php?id=$1', 'course_module');
+		$rules[] = new restore_decode_rule('ELANGINDEX', '/mod/elang/index.php?id=$1', 'course');
 
-	return $rules;
+		return $rules;
 	}
 
 	/**
@@ -86,16 +86,16 @@ class restore_elang_activity_task extends restore_activity_task
 	 */
 	static public function define_restore_log_rules()
 	{
-	$rules = array();
+		$rules = array();
 
-	$rules[] = new restore_log_rule('elang', 'add', 'view.php?id={course_module}', '{elang}');
-	$rules[] = new restore_log_rule('elang', 'update', 'view.php?id={course_module}', '{elang}');
-	$rules[] = new restore_log_rule('elang', 'view', 'view.php?id={course_module}', '{elang}');
-	$rules[] = new restore_log_rule('elang', 'choose', 'view.php?id={course_module}', '{elang}');
-	$rules[] = new restore_log_rule('elang', 'choose again', 'view.php?id={course_module}', '{elang}');
-	$rules[] = new restore_log_rule('elang', 'report', 'report.php?id={course_module}', '{elang}');
+		$rules[] = new restore_log_rule('elang', 'add', 'view.php?id={course_module}', '{elang}');
+		$rules[] = new restore_log_rule('elang', 'update', 'view.php?id={course_module}', '{elang}');
+		$rules[] = new restore_log_rule('elang', 'view', 'view.php?id={course_module}', '{elang}');
+		$rules[] = new restore_log_rule('elang', 'choose', 'view.php?id={course_module}', '{elang}');
+		$rules[] = new restore_log_rule('elang', 'choose again', 'view.php?id={course_module}', '{elang}');
+		$rules[] = new restore_log_rule('elang', 'report', 'report.php?id={course_module}', '{elang}');
 
-	return $rules;
+		return $rules;
 	}
 
 	/**
@@ -111,12 +111,12 @@ class restore_elang_activity_task extends restore_activity_task
 	 */
 	static public function define_restore_log_rules_for_course()
 	{
-	$rules = array();
+		$rules = array();
 
-// Fix old wrong uses (missing extension)
-	$rules[] = new restore_log_rule('elang', 'view all', 'index?id={course}', null, null, null, 'index.php?id={course}');
-	$rules[] = new restore_log_rule('elang', 'view all', 'index.php?id={course}', null);
+	// Fix old wrong uses (missing extension)
+		$rules[] = new restore_log_rule('elang', 'view all', 'index?id={course}', null, null, null, 'index.php?id={course}');
+		$rules[] = new restore_log_rule('elang', 'view all', 'index.php?id={course}', null);
 
-	return $rules;
+		return $rules;
 	}
 }

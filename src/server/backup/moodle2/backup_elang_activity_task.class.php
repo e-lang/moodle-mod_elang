@@ -43,7 +43,7 @@ class backup_elang_activity_task extends backup_activity_task
 	 */
 	protected function define_my_settings()
 	{
-	// No particular settings for this activity
+		// No particular settings for this activity
 	}
 
 	/**
@@ -66,18 +66,18 @@ class backup_elang_activity_task extends backup_activity_task
 	 */
 	static public function encode_content_links($content)
 	{
-	global $CFG;
+		global $CFG;
 
-	$base = preg_quote($CFG->wwwroot, "/");
+		$base = preg_quote($CFG->wwwroot, "/");
 
-	// Link to the list of elang
+		// Link to the list of elang
 
-	$search  = "/($base\/mod\/elang\/index.php\?id=)([0-9]+)/";
-	$content = preg_replace($search, '$@ELANGINDEX*$2@$', $content);
+		$search  = "/($base\/mod\/elang\/index.php\?id=)([0-9]+)/";
+		$content = preg_replace($search, '$@ELANGINDEX*$2@$', $content);
 
-	$search  = "/($base\/mod\/book\/index.php\?id=)([0-9]+)/";
-	$content = preg_replace($search, '$@ELANGVIEWBYID*$2@$', $content);
+		$search  = "/($base\/mod\/book\/index.php\?id=)([0-9]+)/";
+		$content = preg_replace($search, '$@ELANGVIEWBYID*$2@$', $content);
 
-	return $content;
+		return $content;
 	}
 }
