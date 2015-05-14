@@ -10,7 +10,8 @@
  *
  * @since       1.1.0
  */
-	// Because it exists (must)
+
+// Because it exists (must)
 require_once $CFG->dirroot . '/mod/elang/backup/moodle2/restore_elang_stepslib.php';
 
 /**
@@ -113,7 +114,7 @@ class restore_elang_activity_task extends restore_activity_task
 	{
 		$rules = array();
 
-	// Fix old wrong uses (missing extension)
+		// Fix old wrong uses (missing extension)
 		$rules[] = new restore_log_rule('elang', 'view all', 'index?id={course}', null, null, null, 'index.php?id={course}');
 		$rules[] = new restore_log_rule('elang', 'view all', 'index.php?id={course}', null);
 

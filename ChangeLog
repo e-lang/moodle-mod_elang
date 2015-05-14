@@ -25,6 +25,13 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+
+2015-05-14  Christophe Demko <chdemko@gmail.com>
+ # Fix some PHP notice and some indents
+
+2015-05-13  Gabriel 
+ + Implement Backup/Restore feature
+
 2015-04-21  Christophe Demko <chdemko@gmail.com>
  ^ Change sed command to work with MAC OS
 

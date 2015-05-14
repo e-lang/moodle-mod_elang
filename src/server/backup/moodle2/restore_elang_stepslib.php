@@ -48,7 +48,7 @@ class restore_elang_activity_structure_step extends restore_activity_structure_s
 	/**
 	 * Create a copy of former activity, add it to DB
 	 *
-	 * @param   string  $data  The data making the activity.
+	 * @param   array  $data  The data making the activity.
 	 * 
 	 * @return void
 	 */
@@ -60,8 +60,6 @@ class restore_elang_activity_structure_step extends restore_activity_structure_s
 		$oldid = $data->id;
 		$data->course = $this->get_courseid();
 
-		$data->timeopen = $this->apply_date_offset($data->timeopen);
-		$data->timeclose = $this->apply_date_offset($data->timeclose);
 		$data->timemodified = $this->apply_date_offset($data->timemodified);
 
 		// Insert the elang record
@@ -74,7 +72,7 @@ class restore_elang_activity_structure_step extends restore_activity_structure_s
 	/**
 	 * Create a copy of former cues and add them to DB
 	 *
-	 * @param   string  $data  The data making the cues.
+	 * @param   array  $data  The data making the cues.
 	 *
 	 * @return void
 	 */
@@ -86,7 +84,6 @@ class restore_elang_activity_structure_step extends restore_activity_structure_s
 		$oldid = $data->id;
 
 		$data->id_elang = $this->get_new_parentid('elang');
-		$data->timemodified = $this->apply_date_offset($data->timemodified);
 
 		$newitemid = $DB->insert_record('elang_cues', $data);
 		$this->set_mapping('elang_cue', $oldid, $newitemid);

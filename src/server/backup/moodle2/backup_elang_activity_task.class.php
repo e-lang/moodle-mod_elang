@@ -15,10 +15,10 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-	// Because it exists (must)
+// Because it exists (must)
 require_once $CFG->dirroot . '/mod/elang/backup/moodle2/backup_elang_stepslib.php';
 
-	// Because it exists (optional)
+// Because it exists (optional)
 require_once $CFG->dirroot . '/mod/elang/backup/moodle2/backup_elang_settingslib.php';
 
 /**
