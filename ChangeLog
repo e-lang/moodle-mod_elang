@@ -27,6 +27,9 @@ $ -> Language fix or change
 
 
 2015-05-14  Christophe Demko <chdemko@gmail.com>
+ # Apply date offset to datecreated
+
+2015-05-14  Christophe Demko <chdemko@gmail.com>
  # Fix some PHP notice and some indents
 
 2015-05-13  Gabriel Audignon-Le Louët <metsanrah@voila.fr>

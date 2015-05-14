@@ -61,6 +61,7 @@ class restore_elang_activity_structure_step extends restore_activity_structure_s
 		$data->course = $this->get_courseid();
 
 		$data->timemodified = $this->apply_date_offset($data->timemodified);
+		$data->timecreated = $this->apply_date_offset($data->timecreated);
 
 		// Insert the elang record
 		$newitemid = $DB->insert_record('elang', $data);
