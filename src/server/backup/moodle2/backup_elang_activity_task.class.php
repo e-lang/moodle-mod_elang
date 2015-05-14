@@ -1,11 +1,12 @@
 <?php
+
 /**
  * Tasks executed for elang backup, using stepslib
  *
  * You can have a rather longer description of the file as well,
  * if you like, and it can span multiple lines.
  *
- * @package     Mod
+ * @package     mod
  * @subpackage  elang
  * @copyright   2013-2015 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
@@ -24,15 +25,7 @@ require_once $CFG->dirroot . '/mod/elang/backup/moodle2/backup_elang_settingslib
 /**
  * Tasks executed for elang backup, using stepslib
  *
- * You can have a rather longer description of the file as well,
- * if you like, and it can span multiple lines.
- *
- * @package     Mod
- * @subpackage  elang
- * @copyright   2013-2015 University of La Rochelle, France
- * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
- *
- * @since       1.1.0
+ * @since  1.1.0
  */
 class backup_elang_activity_task extends backup_activity_task
 {

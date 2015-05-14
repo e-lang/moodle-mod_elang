@@ -1,9 +1,10 @@
 <?php
+
 /**
  * elang restore task that provides all the settings 
  * and steps to perform one complete restore of the activity
  *
- * @package     Mod
+ * @package     mod
  * @subpackage  elang
  * @copyright   2013-2015 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
@@ -18,12 +19,7 @@ require_once $CFG->dirroot . '/mod/elang/backup/moodle2/restore_elang_stepslib.p
  * elang restore task that provides all the settings 
  * and steps to perform one complete restore of the activity
  *
- * @package     Mod
- * @subpackage  elang
- * @copyright   2013-2015 University of La Rochelle, France
- * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
- *
- * @since       1.1.0
+ * @since  1.1.0
  */
 class restore_elang_activity_task extends restore_activity_task
 {
