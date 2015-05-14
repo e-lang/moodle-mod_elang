@@ -41,12 +41,10 @@ function elang_supports($feature)
 		case FEATURE_SHOW_DESCRIPTION:
 			return true;
 
-/**
 		// Usefull for backup, restore and clone action
-		// TODO: implement backup
 		case FEATURE_BACKUP_MOODLE2:
 			return true;
-*/
+
 		default:
 			return null;
 	}
