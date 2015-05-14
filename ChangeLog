@@ -29,7 +29,7 @@ $ -> Language fix or change
 2015-05-14  Christophe Demko <chdemko@gmail.com>
  # Fix some PHP notice and some indents
 
-2015-05-13  Gabriel Audignong-Le Louët <metsanrah@voila.fr>
+2015-05-13  Gabriel Audignon-Le Louët <metsanrah@voila.fr>
  + Implement Backup/Restore feature
 
 2015-04-21  Christophe Demko <chdemko@gmail.com>
