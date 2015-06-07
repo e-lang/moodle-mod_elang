@@ -48,7 +48,7 @@ enyo.kind({
 			components: [
 				{
 					tag: 'label',
-					content: $L('Limit per page')
+					content: $L('limitperpage')
 				},
 				{
 					name: 'limit',
@@ -71,14 +71,14 @@ enyo.kind({
 			classes: 'table table-bordered table-condensed table-striped',
 			components: [
 				{
-					tag: 'caption', content: $L('Cue Listing')},
+					tag: 'caption', content: $L('cuelisting')},
 				{
 					tag: 'thead',
 					components: [
 						{
 							tag: 'tr',
 							components: [
-								{tag: 'th', attributes: {width: '7%'}, content: $L('#')},
+								{tag: 'th', attributes: {width: '7%'}, content: $L('number')},
 								{tag: 'th', attributes: {width: '7%'}, content: $L('Status')},
 								{tag: 'th', content: $L('Title')}
 							]

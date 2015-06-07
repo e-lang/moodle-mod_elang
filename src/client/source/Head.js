@@ -43,7 +43,7 @@ enyo.kind({
 							components: [
 								{tag :'span', classes: 'glyphicon glyphicon-print glyphicon-white', "aria-hidden": "true"},
 								{tag :'span', content: ' '},
-								{tag: 'span', content: $L('Get a pdf version')}
+								{tag: 'span', content: $L('getpdf')}
 							]
 						}
 					]

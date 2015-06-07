@@ -114,7 +114,7 @@ $config = get_config('elang');
 			}
 			else
 			{
-				alert($L('Your browser is not compatible with files subtitle on HTML5 video'));
+				alert($L('notcompatible_with_HTML5'));
 			}
 		</script>
 	</body>
