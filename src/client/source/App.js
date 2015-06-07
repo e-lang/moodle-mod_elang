@@ -268,7 +268,7 @@ enyo.kind({
 				this.$.modal.setData($L('Error'), 'danger', error, $L('Request failed')).render().show();
 				break;
 			case 400:
-				this.$.modal.setData($L('Error'), 'danger', error, $L('Bad Request')).render().show();
+				this.$.modal.setData($L('Error'), 'danger', error, $L('badrequest')).render().show();
 				break;
 			case 401:
 				this.$.modal.setData($L('Error'), 'danger', error, $L('Unauthorized')).render().show();
@@ -277,19 +277,19 @@ enyo.kind({
 				this.$.modal.setData($L('Error'), 'danger', error, $L('Forbidden')).render().show();
 				break;
 			case 404:
-				this.$.modal.setData($L('Error'), 'danger', error, $L('Not Found')).render().show();
+				this.$.modal.setData($L('Error'), 'danger', error, $L('notfound')).render().show();
 				break;
 			case 500:
-				this.$.modal.setData($L('Error'), 'danger', error, $L('Internal Server Error')).render().show();
+				this.$.modal.setData($L('Error'), 'danger', error, $L('internal_error')).render().show();
 				break;
 			case 501:
-				this.$.modal.setData($L('Error'), 'danger', error, $L('Not Implemented')).render().show();
+				this.$.modal.setData($L('Error'), 'danger', error, $L('notimplemented')).render().show();
 				break;
 			case 503:
-				this.$.modal.setData($L('Error'), 'danger', error, $L('Service Unavailable')).render().show();
+				this.$.modal.setData($L('Error'), 'danger', error, $L('serviceunavailable')).render().show();
 				break;
 			case 'timeout':
-				this.$.modal.setData($L('Error'), 'danger', $L('Timeout'), $L('Timeout with the server')).render().show();
+				this.$.modal.setData($L('Error'), 'danger', $L('Timeout'), $L('timeout_server')).render().show();
 				break;
 		}
 
