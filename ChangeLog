@@ -32,6 +32,7 @@ $ -> Language fix or change
  + Add userinfo in backup/restore process
  # Change moodle version detection for logging API
  ^ Convert string ids
+ ^ Complete modulename_help strings
 
 2015-05-14  Christophe Demko <chdemko@gmail.com>
  # Apply date offset to datecreated
