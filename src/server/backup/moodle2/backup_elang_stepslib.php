@@ -29,7 +29,6 @@ class backup_elang_activity_structure_step extends backup_activity_structure_ste
 		$userinfo = $this->get_setting_value('userinfo');
 
 		// Define each element separated
-
 		$elang = new backup_nested_element(
 			'elang',
 			array('id'),
@@ -44,21 +43,29 @@ class backup_elang_activity_structure_step extends backup_activity_structure_ste
 				'options'
 			)
 		);
-
 		$cues = new backup_nested_element('cues');
-
 		$cue = new backup_nested_element('cue', array('id'), array('id_elang', 'number', 'begin', 'end', 'title', 'json'));
+		$users = new backup_nested_element('users');
+		$user = new backup_nested_element('user', array('id'), array('id_user', 'json'));
 
 		// Build the tree
 		$elang->add_child($cues);
 		$cues->add_child($cue);
+		$cue->add_child($users);
+		$users->add_child($user);
 
 		// Define sources
 		$elang->set_source_table('elang', array('id' => backup::VAR_ACTIVITYID));
-
 		$cue->set_source_table('elang_cues', array('id_elang' => backup::VAR_PARENTID), 'id ASC');
 
+		// Define source for users if userinfo is set
+		if ($userinfo)
+		{
+			$user->set_source_table('elang_users', array('id_cue' => backup::VAR_PARENTID), 'id ASC');
+		}
+
 		// Define id annotations
+		$user->annotate_ids('user', 'id_user');
 
 		// Define file annotations-These files areas haven't itemid
 		$elang->annotate_files('mod_elang', 'videos', null);

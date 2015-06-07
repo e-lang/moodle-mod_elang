@@ -31,6 +31,11 @@ class restore_elang_activity_structure_step extends restore_activity_structure_s
 		$paths[] = new restore_path_element('elang', '/activity/elang');
 		$paths[] = new restore_path_element('elang_cue', '/activity/elang/cues/cue');
 
+		if ($userinfo)
+		{
+			$paths[] = new restore_path_element('elang_user', '/activity/elang/cues/cue/users/user');
+		}
+
 		// Return the paths wrapped into standard activity structure
 		return $this->prepare_activity_structure($paths);
 	}
@@ -78,6 +83,28 @@ class restore_elang_activity_structure_step extends restore_activity_structure_s
 
 		$newitemid = $DB->insert_record('elang_cues', $data);
 		$this->set_mapping('elang_cue', $oldid, $newitemid);
+	}
+
+	/**
+	 * Create a copy of former users and add them to DB
+	 *
+	 * @param   array  $data  The data making the users.
+	 *
+	 * @return void
+	 */
+	protected function process_elang_user($data)
+	{
+		global $DB;
+
+		$data = (object) $data;
+		$oldid = $data->id;
+
+		$data->id_elang = $this->get_new_parentid('elang');
+		$data->id_cue = $this->get_new_parentid('elang_cue');
+		$data->id_user = $this->get_mappingid('user', $data->id_user);
+
+		$newitemid = $DB->insert_record('elang_users', $data);
+		$this->set_mapping('elang_user', $oldid, $newitemid);
 	}
 
 	/**
