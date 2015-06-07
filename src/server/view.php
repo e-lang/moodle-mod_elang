@@ -41,7 +41,7 @@ $context = context_module::instance($cm->id);
 require_capability('mod/elang:view', $context);
 
 // Add a view log
-if (version_compare($version, '2.6') < 0)
+if (version_compare($version, '2.7') < 0)
 {
 	add_to_log($course->id, 'elang', 'view', 'view.php?id=' . $cm->id, $elang->id, $cm->id);
 }

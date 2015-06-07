@@ -350,7 +350,7 @@ switch ($task)
 				)
 			);
 
-			if (version_compare($version, '2.6') < 0)
+			if (version_compare($version, '2.7') < 0)
 			{
 				add_to_log($course->id, 'elang', 'add check', 'view.php?id=' . $cm->id, $check_id, $cm->id);
 			}
@@ -471,7 +471,7 @@ switch ($task)
 			)
 		);
 
-		if (version_compare($version, '2.6') < 0)
+		if (version_compare($version, '2.7') < 0)
 		{
 			add_to_log($course->id, 'elang', 'view help', 'view.php?id=' . $cm->id, $help_id, $cm->id);
 		}

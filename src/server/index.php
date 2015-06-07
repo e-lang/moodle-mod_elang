@@ -30,7 +30,7 @@ require_course_login($course);
 $version = moodle_major_version(true);
 
 // Add a view all log
-if (version_compare($version, '2.6') < 0)
+if (version_compare($version, '2.7') < 0)
 {
 	add_to_log($course->id, 'elang', 'view all', 'index.php?id=' . $course->id, '');
 }
