@@ -89,6 +89,7 @@ class restore_elang_activity_structure_step extends restore_activity_structure_s
 	{
 		// Add elang related files, no need to match by itemname (just internally handled context)
 		$this->add_related_files('mod_elang', 'videos', null);
+		$this->add_related_files('mod_elang', 'poster', null);
 		$this->add_related_files('mod_elang', 'subtitle', null);
 	}
 }

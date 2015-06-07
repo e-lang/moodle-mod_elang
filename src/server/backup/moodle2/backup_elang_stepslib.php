@@ -47,7 +47,7 @@ class backup_elang_activity_structure_step extends backup_activity_structure_ste
 
 		$cues = new backup_nested_element('cues');
 
-		$cue = new backup_nested_element('cue', array('id'), array('id_elang', 'number', 'begin', 'end', 'title','json'));
+		$cue = new backup_nested_element('cue', array('id'), array('id_elang', 'number', 'begin', 'end', 'title', 'json'));
 
 		// Build the tree
 		$elang->add_child($cues);
@@ -62,9 +62,10 @@ class backup_elang_activity_structure_step extends backup_activity_structure_ste
 
 		// Define file annotations-These files areas haven't itemid
 		$elang->annotate_files('mod_elang', 'videos', null);
+		$elang->annotate_files('mod_elang', 'poster', null);
 		$elang->annotate_files('mod_elang', 'subtitle', null);
 
-		// Return the root element (choice), wrapped into standard activity structure
+		// Return the root element (elang), wrapped into standard activity structure
 		return $this->prepare_activity_structure($elang);
 	}
 }
