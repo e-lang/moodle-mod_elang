@@ -80,15 +80,8 @@ $config = get_config('elang');
 			var Elang = Elang || {};
 			Elang.strings =
 <?php
-	if (debugging('', DEBUG_DEVELOPER))
-	{
-		echo '{}';
-	}
-	else
-	{
-		include dirname(__FILE__) . '/lang/en/elang.php';
-		echo json_encode(get_strings(array_keys($string), 'elang'));
-	}
+	include dirname(__FILE__) . '/lang/en/elang.php';
+	echo json_encode(get_strings(array_keys($string), 'elang'));
 ?>;
 		</script>
 <?php if (file_exists(dirname(__FILE__) . '/build')): ?>

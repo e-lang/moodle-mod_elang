@@ -25,11 +25,13 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+
 2015-06-07  Christophe Demko <chdemko@gmail.com>
  ^ Change version number
  + Add poster file in backup/restore process
  + Add userinfo in backup/restore process
  # Change moodle version detection for logging API
+ ^ Convert string ids
 
 2015-05-14  Christophe Demko <chdemko@gmail.com>
  # Apply date offset to datecreated
