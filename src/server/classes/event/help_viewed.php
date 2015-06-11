@@ -89,7 +89,7 @@ class help_viewed extends \core\event\base
 			$this->courseid,
 			'elang',
 			'view help',
-			'view.php?id?id=' . $this->contextinstanceid,
+			'view.php?id=' . $this->contextinstanceid,
 			$this->objectid,
 			$this->contextinstanceid
 		);

@@ -82,7 +82,14 @@ class mod_elang_mod_form extends moodleform_mod
 		$mform->addHelpButton('name', 'elangname', 'elang');
 
 		// Adding the standard "intro" and "introformat" fields
-		$this->add_intro_editor($config->requiremodintro);
+		if (version_compare(moodle_major_version(true), '2.9', '>='))
+		{
+			$this->standard_intro_elements();
+		}
+		else
+		{
+			$this->add_intro_editor($config->requiremodintro);
+		}
 
 		// Adding the rest of elang settings, spreeading all them into this fieldset
 		$mform->addElement('header', 'elangfieldset', get_string('upload', 'elang'));

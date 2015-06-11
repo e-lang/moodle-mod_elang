@@ -30,4 +30,4 @@ $module->component = 'mod_elang';
 $module->release   = '@RELEASE@';
 
 // Maturity: MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC, MATURITY_STABLE
-$module->maturity  = MATURITY_STABLE;
+$module->maturity  = @MATURITY@;

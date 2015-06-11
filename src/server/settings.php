@@ -24,14 +24,18 @@ if ($ADMIN->fulltree)
 	$languages = Elang\getLanguages();
 
 	// General settings
-	$settings->add(
-		new admin_setting_configcheckbox(
-			'elang/requiremodintro',
-			get_string('requiremodintro', 'admin'),
-			get_string('configrequiremodintro', 'admin'),
-			1
-		)
-	);
+	if (version_compare(moodle_major_version(true), '2.8', '<'))
+	{
+		// This should be present only until Moodle 2.7.x
+		$settings->add(
+			new admin_setting_configcheckbox(
+				'elang/requiremodintro',
+				get_string('requiremodintro', 'admin'),
+				get_string('configrequiremodintro', 'admin'),
+				1
+			)
+		);
+	}
 
 	$settings->add(
 		new admin_setting_configtext(

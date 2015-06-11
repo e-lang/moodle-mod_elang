@@ -25,6 +25,10 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+----------------------------------------- rc1-1.1.0 -----------------------------------------
+
+2015-06-11  Christophe Demko <chdemko@gmail.com>
+ + Add report view for teacher
 
 2015-06-07  Christophe Demko <chdemko@gmail.com>
  ^ Change version number

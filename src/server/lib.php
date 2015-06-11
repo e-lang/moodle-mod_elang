@@ -373,8 +373,7 @@ function elang_get_coursemodule_info($coursemodule)
 
 	require_once dirname(__FILE__) . '/locallib.php';
 	$info->name = Elang\generateTitle($elang, $options);
-
-	$info->onclick = "window.open('" . new moodle_url('/mod/elang/view.php', array('id' => $coursemodule->id)) . "'); return false;";
+	$context = context_module::instance($coursemodule->id);
 
 	if ($coursemodule->showdescription)
 	{

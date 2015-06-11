@@ -89,7 +89,7 @@ class check_added extends \core\event\base
 			$this->courseid,
 			'elang',
 			'add check',
-			'view.php?id?id=' . $this->contextinstanceid,
+			'view.php?id=' . $this->contextinstanceid,
 			$this->objectid,
 			$this->contextinstanceid
 		);

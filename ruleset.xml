@@ -11,15 +11,15 @@
 	</rule>
 
 	<rule ref="Joomla.ControlStructures.ControlSignature">
-		<exclude-pattern>view.php</exclude-pattern>
+		<exclude-pattern>play.php</exclude-pattern>
 	</rule>
 
 	<rule ref="Joomla.WhiteSpace.ControlStructureSpacing">
-		<exclude-pattern>view.php</exclude-pattern>
+		<exclude-pattern>play.php</exclude-pattern>
 	</rule>
 
 	<rule ref="Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore">
-		<exclude-pattern>view.php</exclude-pattern>
+		<exclude-pattern>play.php</exclude-pattern>
 	</rule>
 
 	<rule ref="Generic.Files.LineLength.TooLong">

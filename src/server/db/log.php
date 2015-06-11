@@ -18,6 +18,7 @@ $logs = array(
 	array('module' => 'elang', 'action' => 'update', 'mtable' => 'elang', 'field' => 'name'),
 	array('module' => 'elang', 'action' => 'view', 'mtable' => 'elang', 'field' => 'name'),
 	array('module' => 'elang', 'action' => 'view all', 'mtable' => 'elang', 'field' => 'name'),
+	array('module' => 'elang', 'action' => 'view report', 'mtable' => 'elang', 'field' => 'name'),
 
 	array(
 		'module' => 'elang',
