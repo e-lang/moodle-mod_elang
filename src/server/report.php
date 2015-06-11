@@ -78,7 +78,7 @@ if ($format == 'csv')
 	// Log report action
 	if (version_compare($version, '2.7') < 0)
 	{
-		add_to_log($course->id, 'elang', 'view report', 'mod/elang/view.php?id='.$cm->id.'&format=csv', 'csv', $cm->id, $USER->id);
+		add_to_log($course->id, 'elang', 'view report', 'mod/elang/view.php?id=' . $cm->id . '&format=csv', 'csv', $cm->id, $USER->id);
 	}
 	else
 	{

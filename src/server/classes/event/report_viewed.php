@@ -71,7 +71,6 @@ class report_viewed extends \core\event\base
 		{
 			return new \moodle_url('/mod/elang/view.php', array('id' => $this->contextinstanceid, 'id_user' => $this->other['id_user']));
 		}
-		
 	}
 
 	/**
@@ -93,7 +92,8 @@ class report_viewed extends \core\event\base
 		}
 		else
 		{
-			return "The user with id '$this->userid' view a user report '{$this->other['id_user']}' for the elang activity course module id '$this->contextinstanceid'.";
+			return "The user with id '$this->userid' view a user report '{$this->other['id_user']}'" .
+				"for the elang activity course module id '$this->contextinstanceid'.";
 		}
 	}
 
