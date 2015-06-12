@@ -31,6 +31,8 @@ class mod_elang_report_form extends moodleform
 	 */
 	public function definition()
 	{
+		global $COURSE, $DB;
+
 		$mform = $this->_form;
 		$instance = $this->_customdata;
 		$dirtyclass = array('class' => 'ignoredirty');
@@ -38,6 +40,19 @@ class mod_elang_report_form extends moodleform
 		$mform->addElement('header', 'general', get_string('reportoptions', 'elang'));
 
 		// Visible elements.
+
+		// Group
+		$db_groups = $DB->get_records('groups', array('courseid' => $COURSE->id));
+		$groups = array(0 => get_string('all'));
+
+		foreach ($db_groups as $group)
+		{
+			$groups[$group->id] = $group->name;
+		}
+
+		$mform->addElement('select', 'group', get_string('studentsgroup', 'elang'), $groups, $dirtyclass)->setSelected(0);
+
+		// Per page
 		$options = array(0 => get_string('all'), 10 => '10', 20 => '20', 50 => '50', 100 => '100');
 		$mform->addElement('select', 'perpage', get_string('studentsperpage', 'elang'), $options, $dirtyclass)->setSelected(20);
 
@@ -92,9 +107,6 @@ if ($format == 'csv')
 		$event->trigger();
 	}
 
-	// All students are requested
-	$users = get_enrolled_users($context, '', 0, 'u.id, u.firstname, u.lastname, u.email', 'lastname, firstname, email');
-
 	// Set the http header for csv file
 	header('Content-type: application/vnd.ms-excel');
 	header('Content-disposition: attachment; filename="' .
@@ -121,8 +133,11 @@ if ($format == 'csv')
 	// Write header
 	fputcsv($handle, $data);
 
+	// Get the group id
+	$id_group = optional_param('id_group', 0, PARAM_INT);
+
 	// Get the enrolled users
-	$users = get_enrolled_users($context, '', 0, 'u.id, u.firstname, u.lastname, u.email', 'lastname, firstname, email');
+	$users = get_enrolled_users($context, '', $id_group, 'u.id, u.firstname, u.lastname, u.email', 'lastname, firstname, email');
 
 	// Get answers from the users
 	if (!empty($users))
@@ -355,16 +370,6 @@ else
 		// Display the report for a list of users
 		echo $OUTPUT->heading(get_string('reportallstudents', 'elang'));
 
-		// Display download link
-		echo html_writer::link(
-			new moodle_url(
-				'/mod/elang/view.php',
-				array('id' => $cm->id, 'format' => 'csv')
-			),
-			get_string('download', 'elang')
-		);
-		echo $OUTPUT->help_icon('download', 'elang');
-
 		// Create the form
 		$mform = new mod_elang_report_form((string) new moodle_url('/mod/elang/view.php', array('id' => $cm->id)));
 
@@ -375,29 +380,65 @@ else
 		if ($fromform = $mform->get_data())
 		{
 			$perpage = $fromform->perpage;
+			$id_group = $fromform->group;
 
 			// Store the data in the session
 			$cache->set('perpage', $perpage);
+			$cache->set('id_group', $id_group);
 		}
 		else
 		{
 			// Get the data from the session or get the default
 			if ($cache->has('perpage'))
 			{
-				$perpage = $cache->get('perpage', 20);
+				$perpage = $cache->get('perpage');
 			}
 			else
 			{
 				$perpage = 20;
 			}
 
+			if ($cache->has('id_group'))
+			{
+				$id_group = $cache->get('id_group');
+			}
+			else
+			{
+				$id_group = 0;
+			}
+
 			$toform = array(
 				'perpage' => $perpage,
+				'id_group' => $id_group
 			);
 
 			// Set default data (if any)
 			$mform->set_data($toform);
 		}
+
+		// Display download link
+		if ($id_group != 0)
+		{
+			echo html_writer::link(
+				new moodle_url(
+					'/mod/elang/view.php',
+					array('id' => $cm->id, 'format' => 'csv', 'id_group' => $id_group)
+				),
+				get_string('download', 'elang')
+			);
+		}
+		else
+		{
+			echo html_writer::link(
+				new moodle_url(
+					'/mod/elang/view.php',
+					array('id' => $cm->id, 'format' => 'csv')
+				),
+				get_string('download', 'elang')
+			);
+		}
+
+		echo $OUTPUT->help_icon('download', 'elang');
 
 		// Prepare the table
 		$table = new html_table;
@@ -436,7 +477,7 @@ else
 		$cache->set('sort', $sort);
 
 		// Get the enrolled users
-		$users = get_enrolled_users($context, '', 0, 'u.id, u.firstname, u.lastname, u.email', $sort, $page * $perpage, $perpage);
+		$users = get_enrolled_users($context, '', $id_group, 'u.id, u.firstname, u.lastname, u.email', $sort, $page * $perpage, $perpage);
 
 		// Prepare data for the table
 		$table->data = array();
@@ -524,7 +565,7 @@ else
 		{
 			// Output the pagination
 			echo $OUTPUT->paging_bar(
-				count_enrolled_users($context),
+				count_enrolled_users($context, '', $id_group),
 				$page,
 				$perpage,
 				new moodle_url('/mod/elang/view.php', array('id' => $cm->id))

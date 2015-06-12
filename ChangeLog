@@ -25,6 +25,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+2015-06-12  Christophe Demko <chdemko@gmail.com>
+ + Add group selection in the report view
+
 ----------------------------------------- rc1-1.1.0 -----------------------------------------
 
 2015-06-11  Christophe Demko <chdemko@gmail.com>
