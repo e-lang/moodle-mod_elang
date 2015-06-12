@@ -27,6 +27,7 @@ $ -> Language fix or change
 
 2015-06-12  Christophe Demko <chdemko@gmail.com>
  + Add group selection in the report view
+ - Remove .gitignore
 
 ----------------------------------------- rc1-1.1.0 -----------------------------------------
 
