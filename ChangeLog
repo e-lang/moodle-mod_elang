@@ -28,6 +28,7 @@ $ -> Language fix or change
 2015-06-12  Christophe Demko <chdemko@gmail.com>
  + Add group selection in the report view
  - Remove .gitignore
+ ^ Change language code using UTF-8
 
 ----------------------------------------- rc1-1.1.0 -----------------------------------------
 
