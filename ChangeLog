@@ -25,6 +25,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+2015-06-13  Christophe Demko <chdemko@gmail.com>
+ + Adapt onclick behavior to student/teacher when clicking on the course module
+
 2015-06-12  Christophe Demko <chdemko@gmail.com>
  + Add group selection in the report view
  - Remove .gitignore

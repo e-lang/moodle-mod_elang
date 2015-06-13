@@ -385,6 +385,26 @@ function elang_get_coursemodule_info($coursemodule)
 }
 
 /**
+ * Sets dynamic information about a course module
+ *
+ * This function is called from cm_info when displaying the module
+ *
+ * @param   cm_info  $cm  Course module object
+ *
+ * @return  void
+ *
+ * @since   1.1.0
+ */
+function elang_cm_info_dynamic(cm_info $cm)
+{
+	if (!has_capability('mod/elang:report', $cm->context))
+	{
+		$cm->set_on_click("window.open('" . new moodle_url('/mod/elang/view.php', array('id' => $cm->id)) . "'); return false;");
+	}
+}
+
+
+/**
  * Return the list of view actions
  *
  * @return array
