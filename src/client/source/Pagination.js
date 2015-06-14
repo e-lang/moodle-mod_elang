@@ -73,7 +73,7 @@ enyo.kind({
 
 			this.$.pages.show();
 		}
-		else if (this.total == 0)
+		else if (this.total >= 0)
 		{
 			this.$.pages.hide();
 		}
