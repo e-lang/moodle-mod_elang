@@ -19,6 +19,9 @@ defined('MOODLE_INTERNAL') || die();
 // Get the moodle form library
 require_once $CFG->dirroot . '/course/moodleform_mod.php';
 
+// Get the local library
+require_once dirname(__FILE__) . '/locallib.php';
+
 /**
  * Module instance settings form
  *
@@ -94,7 +97,6 @@ class mod_elang_mod_form extends moodleform_mod
 		// Adding the rest of elang settings, spreeading all them into this fieldset
 		$mform->addElement('header', 'elangfieldset', get_string('upload', 'elang'));
 
-		require_once dirname(__FILE__) . '/locallib.php';
 		$languages = Elang\getLanguages();
 		$options = array();
 
@@ -274,62 +276,88 @@ class mod_elang_mod_form extends moodleform_mod
 	{
 		$errors = parent::validation($data, $files);
 
-		global $USER;
-		$fs = get_file_storage();
-		$context = context_user::instance($USER->id);
-		$files = $fs->get_area_files($context->id, 'user', 'draft', $data['subtitle'], 'id DESC', false);
-
-		$noerror = false;
-
-		foreach ($files as $file)
+		// If no errors have been detecting on subtitle
+		if (!isset($errors['subtitle']))
 		{
-			try
+			global $USER;
+			$fs = get_file_storage();
+			$context = context_user::instance($USER->id);
+			$files = $fs->get_area_files($context->id, 'user', 'draft', $data['subtitle'], 'id DESC', false);
+
+			$noerror = false;
+
+			// Loop on all files (normally only one)
+			foreach ($files as $file)
 			{
-				$filepath = $file->copy_content_to_temp();
-			}
-			catch (\Exception $e)
-			{
-				$errors['subtitle'] = get_string('subtitleunabletosave', 'elang');
-				break;
+				// Save the file to a temporary path
+				try
+				{
+					$filepath = $file->copy_content_to_temp();
+				}
+				catch (\Exception $e)
+				{
+					$errors['subtitle'] = get_string('subtitleunabletosave', 'elang');
+					break;
+				}
+
+				// Try to detect encoding
+				$contents = Elang\transcodeSubtitle(file_get_contents($filepath));
+
+				if (false === $contents)
+				{
+					// Automatic detection does not succeed
+					$errors['subtitle'] = get_string('subtitleunknownencoding', 'elang');
+					break;
+				}
+				else
+				{
+					// Encoding succeeds, put back encoded contents in file
+					file_put_contents($filepath, $contents);
+
+					// Detect vtt format
+					try
+					{
+						$caption = new \Captioning\Format\WebvttFile($filepath);
+						$noerror = true;
+						break;
+					}
+					catch (\Exception $e)
+					{
+					}
+
+					// Detect subrip format
+					try
+					{
+						$caption = new \Captioning\Format\SubripFile($filepath);
+						$noerror = true;
+						break;
+					}
+					catch (\Exception $e)
+					{
+					}
+				}
 			}
 
-			try
+			if ($noerror)
 			{
-				$caption = new \Captioning\Format\WebvttFile($filepath);
-				$noerror = true;
-				break;
-			}
-			catch (\Exception $e)
-			{
-			}
+				// $noerror means automatic detection of encoding has been successfull and the file is in vtt or subrip format
+				$this->vtt = new \Captioning\Format\WebvttFile;
 
-			try
-			{
-				$caption = new \Captioning\Format\SubripFile($filepath);
-				$noerror = true;
-				break;
+				// Construct the cues in vtt format
+				foreach ($caption->getCues() as $cue)
+				{
+					$this->vtt->addCue(
+						$cue->getText(),
+						\Captioning\Format\WebvttCue::ms2tc($cue->getStartMS()),
+						\Captioning\Format\WebvttCue::ms2tc($cue->getStopMS())
+					);
+				}
 			}
-			catch (\Exception $e)
+			elseif (!isset($errors['subtitle']))
 			{
+				// File is not in vtt or subrip format
+				$errors['subtitle'] = get_string('subtitleinvalidformat', 'elang');
 			}
-		}
-
-		if ($noerror)
-		{
-			$this->vtt = new \Captioning\Format\WebvttFile;
-
-			foreach ($caption->getCues() as $cue)
-			{
-				$this->vtt->addCue(
-					$cue->getText(),
-					\Captioning\Format\WebvttCue::ms2tc($cue->getStartMS()),
-					\Captioning\Format\WebvttCue::ms2tc($cue->getStopMS())
-				);
-			}
-		}
-		elseif (!isset($errors['subtitle']))
-		{
-			$errors['subtitle'] = get_string('subtitleinvalidformat', 'elang');
 		}
 
 		return $errors;

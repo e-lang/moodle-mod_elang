@@ -104,6 +104,7 @@ $string['subtitleinvalidformat'] = 'Invalid subtitle file format';
 $string['subtitlemaxsize_config'] = 'Set the maximum subtitle size in bytes';
 $string['subtitlemaxsize'] = 'Maximum subtitle size';
 $string['subtitleunabletosave'] = 'Unable to save subtitle file. Contact your administrator.';
+$string['subtitleunknownencoding'] = 'Encoding of the subtitle file not detectible. Please try to convert this first to UTF-8!';
 $string['subtitle'] = 'Subtitle';
 $string['timeout_config'] = 'Timeout between the moodle server and client browser';
 $string['timeout'] = 'Timeout';
