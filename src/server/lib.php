@@ -587,8 +587,6 @@ function elang_pluginfile($course, $cm, $context, $filearea, array $args, $force
 		$options = json_decode($elang->options, true);
 		$repeatedunderscore = isset($options['repeatedunderscore']) ? $options['repeatedunderscore'] : 10;
 
-		$cue = new Elang\Cue;
-
 		require_once $CFG->libdir . '/pdflib.php';
 		$doc = new pdf;
 		$doc->SetMargins(isset($options['left']) ? $options['left'] : 20, isset($options['top']) ? $options['top'] : 20);
@@ -610,12 +608,15 @@ function elang_pluginfile($course, $cm, $context, $filearea, array $args, $force
 
 		foreach ($records as $id => $record)
 		{
-			$cue->setBegin($record->begin);
-			$cue->setEnd($record->end);
 			$doc->Write(5, '', '', false, '', true);
 			$doc->WriteHtml(
 				'<h3>' .
-				sprintf(get_string('pdfcue', 'elang'), $i++, Elang\Cue::millisecondsToString($record->begin), Elang\Cue::millisecondsToString($record->end)) .
+				sprintf(
+					get_string('pdfcue', 'elang'),
+					$i++,
+					\Captioning\Format\WebvttCue::ms2tc($record->begin),
+					\Captioning\Format\WebvttCue::ms2tc($record->end)
+				) .
 				'</h3>'
 			);
 			$doc->Write(5, Elang\generateCueText(json_decode($record->json, true), array(), '_', $repeatedunderscore), '', false, '', true);

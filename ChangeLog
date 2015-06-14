@@ -25,6 +25,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+2015-06-14  Christophe Demko <chdemko@gmail.com>
+ # Correct pdf output (broken when captioning library was introduced)
+
 ----------------------------------------- rc2-1.1.0 -----------------------------------------
 
 2015-06-14  Christophe Demko <chdemko@gmail.com>
