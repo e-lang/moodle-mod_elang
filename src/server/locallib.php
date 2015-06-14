@@ -314,8 +314,6 @@ function saveFiles(\stdClass $elang, \mod_elang_mod_form $mform)
 {
 	global $DB;
 
-	require_once dirname(__FILE__) . '/locallib.php';
-
 	$id = $elang->id;
 	$cmid = $elang->coursemodule;
 	$context = \context_module::instance($cmid);
