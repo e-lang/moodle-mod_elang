@@ -199,12 +199,16 @@ enyo.kind({
 				if (data.elements[inRequest.sender.name].content != '')
 				{
 					this.doErrorDecrement();
+					data.error--;
+				}
+				else
+				{
+					data.remaining--;
 				}
 
 				data.elements[inRequest.sender.name] = {content: inResponse.content, type: 'success'};
-				this.cue.setRemaining(this.cue.getRemaining() - 1).render();
+				data.success++;
 				this.doSuccessIncrement();
-				this.cueChanged();
 				this.focus();
 				this.render();
 				break;
@@ -212,6 +216,9 @@ enyo.kind({
 				if (inRequest.sender.getValue() == '')
 				{
 					inRequest.sender.setError(false);
+
+					data.error--;
+					data.remaining++;
 					this.doErrorDecrement();
 				}
 				else
@@ -220,6 +227,8 @@ enyo.kind({
 
 					if (data.elements[inRequest.sender.name].content == '')
 					{
+						data.remaining--;
+						data.error++;
 						this.doErrorIncrement();
 					}
 				}
@@ -227,6 +236,9 @@ enyo.kind({
 				data.elements[inRequest.sender.name].content = inRequest.sender.getValue();
 				break;
 		}
+
+		this.cue.setSuccess(data.success).setError(data.error).setRemaining(data.remaining).render();
+		this.cueChanged();
 
 		this.doTrackChange({number: data.number, text: inResponse.cue});
 	},	
@@ -273,10 +285,22 @@ enyo.kind({
 	 */
 	help: function (inRequest, inResponse)
 	{
-		this.cue.getData().elements[inRequest.sender.number] = {content: inResponse.content, type: 'help'};
+		var data = this.cue.getData();
+
+		if (data.elements[inRequest.sender.name].content == '')
+		{
+			data.remaining--;
+		}
+		else
+		{
+			data.error--;
+		}
+
+		data.elements[inRequest.sender.number] = {content: inResponse.content, type: 'help'};
+		data.help++;
+		this.cue.setHelp(data.help).setError(data.error).setRemaining(data.remaining).render();
 		this.cueChanged();
 		this.render();
-		this.cue.setRemaining(this.cue.getRemaining() - 1).render();
 		this.doTrackChange({number: this.cue.getData().number, text: inResponse.cue});
 		this.doHelpIncrement();
 		if (inRequest.sender.getValue() != '')

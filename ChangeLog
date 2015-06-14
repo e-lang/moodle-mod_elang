@@ -28,6 +28,7 @@ $ -> Language fix or change
 2015-06-14  Christophe Demko <chdemko@gmail.com>
  # Correct output when a single page is present in pagination
  + Add encoding detection (Thanks to Ralf Erlebach)
+ + Enhance client view by adding error/help/success badges in cues view 
 
 2015-06-13  Christophe Demko <chdemko@gmail.com>
  + Adapt onclick behavior to student/teacher when clicking on the course module

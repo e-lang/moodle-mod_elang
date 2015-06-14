@@ -256,10 +256,13 @@ enyo.kind({
 	 * Published properties:
 	 * - number: number of the cue
 	 * - data: data hold by the cue
+	 * - success: #of success
+	 * - error: # of errors
+	 * - help: # of help
 	 * - remaining: texts to find
 	 * Each property will have public setter and getter methods
 	 */
-	published: {number: 0, data: {}, remaining: 0},
+	published: {number: 0, data: {}, success: 0, error: 0, help: 0, remaining: 0},
 
 	/**
 	 * Events:
@@ -284,7 +287,10 @@ enyo.kind({
 		{
 			tag: 'td',
 			components: [
-				{tag: 'span', classes: 'label label-warning', name: 'remaining'},
+				{tag: 'span', classes: 'label label-success', name: 'success', attributes: {title: $L('studentsuccess'), 'data-toggle':'tooltip'}},
+				{tag: 'span', classes: 'label label-danger', name: 'error', attributes: {title: $L('studenterror'), 'data-toggle':'tooltip'}},
+				{tag: 'span', classes: 'label label-info', name: 'help', attributes: {title: $L('studenthelp'), 'data-toggle':'tooltip'}},
+				{tag: 'span', classes: 'label label-warning', name: 'remaining', attributes: {title: $L('studentremaining'), 'data-toggle':'tooltip'}},
 			],
 		},
 		{tag: 'td', components: [{name: 'title', tag: 'a', ontap: 'cueTap', attributes: {href:'#'}}]}
@@ -302,7 +308,26 @@ enyo.kind({
 		this.inherited(arguments);
 		this.$.number.content = this.number;
 		this.$.title.content = this.data.title;
+		this.success = this.data.success;
+		this.error = this.data.error;
+		this.help = this.data.help;
 		this.remaining = this.data.remaining;
+
+		if (this.data.success != '0')
+		{
+			this.$.success.content = this.data.success;
+		}
+
+		if (this.data.error != '0')
+		{
+			this.$.error.content = this.data.error;
+		}
+
+		if (this.data.help != '0')
+		{
+			this.$.help.content = this.data.help;
+		}
+
 		if (this.data.remaining != '0')
 		{
 			this.$.remaining.content = this.data.remaining;
@@ -358,6 +383,75 @@ enyo.kind({
 		else
 		{
 			this.$.remaining.content = this.remaining;
+		}
+	},
+
+	/**
+	 * Detect a change in the success value
+	 *
+	 * @protected
+	 *
+	 * @param  oldValue  array  Old success value
+	 *
+	 * @return  void
+	 *
+	 * @since  1.1.0
+	 */
+	successChanged: function (oldValue)
+	{
+		if (this.success == 0)
+		{
+			this.$.success.content = '';
+		}
+		else
+		{
+			this.$.success.content = this.success;
+		}
+	},
+
+	/**
+	 * Detect a change in the error value
+	 *
+	 * @protected
+	 *
+	 * @param  oldValue  array  Old error value
+	 *
+	 * @return  void
+	 *
+	 * @since  1.1.0
+	 */
+	errorChanged: function (oldValue)
+	{
+		if (this.error == 0)
+		{
+			this.$.error.content = '';
+		}
+		else
+		{
+			this.$.error.content = this.error;
+		}
+	},
+
+	/**
+	 * Detect a change in the help value
+	 *
+	 * @protected
+	 *
+	 * @param  oldValue  array  Old help value
+	 *
+	 * @return  void
+	 *
+	 * @since  1.1.0
+	 */
+	helpChanged: function (oldValue)
+	{
+		if (this.help == 0)
+		{
+			this.$.help.content = '';
+		}
+		else
+		{
+			this.$.help.content = this.help;
 		}
 	}
 });

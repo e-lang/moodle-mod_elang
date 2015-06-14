@@ -254,7 +254,10 @@ switch ($task)
 				'begin' => $record->begin / 1000,
 				'end' => $record->end / 1000,
 				'elements' => $elements,
-				'remaining' => $cueTotal - $cueSuccess - $cueHelp,
+				'remaining' => $cueTotal - $cueSuccess - $cueHelp - $cueError,
+				'error' => $cueError,
+				'help' => $cueHelp,
+				'success' => $cueSuccess,
 			);
 		}
 

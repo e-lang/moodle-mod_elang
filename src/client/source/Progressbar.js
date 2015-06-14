@@ -39,10 +39,10 @@ enyo.kind({
 	 * - danger
 	 */
 	components:  [
-		{name: 'success', classes: 'progress-bar progress-bar-success', style: 'width: 0%;'},
-		{name: 'info', classes: 'progress-bar progress-bar-info', style: 'width: 0%;'},
+		{name: 'success', classes: 'progress-bar progress-bar-success', style: 'width: 0%;', attributes: {title: $L('studentsuccess'), 'data-toggle':'tooltip'}},
+		{name: 'info', classes: 'progress-bar progress-bar-info', style: 'width: 0%;', attributes: {title: $L('studenthelp'), 'data-toggle':'tooltip'}},
 		{name: 'warning', classes: 'progress-bar progress-bar-warning', style: 'width: 0%;'},
-		{name: 'danger', classes: 'progress-bar progress-bar-danger', style: 'width: 0%;'}
+		{name: 'danger', classes: 'progress-bar progress-bar-danger', style: 'width: 0%;', attributes: {title: $L('studenterror'), 'data-toggle':'tooltip'}}
 	],
 
 	/**
