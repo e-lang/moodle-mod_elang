@@ -474,7 +474,13 @@ else
 					get_string('sortlastname', 'elang')
 				)
 			),
-			get_string('email', 'elang'),
+			html_writer::link(
+				new moodle_url(
+					'/mod/elang/view.php',
+					array('id' => $cm->id, 'sort' => 'email')
+				),
+				get_string('email', 'elang')
+			),
 			get_string('studentsuccess', 'elang'),
 			get_string('studenthelp', 'elang'),
 			get_string('studenterror', 'elang'),
