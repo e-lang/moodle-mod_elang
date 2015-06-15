@@ -367,9 +367,6 @@ else
 		// Output starts here.
 		echo $OUTPUT->header();
 
-		// Display the report for a list of users
-		echo $OUTPUT->heading(get_string('reportallstudents', 'elang'));
-
 		// Create the form
 		$mform = new mod_elang_report_form((string) new moodle_url('/mod/elang/view.php', array('id' => $cm->id)));
 
@@ -415,16 +412,21 @@ else
 			// Set default data (if any)
 			$mform->set_data($toform);
 		}
-	
+
 		// Display link to the player
 		echo html_writer::link(
-				new moodle_url(
-					'/mod/elang/view.php',
-					array('id' => $cm->id, 'view' => 'player')
-				),
-				get_string('showplayer', 'elang'),
-				array('target' => '_blank')
-			).'&nbsp;&nbsp;&nbsp;';
+			new moodle_url(
+				'/mod/elang/view.php',
+				array('id' => $cm->id, 'view' => 'player')
+			),
+			get_string('showplayer', 'elang'),
+			array('target' => '_blank')
+		);
+
+		echo $OUTPUT->help_icon('showplayer', 'elang');
+
+		// Display the report for a list of users
+		echo $OUTPUT->heading(get_string('reportallstudents', 'elang'));
 
 		// Display download link
 		if ($id_group != 0)

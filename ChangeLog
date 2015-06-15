@@ -29,6 +29,7 @@ $ -> Language fix or change
  $ Fix some language strings
  +* Add view capability for non-editing teacher
  + Remove useless spaces in text submitted
+ + Add a student view link in the teacher view (Thanks to Ralf Erlebach)
 
 2015-06-14  Christophe Demko <chdemko@gmail.com>
  # Correct pdf output (broken when captioning library was introduced)
