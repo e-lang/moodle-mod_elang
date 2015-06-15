@@ -344,13 +344,18 @@ class mod_elang_mod_form extends moodleform_mod
 				$this->vtt = new \Captioning\Format\WebvttFile;
 
 				// Construct the cues in vtt format
-				foreach ($caption->getCues() as $cue)
+				$cues = $caption->getCues();
+
+				if ($cues)
 				{
-					$this->vtt->addCue(
-						$cue->getText(),
-						\Captioning\Format\WebvttCue::ms2tc($cue->getStartMS()),
-						\Captioning\Format\WebvttCue::ms2tc($cue->getStopMS())
-					);
+					foreach ($cues as $cue)
+					{
+						$this->vtt->addCue(
+							$cue->getText(),
+							\Captioning\Format\WebvttCue::ms2tc($cue->getStartMS()),
+							\Captioning\Format\WebvttCue::ms2tc($cue->getStopMS())
+						);
+					}
 				}
 			}
 			elseif (!isset($errors['subtitle']))

@@ -366,49 +366,54 @@ function saveFiles(\stdClass $elang, \mod_elang_mod_form $mform)
 
 	$cue = new \stdClass;
 
-	foreach ($mform->getVtt()->getCues() as $i => $elt)
+	$cues = $mform->getVtt()->getCues();
+
+	if ($cues)
 	{
-		$cue->id_elang = $id;
-		$text = strip_tags($elt->getText());
-
-		$title = preg_replace('/(\[[^\]]*\]|{[^}]*})/', '...', $text);
-
-		if (mb_strlen($title, 'UTF-8') > $elang->titlelength)
+		foreach ($cues as $i => $elt)
 		{
-			$cue->title = preg_replace('/ [^ ]*$/', ' ...', mb_substr($title, 0, $elang->titlelength, 'UTF-8'));
-		}
-		else
-		{
-			$cue->title = $title;
-		}
+			$cue->id_elang = $id;
+			$text = strip_tags($elt->getText());
 
-		$cue->begin	= $elt->getStartMS();
-		$cue->end = $elt->getStopMS();
-		$cue->number = $i + 1;
-		$texts = preg_split('/(\[[^\]]*\]|{[^}]*})/', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
-		$data = array();
+			$title = preg_replace('/(\[[^\]]*\]|{[^}]*})/', '...', $text);
 
-		foreach ($texts as $text)
-		{
-			if (isset($text[0]))
+			if (mb_strlen($title, 'UTF-8') > $elang->titlelength)
 			{
-				if ($text[0] == '[' && $text[strlen($text) - 1] == ']')
+				$cue->title = preg_replace('/ [^ ]*$/', ' ...', mb_substr($title, 0, $elang->titlelength, 'UTF-8'));
+			}
+			else
+			{
+				$cue->title = $title;
+			}
+
+			$cue->begin	= $elt->getStartMS();
+			$cue->end = $elt->getStopMS();
+			$cue->number = $i + 1;
+			$texts = preg_split('/(\[[^\]]*\]|{[^}]*})/', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
+			$data = array();
+
+			foreach ($texts as $text)
+			{
+				if (isset($text[0]))
 				{
-					$data[] = array('type' => 'input', 'content' => substr($text, 1, strlen($text) - 2), 'order' => $i++, 'help' => true);
-				}
-				elseif ($text[0] == '{' && $text[strlen($text) - 1] == '}')
-				{
-					$data[] = array('type' => 'input', 'content' => substr($text, 1, strlen($text) - 2), 'order' => $i++, 'help' => false);
-				}
-				else
-				{
-					$data[] = array('type' => 'text', 'content' => $text);
+					if ($text[0] == '[' && $text[strlen($text) - 1] == ']')
+					{
+						$data[] = array('type' => 'input', 'content' => substr($text, 1, strlen($text) - 2), 'order' => $i++, 'help' => true);
+					}
+					elseif ($text[0] == '{' && $text[strlen($text) - 1] == '}')
+					{
+						$data[] = array('type' => 'input', 'content' => substr($text, 1, strlen($text) - 2), 'order' => $i++, 'help' => false);
+					}
+					else
+					{
+						$data[] = array('type' => 'text', 'content' => $text);
+					}
 				}
 			}
-		}
 
-		$cue->json = json_encode($data);
-		$DB->insert_record('elang_cues', $cue);
+			$cue->json = json_encode($data);
+			$DB->insert_record('elang_cues', $cue);
+		}
 	}
 }
 
