@@ -85,6 +85,7 @@ $string['settings'] = 'Specific module settings';
 $string['showlanguage_config'] = 'Show the language in the course module title';
 $string['showlanguage_help'] = 'Show the language in the course module title';
 $string['showlanguage'] = 'Show language';
+$string['showplayer'] = 'Display student\'s view';
 $string['size_config'] = 'This defines the pdf font size';
 $string['size_error'] = 'You should enter a number here. Typical value is 16.';
 $string['size_help'] = 'This defines the pdf font size';
