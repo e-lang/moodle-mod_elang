@@ -330,7 +330,7 @@ switch ($task)
 			}
 		}
 
-		$text = optional_param('text', '', PARAM_TEXT);
+		$text = preg_replace(array('/^\s*/', '/\s*$/', '/\s+/'), array('', '', ' '), optional_param('text', '', PARAM_TEXT));
 
 		// Compare strings ignoring case
 		// TODO: insert here the use of the Levenshtein distance
