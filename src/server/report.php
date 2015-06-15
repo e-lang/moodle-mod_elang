@@ -415,6 +415,16 @@ else
 			// Set default data (if any)
 			$mform->set_data($toform);
 		}
+	
+		// Display link to the player
+		echo html_writer::link(
+				new moodle_url(
+					'/mod/elang/view.php',
+					array('id' => $cm->id, 'view' => 'player')
+				),
+				get_string('showplayer', 'elang'),
+				array('target' => '_blank')
+			).'&nbsp;&nbsp;&nbsp;';
 
 		// Display download link
 		if ($id_group != 0)
