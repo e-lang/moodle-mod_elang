@@ -25,6 +25,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+2015-06-15  Christophe Demko <chdemko@gmail.com>
+ $ Fix some language strings
+
 2015-06-14  Christophe Demko <chdemko@gmail.com>
  # Correct pdf output (broken when captioning library was introduced)
 
