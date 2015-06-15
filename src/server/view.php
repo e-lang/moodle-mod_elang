@@ -23,6 +23,10 @@ $version = moodle_major_version(true);
 // Get the course number
 $id = required_param('id', PARAM_INT);
 
+// Get the optional view parameter
+$view = optional_param('view',NULL, PARAM_ALPHA);
+// 'player' for player view for teachers
+
 // Get the course module
 $cm = get_coursemodule_from_id('elang', $id, 0, false, MUST_EXIST);
 
@@ -38,7 +42,7 @@ require_login($course, true, $cm);
 // Get the context
 $context = context_module::instance($cm->id);
 
-if (has_capability('mod/elang:report', $context))
+if ((has_capability('mod/elang:report', $context))&&($view != 'player'))
 {
 	require_once dirname(__FILE__) . '/report.php';
 }
