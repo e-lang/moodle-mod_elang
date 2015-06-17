@@ -25,6 +25,10 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+2015-06-17  Christophe Demko <chdemko@gmail.com>
+ + Allow to add a link for an input using [my text (http://link.to)] and {my text (http://link.to)}
+ # Corrected character encoding
+
 2015-06-16  Christophe Demko <chdemko@gmail.com>
  + Allow to sort by email in the report view
  # Fix empty subtitle file

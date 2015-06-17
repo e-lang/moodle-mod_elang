@@ -98,13 +98,22 @@ enyo.kind({
 						);
 						break;
 					case 'input':
-						this.createComponents(
-							[
-								{name: i, kind: 'Elang.Input', value: element.content, error: element.content != '', help: element.help, size: element.size, number: i},
-								{tag: 'span', content: ' '},
-							],
-							{owner: this}
-						);
+						var data = {
+							name: i,
+							kind: 'Elang.Input',
+							value: element.content,
+							error: element.content != '',
+							help: element.help,
+							size: element.size,
+							number: i
+						};
+
+						if ('link' in element)
+						{
+							data.link = element.link;
+						}
+
+						this.createComponents([data, {tag: 'span', content: ' '}], {owner: this});
 						break;
 				}
 			}

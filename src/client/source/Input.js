@@ -29,11 +29,12 @@ enyo.kind({
 	 * - value: the current input value
 	 * - error: the error state (true or false)
 	 * - help: the help state (true or false)
+	 * - link: the link (string)
 	 * - size: the size of the input
 	 * - number: the item number
 	 * Each property will have public setter and getter methods
 	 */
-	published: {value: null, error: null, help: null, size: null, number: null},
+	published: {value: null, error: null, help: null, link: null, size: null, number: null},
 
 	/**
 	 * Named components:
@@ -129,7 +130,7 @@ enyo.kind({
 					tag: 'a',
 					ontap: 'helpTap',
 					classes: 'btn input-group-addon',
-					attibutes: {href: '#'},
+					attributes: {title: $L('inputhelp'), 'data-toggle':'tooltip', href: '#'},
 					components: [{tag: 'span', classes: 'glyphicon glyphicon-info-sign'}]
 				}
 			);
@@ -138,6 +139,31 @@ enyo.kind({
 		{
 			this.$.help.destroy();
 			this.render();
+		}
+	},
+
+	/**
+	 * Detect a change in the link property
+	 *
+	 * @protected
+	 *
+	 * @param   oldValue  string|null  The link old value
+	 *
+	 * @since  0.0.3
+	 */
+	linkChanged: function (oldValue)
+	{
+		if (this.link)
+		{
+			this.createComponent(
+				{
+					name: 'link',
+					tag: 'a',
+					classes: 'btn input-group-addon',
+					attributes: {title: $L('inputlink'), 'data-toggle':'tooltip', href: this.link, target: '_blank'},
+					components: [{tag: 'span', classes: 'glyphicon glyphicon-link'}]
+				}
+			);
 		}
 	},
 
@@ -154,6 +180,7 @@ enyo.kind({
 		this.valueChanged();
 		this.sizeChanged();
 		this.helpChanged();
+		this.linkChanged();
 		this.errorChanged();
 	},
 

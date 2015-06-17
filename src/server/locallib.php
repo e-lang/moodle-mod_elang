@@ -161,130 +161,78 @@ function generateCueText($data, $user, $char='-', $repeated = 10)
  */
 function transcodeSubtitle($contents, $encoding_to = 'UTF-8')
 {
+	$detect_order = array(
+		"UTF-8",
+		"ASCII",
+		"ISO-8859-1",
+		"ISO-8859-2",
+		"ISO-8859-3",
+		"ISO-8859-4",
+		"ISO-8859-5",
+		"ISO-8859-6",
+		"ISO-8859-7",
+		"ISO-8859-8",
+		"ISO-8859-9",
+		"ISO-8859-10",
+		"ISO-8859-13",
+		"ISO-8859-14",
+		"ISO-8859-15",
+		"ISO-8859-16",
+		"KOI8-R",
+		"KOI8-U",
+		"Windows-1251",
+		"Windows-1252",
+		"Windows-1254"
+	);
+
 	// $encoding_to is explicitely given as null, there is nothing to do
 	if (!$encoding_to)
 	{
 		return $contents;
 	}
 
-	// Set the assumed encoding of the string as false
-	$encoding = false;
-
-	// Detect bom for different encodings and strip it from the string
-	$bom_encoding = array(
-		'UTF-32BE' => pack("CCCC", 0x00, 0x00, 0xFE, 0xFF),
-		'UTF-32LE' => pack("CCCC", 0xFF, 0xFE, 0x00, 0x00),
-		'GB-18030' => pack("CCCC", 0x84, 0x31, 0x95, 0x33),
-		'UTF-8' => pack("CCC", 0xEF, 0xBB, 0xBF),
-		'UTF-16BE' => pack("CC", 0xFE, 0xFF),
-		'UTF-16LE' => pack("CC", 0xFF, 0xFE)
-	);
-
-	foreach ($bom_encoding AS $enc => $bom)
+	if (function_exists('mb_detect_encoding'))
 	{
-		if (0 == strncmp($contents, $bom, strlen($bom)))
-		{
-			$contents = substr($contents, strlen($bom));
-			$encoding = $enc;
-			break;
-		}
+		$encoding = mb_detect_encoding($contents, $detect_order, true);
 	}
-
-	if (!$encoding)
+	else
 	{
-		// Try to detect concurrent encoding and convert into UTF-8
-		$detect_order = array(
-			'ASCII',
-			'UTF-8',
-			'UCS-2',
-			'UCS-2BE',
-			'UCS-2LE',
-			'UCS-4',
-			'UCS-4BE',
-			'UCS-4LE',
-			'UTF-16',
-			'UTF-16BE',
-			'UTF-16LE',
-			'UTF-32',
-			'UTF-32BE',
-			'UTF-32LE',
-			'ISO-8859-1',
-			'ISO-8859-2',
-			'ISO-8859-3',
-			'ISO-8859-4',
-			'ISO-8859-5',
-			'ISO-8859-6',
-			'ISO-8859-7',
-			'ISO-8859-8',
-			'ISO-8859-9',
-			'ISO-8859-10',
-			'ISO-8859-11',
-			'ISO-8859-13',
-			'ISO-8859-14',
-			'ISO-8859-15',
-			'ISO-8859-16',
-			'KOI8-R',
-			'KOI8-U',
-			'KOI8-RU',
-			'WINDOWS-1250',
-			'WINDOWS-1251',
-			'WINDOWS-1252',
-			'WINDOWS-1253',
-			'WINDOWS-1254',
-			'WINDOWS-1255',
-			'WINDOWS-1256',
-			'WINDOWS-1257',
-			'WINDOWS-1258',
-			'MACROMAN',
-			'MACCENTRALEUROPE',
-			'MACICELAND',
-			'MACCROATIAN',
-			'MACROMANIA',
-			'MACCYRILLIC',
-			'MACUKRAINE',
-			'MACGREEK',
-			'MACTURKISH',
-			'MACHEBREW',
-			'MACARABIC',
-			'MACTHAI',
-			'KOI8-T',
-			'ISO-IR-166',
-			'WINDOWS-874',
-			'ISO-IR-14',
-			'JISX0201-1976',
-			'ISO-IR-87',
-			'ISO-IR-159',
-			'GB_1988-80',
-			'GB_2312-80',
-			'ISO-IR-149',
-			'EUC-JP',
-			'SHIFT-JIS',
-			'ISO-2022-JP',
-			'ISO-2022-JP-1',
-			'ISO-2022-JP-2',
-			'EUC-CN',
-			'GBK',
-			'WINDOWS-936',
-			'GB18030',
-			'ISO-2022-CN',
-			'BIG-5',
-			'CP950',
-			'EUC-KR',
-			'ISO-2022-KR',
-			'DEC-KANJI',
-			'DEC-HANYU',
-			'EUC-JISX0213',
-			'SHIFT_JISX0213',
-			'ISO-2022-JP-3'
+		// Set the assumed encoding of the string as false
+		$encoding = false;
+
+		// Detect bom for different encodings and strip it from the string
+		$bom_encoding = array(
+			'UTF-32BE' => pack("CCCC", 0x00, 0x00, 0xFE, 0xFF),
+			'UTF-32LE' => pack("CCCC", 0xFF, 0xFE, 0x00, 0x00),
+			'GB-18030' => pack("CCCC", 0x84, 0x31, 0x95, 0x33),
+			'UTF-8' => pack("CCC", 0xEF, 0xBB, 0xBF),
+			'UTF-16BE' => pack("CC", 0xFE, 0xFF),
+			'UTF-16LE' => pack("CC", 0xFF, 0xFE)
 		);
 
-		// Test for all encodings given above
-		foreach ($detect_order as $enc)
+		foreach ($bom_encoding AS $enc => $bom)
 		{
-			if ($contents === @iconv($enc, $enc, $contents))
+			if (0 == strncmp($contents, $bom, strlen($bom)))
 			{
+				$contents = substr($contents, strlen($bom));
 				$encoding = $enc;
 				break;
+			}
+		}
+
+		if (!$encoding)
+		{
+			// Convert to md5 for fast comparison
+			$md5 = md5($contents);
+
+			// Try to detect concurrent encoding and convert into UTF-8
+			foreach ($detect_order as $enc)
+			{
+				if ($md5 === md5(@iconv($enc, $enc, $contents)))
+				{
+					$encoding = $enc;
+					break;
+				}
 			}
 		}
 	}
@@ -396,17 +344,42 @@ function saveFiles(\stdClass $elang, \mod_elang_mod_form $mform)
 			{
 				if (isset($text[0]))
 				{
+					// Detect type of part
 					if ($text[0] == '[' && $text[strlen($text) - 1] == ']')
 					{
-						$data[] = array('type' => 'input', 'content' => substr($text, 1, strlen($text) - 2), 'order' => $i++, 'help' => true);
+						// Input text with help button
+						$help = true;
 					}
 					elseif ($text[0] == '{' && $text[strlen($text) - 1] == '}')
 					{
-						$data[] = array('type' => 'input', 'content' => substr($text, 1, strlen($text) - 2), 'order' => $i++, 'help' => false);
+						// Input text without help button
+						$help = false;
 					}
 					else
 					{
+						// Display text
+						$help = null;
+					}
+
+					if ($help === null)
+					{
+						// Display text
 						$data[] = array('type' => 'text', 'content' => $text);
+					}
+					else
+					{
+						// Input text
+						preg_match('/([^(]*)(\((.*)\))?$/', substr($text, 1, strlen($text) - 2), $results);
+						$text = preg_replace(array('/^\s*/', '/\s*$/', '/\s+/'), array('', '', ' '), $results[1]);
+						$element = array('type' => 'input', 'content' => $text, 'order' => $i++, 'help' => $help);
+
+						// Help button detected
+						if (isset($results[3]))
+						{
+							$element['link'] = $results[3];
+						}
+
+						$data[] = $element;
 					}
 				}
 			}

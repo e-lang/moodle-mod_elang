@@ -204,7 +204,8 @@ switch ($task)
 								'type' => 'input',
 								'size' => ((int) (mb_strlen($element['content'], 'UTF-8') - 1) / 10 + 1) * 10,
 								'content' => '',
-								'help' => $element['help']
+								'help' => $element['help'],
+								'link' => isset($element['link']) ? $element['link'] : null
 							);
 						}
 						elseif ($user[$number]['content'] == $element['content'])
@@ -224,7 +225,8 @@ switch ($task)
 								'type' => 'input',
 								'size' => ((int) (mb_strlen($element['content'], 'UTF-8') - 1) / 10 + 1) * 10,
 								'content' => $user[$number]['content'],
-								'help' => $element['help']
+								'help' => $element['help'],
+								'link' => isset($element['link']) ? $element['link'] : null
 							);
 						}
 					}
@@ -234,7 +236,8 @@ switch ($task)
 							'type' => 'input',
 							'size' => ((int) (mb_strlen($element['content'], 'UTF-8') - 1) / 10 + 1) * 10,
 							'content' => '',
-							'help' => $element['help']
+							'help' => $element['help'],
+							'link' => isset($element['link']) ? $element['link'] : null
 						);
 					}
 				}
