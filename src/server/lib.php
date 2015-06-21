@@ -83,6 +83,7 @@ function elang_add_instance(stdClass $elang, mod_elang_mod_form $mform = null)
 			'left' => isset($elang->left) ? $elang->left : 20,
 			'top' => isset($elang->top) ? $elang->top : 20,
 			'size' => isset($elang->size) ? $elang->size : 16,
+			'usetransliteration' => isset($elang->usetransliteration) ? true : false,
 		)
 	);
 
@@ -128,6 +129,7 @@ function elang_update_instance(stdClass $elang, mod_elang_mod_form $mform = null
 			'left' => isset($elang->left) ? $elang->left : 20,
 			'top' => isset($elang->top) ? $elang->top : 20,
 			'size' => isset($elang->size) ? $elang->size : 16,
+			'usetransliteration' => isset($elang->usetransliteration) ? true : false,
 		)
 	);
 

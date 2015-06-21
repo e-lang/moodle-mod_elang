@@ -26,6 +26,9 @@ $ -> Language fix or change
 ! -> Note
 
 2015-06-17  Christophe Demko <chdemko@gmail.com>
+ + Comparison between answer and correct value can be done using ASCII transliteration
+
+2015-06-17  Christophe Demko <chdemko@gmail.com>
  $ Fix language string 'subtitleunknownencoding'
 
 ----------------------------------------- stable-1.1.0 -----------------------------------------

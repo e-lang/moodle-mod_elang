@@ -112,6 +112,7 @@ if ($ADMIN->fulltree)
 			$languages
 		)
 	);
+
 	$settings->add(
 		new admin_setting_configcheckbox(
 			'elang/showlanguage',
@@ -146,6 +147,15 @@ if ($ADMIN->fulltree)
 			get_string('size_config', 'elang'),
 			16,
 			PARAM_INT
+		)
+	);
+
+	$settings->add(
+		new admin_setting_configcheckbox(
+			'elang/usetransliteration',
+			get_string('usetransliteration', 'elang'),
+			get_string('usetransliteration_config', 'elang'),
+			0
 		)
 	);
 }

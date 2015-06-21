@@ -186,6 +186,9 @@ class mod_elang_mod_form extends moodleform_mod
 		$mform->addRule('size', get_string('size_error', 'elang'), 'numeric', null, 'client');
 		$mform->setType('size', PARAM_INT);
 
+		$mform->addElement('checkbox', 'usetransliteration', get_string('usetransliteration', 'elang'));
+		$mform->addHelpButton('usetransliteration', 'usetransliteration', 'elang');
+
 		// Add standard elements, common to all modules
 		$this->standard_coursemodule_elements();
 
@@ -250,6 +253,7 @@ class mod_elang_mod_form extends moodleform_mod
 			$default_values['left'] = isset($options['left']) ? $options['left'] : 20;
 			$default_values['top'] = isset($options['top']) ? $options['top'] : 20;
 			$default_values['size'] = isset($options['size']) ? $options['size'] : 16;
+			$default_values['usetransliteration'] = isset($options['usetransliteration']) ? $options['usetransliteration'] : false;
 		}
 		else
 		{
@@ -261,6 +265,7 @@ class mod_elang_mod_form extends moodleform_mod
 			$default_values['left'] = $config->left;
 			$default_values['top'] = $config->top;
 			$default_values['size'] = $config->size;
+			$default_values['usetransliteration'] = $config->usetransliteration;
 		}
 	}
 
