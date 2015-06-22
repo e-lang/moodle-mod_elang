@@ -344,8 +344,8 @@ switch ($task)
 			|| $options['usetransliteration']
 			&& strtolower(@iconv('UTF-8', 'ASCII//TRANSLIT', $text)) == strtolower(@iconv('UTF-8', 'ASCII//TRANSLIT', $elements[$number]['content'])))
 		{
- 			$text = $elements[$number]['content'];
- 		}
+			$text = $elements[$number]['content'];
+		}
 
 		// Log action
 		if (!empty($text))
