@@ -186,9 +186,6 @@ class mod_elang_mod_form extends moodleform_mod
 		$mform->addRule('size', get_string('size_error', 'elang'), 'numeric', null, 'client');
 		$mform->setType('size', PARAM_INT);
 
-		$mform->addElement('checkbox', 'usetransliteration', get_string('usetransliteration', 'elang'));
-		$mform->addHelpButton('usetransliteration', 'usetransliteration', 'elang');
-
 		// Add standard elements, common to all modules
 		$this->standard_coursemodule_elements();
 
@@ -202,6 +199,50 @@ class mod_elang_mod_form extends moodleform_mod
 		}
 	}
 
+	
+    function add_completion_rules() {
+        $mform =& $this->_form;
+
+        $group=array();
+        $group[] =& $mform->createElement('checkbox', 'completion_gapfilledenabled', '', get_string('completion:gapfilled','elang'));
+        $group[] =& $mform->createElement('text', 'completion_gapfilled', '', array('size'=>3));
+        $mform->setType('completion_gapfilled',PARAM_INT);
+        $mform->addGroup($group, 'completion_gapfilled_group', get_string('completion:gapfilledgroup','elang'), array(' '), false);
+        $mform->disabledIf('completion_gapfilled','completion_gapfilledenabled','notchecked');
+
+        $group=array();
+        $group[] =& $mform->createElement('checkbox', 'completion_gapcompletedenabled', '', get_string('completion:gapcompleted','elang'));
+        $group[] =& $mform->createElement('text', 'completion_gapcompleted', '', array('size'=>3));
+        $mform->setType('completion_gapcompleted',PARAM_INT);
+        $mform->addGroup($group, 'completion_gapcompleted_group', get_string('completion:gapcompletedgroup','elang'), array(' '), false);
+        $mform->disabledIf('completion_gapcompleted','completion_gapcompletedenabled','notchecked');
+
+        return array('completion_gapcompleted_group','completion_gapfilled_group');
+    }
+	
+    function completion_rule_enabled($data) {
+        return (!empty($data['completion_gapfilledenabled']) && $data['completion_gapfilled'] > 0 && $data['completion_gapfilled'] <= 100) ||
+            (!empty($data['completion_gapcompletedenabled']) && $data['completion_gapcompleted'] > 0 && $data['completion_gapcompleted'] <= 100);
+    }
+
+    function get_data() {
+        $data = parent::get_data();
+        if (!$data) {
+            return false;
+        }
+        // Turn off completion settings if the checkboxes aren't ticked
+        if (!empty($data->completionunlocked)) {
+            $autocompletion = !empty($data->completion) && $data->completion==COMPLETION_TRACKING_AUTOMATIC;
+            if (empty($data->completion_gapfilledenabled) || !$autocompletion) {
+                $data->completion_gapfilled = 0;
+            }
+            if (empty($data->completion_gapcompletedenabled) || !$autocompletion) {
+                $data->completion_gapcompleted = 0;
+            }
+        }
+        return $data;
+    }
+	
 	/**
 	 * Preprocess data before creating form
 	 *
@@ -253,7 +294,11 @@ class mod_elang_mod_form extends moodleform_mod
 			$default_values['left'] = isset($options['left']) ? $options['left'] : 20;
 			$default_values['top'] = isset($options['top']) ? $options['top'] : 20;
 			$default_values['size'] = isset($options['size']) ? $options['size'] : 16;
-			$default_values['usetransliteration'] = isset($options['usetransliteration']) ? $options['usetransliteration'] : false;
+			$default_values['completion_gapfilled'] = isset($options['completion_gapfilled']) ? $options['completion_gapfilled'] : 0;
+			$default_values['completion_gapcompleted'] = isset($options['completion_gapcompleted']) ? $options['completion_gapcompleted'] : 0;
+			
+			if ($default_values['completion_gapfilled'] > 0) $default_values['completion_gapfilledenabled'] = true;
+			if ($default_values['completion_gapcompleted'] > 0) $default_values['completion_gapcompletedenabled'] = true;
 		}
 		else
 		{
@@ -265,7 +310,8 @@ class mod_elang_mod_form extends moodleform_mod
 			$default_values['left'] = $config->left;
 			$default_values['top'] = $config->top;
 			$default_values['size'] = $config->size;
-			$default_values['usetransliteration'] = $config->usetransliteration;
+			$default_values['completion_gapfilled'] = 0;
+			$default_values['completion_gapfilled'] = 0;
 		}
 	}
 
