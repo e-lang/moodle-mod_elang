@@ -36,17 +36,13 @@ function elang_supports($feature)
 {
 	switch ($feature)
 	{
-		case FEATURE_MOD_INTRO:
-			return true;
-		case FEATURE_SHOW_DESCRIPTION:
-			return true;
-
-		// Usefull for backup, restore and clone action
-		case FEATURE_BACKUP_MOODLE2:
-			return true;
-
-		default:
-			return null;
+		case FEATURE_MOD_INTRO:					return true;
+		case FEATURE_SHOW_DESCRIPTION:			return true;
+		case FEATURE_BACKUP_MOODLE2:			return true; // Usefull for backup, restore and clone action
+		case FEATURE_COMPLETION_TRACKS_VIEWS: 	return true;
+		case FEATURE_COMPLETION_HAS_RULES: 		return true;
+		
+		default:								return null;
 	}
 }
 
@@ -83,7 +79,8 @@ function elang_add_instance(stdClass $elang, mod_elang_mod_form $mform = null)
 			'left' => isset($elang->left) ? $elang->left : 20,
 			'top' => isset($elang->top) ? $elang->top : 20,
 			'size' => isset($elang->size) ? $elang->size : 16,
-			'usetransliteration' => isset($elang->usetransliteration) ? true : false,
+			'completion_gapfilled' => isset($elang->completion_gapfilled) ? $elang->completion_gapfilled : 0,
+			'completion_gapcompleted' => isset($elang->completion_gapfilled) ? $elang->completion_gapfilled : 0,
 		)
 	);
 
@@ -129,7 +126,8 @@ function elang_update_instance(stdClass $elang, mod_elang_mod_form $mform = null
 			'left' => isset($elang->left) ? $elang->left : 20,
 			'top' => isset($elang->top) ? $elang->top : 20,
 			'size' => isset($elang->size) ? $elang->size : 16,
-			'usetransliteration' => isset($elang->usetransliteration) ? true : false,
+			'completion_gapfilled' => isset($elang->completion_gapfilled) ? $elang->completion_gapfilled : 0,
+			'completion_gapcompleted' => isset($elang->completion_gapfilled) ? $elang->completion_gapfilled : 0,
 		)
 	);
 
@@ -239,7 +237,7 @@ function elang_user_outline($course, $user, $mod, $elang)
  * @param   cm_info   $mod     course module info
  * @param   stdClass  $elang   the module instance record
  *
- * @return  void, is supposed to echp directly
+ * @return  void, is supposed to echo directly
  *
  * @category  core
  *
@@ -247,6 +245,105 @@ function elang_user_outline($course, $user, $mod, $elang)
  */
 function elang_user_complete($course, $user, $mod, $elang)
 {
+}
+
+/**
+ * Obtains the automatic completion state for this elang based on any conditions
+ * in elang settings.
+ *
+ * @global object
+ * @global object
+ * @param object $course Course
+ * @param object $cm Course-module
+ * @param int $userid User ID
+ * @param bool $type Type of comparison (or/and; can be used as return value if no conditions)
+ * @return bool True if completed, false if not. (If no conditions, then return
+ *   value depends on comparison type)
+ */
+function elang_get_completion_state($course, $cm, $userid, $type = false)
+{
+    global $DB;
+
+	// Get options for elang
+    if (!($elang = $DB->get_record('elang', array('id' => $cm->instance))))
+	{
+        throw new Exception("Can't find elang {$cm->instance}");
+    }
+	
+	$options = json_decode($elang->options, true);
+	
+	if (!array_key_exists('completion_gapfilled', $options)) $options['completion_gapfilled'] = 0;
+	if (!array_key_exists('completion_gapcompleted', $options)) $options['completion_gapcompleted'] = 0;
+	
+    $result = $type; // Default return value.
+
+	// Get all cues
+	$solutions = $DB->get_records('elang_cues', array('id_elang' => $cm->instance), 'number');
+
+	// Get answers provided by a given user
+	$answers = $DB->get_records('elang_users', array('id_elang' => $cm->instance, 'id_user' => $userid));
+
+	$answers2 = array();
+
+	foreach ($answers as $answer)
+	{
+		$answers2[$answer->id_cue] = json_decode($answer->json, true);
+	}
+
+	// Count cues ans answers
+	$count = 0;
+	$success = 0;
+	$help = 0;
+	$error = 0;
+
+	foreach ($solutions as $cue => $solution)
+	{
+		// Compute data
+		foreach (json_decode($solution->json, true) as $n => $data)
+		{
+			if (isset($data['content']) && $data['type'] == 'input') $count++;
+
+			if (isset($answers2[$cue][$n]))
+			{
+				if ($answers2[$cue][$n]['help'])
+				{
+					$help++;
+				}
+				elseif ($answers2[$cue][$n]['content'] == $data['content'])
+				{
+					$success++;
+				}
+				elseif ($answers2[$cue][$n]['content'] != '')
+				{
+					$error++;
+				}
+			}
+		}
+	}
+
+	// Avoid division by zero
+	if ($count == 0) $count = 1;
+	
+	if ($options['completion_gapfilled'] > 0)
+	{
+        $value = $options['completion_gapfilled'] <= (($success + $help + $error) * 100 / $count);
+		if ($type == COMPLETION_AND) {
+            $result = $result && $value;
+        } else {
+            $result = $result || $value;
+        }
+    }
+
+	if ($options['completion_gapcompleted'] > 0)
+	{
+        $value = $options['completion_gapcompleted'] <= (($success) * 100 / $count);
+		if ($type == COMPLETION_AND) {
+            $result = $result && $value;
+        } else {
+            $result = $result || $value;
+        }
+    }
+    return $result;
 }
 
 /**
@@ -371,6 +468,7 @@ function elang_get_coursemodule_info($coursemodule)
 	}
 
 	$options = json_decode($elang->options, true);
+	
 	$info = new cached_cm_info;
 
 	require_once dirname(__FILE__) . '/locallib.php';
