@@ -38,6 +38,13 @@ $elang = $DB->get_record('elang', array('id' => $cm->instance), '*', MUST_EXIST)
 // Verify the login
 require_login($course, true, $cm);
 
+// Update completion state
+$completion = new completion_info($course);
+if($completion->is_enabled($cm))
+{
+	$completion->update_state($cm, COMPLETION_UNKNOWN);
+}
+			
 // Get the context
 $context = context_module::instance($cm->id);
 
