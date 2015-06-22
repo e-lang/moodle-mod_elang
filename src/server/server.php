@@ -66,6 +66,9 @@ if (!$course || !$elang)
 	die;
 }
 
+// Verify the login
+require_login($course, true, $cm);
+
 // Get the moodle version
 $version = moodle_major_version(true);
 
@@ -337,9 +340,7 @@ switch ($task)
 
 		// Compare strings ignoring case
 		// TODO: insert here the use of the Levenshtein distance
-		if (mb_strtolower($text, 'UTF-8') == mb_strtolower($elements[$number]['content'], 'UTF-8')
-			|| $options['usetransliteration']
-			&& strtolower(@iconv('UTF-8', 'ASCII//TRANSLIT', $text)) == strtolower(@iconv('UTF-8', 'ASCII//TRANSLIT', $elements[$number]['content'])))
+		if (mb_strtolower($text, 'UTF-8') == mb_strtolower($elements[$number]['content'], 'UTF-8'))
 		{
 			$text = $elements[$number]['content'];
 		}
@@ -401,8 +402,15 @@ switch ($task)
 			);
 		}
 
+		// Check completion
+		$completion = new completion_info($course);
+		if ($completion->is_enabled($cm))
+		{
+			$completion->update_state($cm, COMPLETION_COMPLETE);
+		}
+		
+		// Send the response
 		$cue_text = Elang\generateCueText($elements, $data, '-', $repeatedunderscore);
-
 		if ($elements[$number]['content'] == $text)
 		{
 			Elang\sendResponse(array('status' => 'success', 'cue' => $cue_text, 'content' => $text));
@@ -520,12 +528,29 @@ switch ($task)
 			);
 		}
 
+		// Check completion
+		$completion = new completion_info($course);
+		if ($completion->is_enabled($cm))
+		{
+			$completion->update_state($cm, COMPLETION_COMPLETE);
+		}
+		
+		// Send the response		
 		$cue_text = Elang\generateCueText($elements, $data, '-', $repeatedunderscore);
-
-		// Send the response
 		Elang\sendResponse(array('cue' => $cue_text, 'content' => $elements[$number]['content']));
+		
 		break;
-
+	
+	/*
+	case 'reset_incomplete':
+	case 'reset_all':
+		// needs to be coded at later times
+		$completion = new completion_info($course);
+		if ($completion->is_enabled($cm))
+		{
+			$completion->update_state($cm, COMPLETION_INCOMPLETE);
+		}
+	*/
 	default:
 		header('HTTP/1.1 400 Bad Request');
 		die;
