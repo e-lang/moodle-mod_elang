@@ -42,6 +42,7 @@ require_login($course, true, $cm);
 $completion = new completion_info($course);
 if($completion->is_enabled($cm))
 {
+	$completion->set_module_viewed($cm);
 	$completion->update_state($cm, COMPLETION_UNKNOWN);
 }
 			
