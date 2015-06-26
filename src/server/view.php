@@ -46,7 +46,7 @@ if ($completion->is_enabled($cm))
 	$completion->set_module_viewed($cm);
 	$completion->update_state($cm, COMPLETION_UNKNOWN);
 }
-	
+
 // Get the context
 $context = context_module::instance($cm->id);
 
