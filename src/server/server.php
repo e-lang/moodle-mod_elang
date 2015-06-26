@@ -406,13 +406,15 @@ switch ($task)
 
 		// Check completion
 		$completion = new completion_info($course);
+
 		if ($completion->is_enabled($cm))
 		{
 			$completion->update_state($cm, COMPLETION_COMPLETE);
 		}
-		
+
 		// Send the response
 		$cue_text = Elang\generateCueText($elements, $data, '-', $repeatedunderscore);
+
 		if ($elements[$number]['content'] == $text)
 		{
 			Elang\sendResponse(array('status' => 'success', 'cue' => $cue_text, 'content' => $text));
@@ -432,6 +434,7 @@ switch ($task)
 		$cue = $DB->get_record('elang_cues', array('id' => $id_cue), '*');
 
 		// Detect error
+
 		if (!$cue)
 		{
 			header('HTTP/1.1 404 Not Found');
@@ -532,27 +535,18 @@ switch ($task)
 
 		// Check completion
 		$completion = new completion_info($course);
+
 		if ($completion->is_enabled($cm))
 		{
 			$completion->update_state($cm, COMPLETION_COMPLETE);
 		}
-		
+
 		// Send the response		
 		$cue_text = Elang\generateCueText($elements, $data, '-', $repeatedunderscore);
 		Elang\sendResponse(array('cue' => $cue_text, 'content' => $elements[$number]['content']));
 		
 		break;
-	
-	/*
-	case 'reset_incomplete':
-	case 'reset_all':
-		// needs to be coded at later times
-		$completion = new completion_info($course);
-		if ($completion->is_enabled($cm))
-		{
-			$completion->update_state($cm, COMPLETION_INCOMPLETE);
-		}
-	*/
+
 	default:
 		header('HTTP/1.1 400 Bad Request');
 		die;
