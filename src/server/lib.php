@@ -36,13 +36,19 @@ function elang_supports($feature)
 {
 	switch ($feature)
 	{
-		case FEATURE_MOD_INTRO:					return true;
-		case FEATURE_SHOW_DESCRIPTION:			return true;
-		case FEATURE_BACKUP_MOODLE2:			return true; // Usefull for backup, restore and clone action
-		case FEATURE_COMPLETION_TRACKS_VIEWS: 	return true;
-		case FEATURE_COMPLETION_HAS_RULES: 		return true;
+		case FEATURE_MOD_INTRO:
+			return true;
+		case FEATURE_SHOW_DESCRIPTION:
+			return true;
+		case FEATURE_BACKUP_MOODLE2:
+			return true; // Usefull for backup, restore and clone action
+		case FEATURE_COMPLETION_TRACKS_VIEWS:
+			return true;
+		case FEATURE_COMPLETION_HAS_RULES:
+			return true;
 		
-		default:								return null;
+		default:
+			return null;
 	}
 }
 
@@ -264,20 +270,22 @@ function elang_user_complete($course, $user, $mod, $elang)
  */
 function elang_get_completion_state($course, $cm, $userid, $type = false)
 {
-    global $DB;
-
+	global $DB;
+	
 	// Get options for elang
-    if (!($elang = $DB->get_record('elang', array('id' => $cm->instance))))
+	if (!($elang = $DB->get_record('elang', array('id' => $cm->instance))))
 	{
-        throw new Exception("Can't find elang {$cm->instance}");
-    }
-	
+		throw new Exception("Can't find elang {$cm->instance}");
+	}
+
 	$options = json_decode($elang->options, true);
-	
+
 	if (!array_key_exists('completion_gapfilled', $options)) $options['completion_gapfilled'] = 0;
+
 	if (!array_key_exists('completion_gapcompleted', $options)) $options['completion_gapcompleted'] = 0;
-	
-    $result = $type; // Default return value.
+
+	// Default return value.
+	$result = $type; 
 
 	// Get all cues
 	$solutions = $DB->get_records('elang_cues', array('id_elang' => $cm->instance), 'number');
@@ -328,24 +336,33 @@ function elang_get_completion_state($course, $cm, $userid, $type = false)
 	
 	if ($options['completion_gapfilled'] > 0)
 	{
-        $value = $options['completion_gapfilled'] <= (($success + $help + $error) * 100 / $count);
-		if ($type == COMPLETION_AND) {
-            $result = $result && $value;
-        } else {
-            $result = $result || $value;
-        }
-    }
+		$value = $options['completion_gapfilled'] <= (($success + $help + $error) * 100 / $count);
+		
+		if ($type == COMPLETION_AND)
+		{
+			$result = $result && $value;
+		}
+        	else
+        	{
+			$result = $result || $value;
+        	}
+	}
 
 	if ($options['completion_gapcompleted'] > 0)
 	{
-        $value = $options['completion_gapcompleted'] <= (($success) * 100 / $count);
-		if ($type == COMPLETION_AND) {
-            $result = $result && $value;
-        } else {
-            $result = $result || $value;
-        }
-    }
-    return $result;
+		$value = $options['completion_gapcompleted'] <= (($success) * 100 / $count);
+
+		if ($type == COMPLETION_AND)
+		{
+            		$result = $result && $value;
+        	}
+        	else
+        	{
+        		$result = $result || $value;
+        	}
+	}
+
+	return $result;
 }
 
 /**
@@ -470,7 +487,7 @@ function elang_get_coursemodule_info($coursemodule)
 	}
 
 	$options = json_decode($elang->options, true);
-	
+
 	$info = new cached_cm_info;
 
 	require_once dirname(__FILE__) . '/locallib.php';
