@@ -30,7 +30,6 @@ $string['csvlastname'] = 'Lastname';
 $string['cuelisting'] = 'Cue Listing';
 $string['download'] = 'Download';
 $string['download_help'] = "The file downloaded in CSV format contains the progress of each student. Students are arranged in lines and text to guess in columns. A title line contains the number of the sequence of texts to guess. In the rest of the cells, a number represents the status of each text to guess (0: empty 1: success, -1 error, -2: help requested).";
-$string['elang:addinstance'] = 'Add instance';
 $string['elang'] = 'Listening Landscape';
 $string['elangname'] = "Exercise's title";
 $string['elangname_help'] = 'Enter the exercise title';

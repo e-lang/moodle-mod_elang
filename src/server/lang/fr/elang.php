@@ -29,7 +29,6 @@ $string['csvlastname'] = 'Nom';
 $string['cuelisting'] = 'Liste des séquences';
 $string['download'] = 'Téléchargement';
 $string['download_help'] = "Le fichier téléchargé au format csv contient l'état d'avancement de chaque étudiant. Les étudiants sont disposés en ligne et les textes à deviner en colonnes. Une ligne de titre contient le numéro de la séquence des textes à deviner. Dans le reste des cellules, un entier représente l'état de chaque texte à deviner (0: vide, 1: succès, -1: erreur, -2: aide demandée).";
-$string['elang:addinstance'] = 'Ajouter une instance';
 $string['elangname_help'] = "Entrez le nom de l'exercice";
 $string['elangname'] = "Titre de l'exercice";
 $string['elang'] = "Paysage d'écoute";
