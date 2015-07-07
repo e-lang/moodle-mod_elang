@@ -202,45 +202,71 @@ class mod_elang_mod_form extends moodleform_mod
 		}
 	}
 
-	function add_completion_rules() 
+	/**
+	 * Add completion rules
+	 *
+	 * @return  array  Array of string IDs of added items, empty array if none
+	 *
+	 * @since  1.2.0
+	 */
+	public function add_completion_rules()
 	{
-		$mform =& $this->_form;
+		$mform = $this->_form;
 
 		$group = array();
-		$group[] =& $mform->createElement('checkbox', 'completion_gapfilledenabled', '', get_string('completion:gapfilled','elang'));
-		$group[] =& $mform->createElement('text', 'completion_gapfilled', '', array('size' => 3));
-		$mform->setType('completion_gapfilled',PARAM_INT);
-		$mform->addGroup($group, 'completion_gapfilled_group', get_string('completion:gapfilledgroup','elang'), array(' '), false);
-		$mform->disabledIf('completion_gapfilled','completion_gapfilledenabled','notchecked');
+		$group[] = $mform->createElement('checkbox', 'completion_gapfilledenabled', '', get_string('completion:gapfilled', 'elang'));
+		$group[] = $mform->createElement('text', 'completion_gapfilled', '', array('size' => 3));
+		$mform->setType('completion_gapfilled', PARAM_INT);
+		$mform->addGroup($group, 'completion_gapfilled_group', get_string('completion:gapfilledgroup', 'elang'), array(' '), false);
+		$mform->disabledIf('completion_gapfilled', 'completion_gapfilledenabled', 'notchecked');
 
 		$group = array();
-		$group[] =& $mform->createElement('checkbox', 'completion_gapcompletedenabled', '', get_string('completion:gapcompleted','elang'));
-		$group[] =& $mform->createElement('text', 'completion_gapcompleted', '', array('size' => 3));
-		$mform->setType('completion_gapcompleted',PARAM_INT);
-		$mform->addGroup($group, 'completion_gapcompleted_group', get_string('completion:gapcompletedgroup','elang'), array(' '), false);
-		$mform->disabledIf('completion_gapcompleted','completion_gapcompletedenabled','notchecked');
+		$group[] = $mform->createElement('checkbox', 'completion_gapcompletedenabled', '', get_string('completion:gapcompleted', 'elang'));
+		$group[] = $mform->createElement('text', 'completion_gapcompleted', '', array('size' => 3));
+		$mform->setType('completion_gapcompleted', PARAM_INT);
+		$mform->addGroup($group, 'completion_gapcompleted_group', get_string('completion:gapcompletedgroup', 'elang'), array(' '), false);
+		$mform->disabledIf('completion_gapcompleted', 'completion_gapcompletedenabled', 'notchecked');
 
-		return array('completion_gapcompleted_group','completion_gapfilled_group');
+		return array('completion_gapcompleted_group', 'completion_gapfilled_group');
 	}
 
-	function completion_rule_enabled($data) 
+	/**
+	 * Called during validation. Override to indicate, based on the data, whether
+	 * a custom completion rule is enabled (selected).
+	 *
+	 * @param   array  $data  Input data (not yet validated)
+	 *
+	 * @return  bool  true if one or more rules is enabled, false if none are; default returns false
+	 *
+	 * @since  1.2.0
+	 */
+	public function completion_rule_enabled($data)
 	{
-		return (!empty($data['completion_gapfilledenabled']) && $data['completion_gapfilled'] > 0 && $data['completion_gapfilled'] <= 100) ||
-			(!empty($data['completion_gapcompletedenabled']) && $data['completion_gapcompleted'] > 0 && $data['completion_gapcompleted'] <= 100);
+		return !empty($data['completion_gapfilledenabled']) && $data['completion_gapfilled'] > 0 && $data['completion_gapfilled'] <= 100 ||
+			!empty($data['completion_gapcompletedenabled']) && $data['completion_gapcompleted'] > 0 && $data['completion_gapcompleted'] <= 100;
 	}
-	
-	function get_data() 
+
+	/**
+	 * Return submitted data if properly submitted or returns NULL if validation fails or
+	 * if there is no submitted data.
+	 *
+	 * @return  object  submitted data; NULL if not valid or not submitted or cancelled
+	 *
+	 * @since  1.2.0
+	 */
+	public function get_data()
 	{
-        	$data = parent::get_data();
-        	if (!$data) {
+		$data = parent::get_data();
+
+		if (!$data)
+		{
 			return false;
 		}
-        
-        	// Turn off completion settings if the checkboxes aren't ticked
 
+		// Turn off completion settings if the checkboxes aren't ticked
 		if (!empty($data->completionunlocked))
 		{
-			$autocompletion = !empty($data->completion) && $data->completion==COMPLETION_TRACKING_AUTOMATIC;
+			$autocompletion = !empty($data->completion) && $data->completion == COMPLETION_TRACKING_AUTOMATIC;
 
 			if (empty($data->completion_gapfilledenabled) || !$autocompletion)
 			{
@@ -252,9 +278,10 @@ class mod_elang_mod_form extends moodleform_mod
 				$data->completion_gapcompleted = 0;
 			}
 		}
+
 		return $data;
 	}
-	
+
 	/**
 	 * Preprocess data before creating form
 	 *
@@ -309,10 +336,8 @@ class mod_elang_mod_form extends moodleform_mod
 			$default_values['usetransliteration'] = isset($options['usetransliteration']) ? $options['usetransliteration'] : false;
 			$default_values['completion_gapfilled'] = isset($options['completion_gapfilled']) ? $options['completion_gapfilled'] : 0;
 			$default_values['completion_gapcompleted'] = isset($options['completion_gapcompleted']) ? $options['completion_gapcompleted'] : 0;
-
-			if ($default_values['completion_gapfilled'] > 0) $default_values['completion_gapfilledenabled'] = true;
-
-			if ($default_values['completion_gapcompleted'] > 0) $default_values['completion_gapcompletedenabled'] = true;
+			$default_values['completion_gapfilledenabled'] = $default_values['completion_gapfilled'] > 0;
+			$default_values['completion_gapcompletedenabled'] = $default_values['completion_gapcompleted'] > 0;
 		}
 		else
 		{
@@ -326,7 +351,9 @@ class mod_elang_mod_form extends moodleform_mod
 			$default_values['size'] = $config->size;
 			$default_values['usetransliteration'] = $config->usetransliteration;
 			$default_values['completion_gapfilled'] = 0;
-			$default_values['completion_gapfilled'] = 0;
+			$default_values['completion_gapcompleted'] = 0;
+			$default_values['completion_gapfilledenabled'] = false;
+			$default_values['completion_gapcompletedenabled'] = false;
 		}
 	}
 

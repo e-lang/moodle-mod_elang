@@ -40,13 +40,17 @@ function elang_supports($feature)
 			return true;
 		case FEATURE_SHOW_DESCRIPTION:
 			return true;
+
+		// Usefull for backup, restore and clone action
 		case FEATURE_BACKUP_MOODLE2:
-			return true; // Usefull for backup, restore and clone action
+			return true;
+
+		// Usefull for completion settings
 		case FEATURE_COMPLETION_TRACKS_VIEWS:
 			return true;
 		case FEATURE_COMPLETION_HAS_RULES:
 			return true;
-		
+
 		default:
 			return null;
 	}
@@ -87,7 +91,7 @@ function elang_add_instance(stdClass $elang, mod_elang_mod_form $mform = null)
 			'size' => isset($elang->size) ? $elang->size : 16,
 			'usetransliteration' => isset($elang->usetransliteration) ? true : false,
 			'completion_gapfilled' => isset($elang->completion_gapfilled) ? $elang->completion_gapfilled : 0,
-			'completion_gapcompleted' => isset($elang->completion_gapfilled) ? $elang->completion_gapfilled : 0,
+			'completion_gapcompleted' => isset($elang->completion_gapcompleted) ? $elang->completion_gapcompleted : 0,
 		)
 	);
 
@@ -135,7 +139,7 @@ function elang_update_instance(stdClass $elang, mod_elang_mod_form $mform = null
 			'size' => isset($elang->size) ? $elang->size : 16,
 			'usetransliteration' => isset($elang->usetransliteration) ? true : false,
 			'completion_gapfilled' => isset($elang->completion_gapfilled) ? $elang->completion_gapfilled : 0,
-			'completion_gapcompleted' => isset($elang->completion_gapfilled) ? $elang->completion_gapfilled : 0,
+			'completion_gapcompleted' => isset($elang->completion_gapcompleted) ? $elang->completion_gapcompleted : 0,
 		)
 	);
 
@@ -256,22 +260,21 @@ function elang_user_complete($course, $user, $mod, $elang)
 }
 
 /**
- * Obtains the automatic completion state for this elang based on any conditions
- * in elang settings.
+ * Obtains the automatic completion state for this elang based on any conditions in elang settings.
  *
- * @global object
- * @global object
- * @param object $course Course
- * @param object $cm Course-module
- * @param int $userid User ID
- * @param bool $type Type of comparison (or/and; can be used as return value if no conditions)
- * @return bool True if completed, false if not. (If no conditions, then return
- *   value depends on comparison type)
+ * @param   object  $course  Course
+ * @param   object  $cm      Course-module
+ * @param   int     $userid  User ID
+ * @param   bool    $type    Type of comparison (or/and; can be used as return value if no conditions)
+ *
+ * @return  bool  true if completed, false if not. (If no conditions, then return value depends on comparison type)
+ *
+ * @since  1.2.0
  */
 function elang_get_completion_state($course, $cm, $userid, $type = false)
 {
 	global $DB;
-	
+
 	// Get options for elang
 	if (!($elang = $DB->get_record('elang', array('id' => $cm->instance))))
 	{
@@ -280,12 +283,18 @@ function elang_get_completion_state($course, $cm, $userid, $type = false)
 
 	$options = json_decode($elang->options, true);
 
-	if (!array_key_exists('completion_gapfilled', $options)) $options['completion_gapfilled'] = 0;
+	if (!array_key_exists('completion_gapfilled', $options))
+	{
+		$options['completion_gapfilled'] = 0;
+	}
 
-	if (!array_key_exists('completion_gapcompleted', $options)) $options['completion_gapcompleted'] = 0;
+	if (!array_key_exists('completion_gapcompleted', $options))
+	{
+		$options['completion_gapcompleted'] = 0;
+	}
 
 	// Default return value.
-	$result = $type; 
+	$result = $type;
 
 	// Get all cues
 	$solutions = $DB->get_records('elang_cues', array('id_elang' => $cm->instance), 'number');
@@ -311,7 +320,10 @@ function elang_get_completion_state($course, $cm, $userid, $type = false)
 		// Compute data
 		foreach (json_decode($solution->json, true) as $n => $data)
 		{
-			if (isset($data['content']) && $data['type'] == 'input') $count++;
+			if (isset($data['content']) && $data['type'] == 'input')
+			{
+				$count++;
+			}
 
 			if (isset($answers2[$cue][$n]))
 			{
@@ -332,37 +344,43 @@ function elang_get_completion_state($course, $cm, $userid, $type = false)
 	}
 
 	// Avoid division by zero
-	if ($count == 0) $count = 1;
-	
-	if ($options['completion_gapfilled'] > 0)
+	if ($count == 0)
 	{
-		$value = $options['completion_gapfilled'] <= (($success + $help + $error) * 100 / $count);
-		
-		if ($type == COMPLETION_AND)
+		return $result;
+	}
+	else
+	{
+		if ($options['completion_gapfilled'] > 0)
 		{
-			$result = $result && $value;
+			$value = $options['completion_gapfilled'] <= (($success + $help + $error) * 100 / $count);
+
+			if ($type == COMPLETION_AND)
+			{
+				$result = $result && $value;
+			}
+			else
+			{
+				$result = $result || $value;
+			}
 		}
-        	else
-        	{
-			$result = $result || $value;
-        	}
-	}
 
-	if ($options['completion_gapcompleted'] > 0)
-	{
-		$value = $options['completion_gapcompleted'] <= (($success) * 100 / $count);
-
-		if ($type == COMPLETION_AND)
+		if ($options['completion_gapcompleted'] > 0)
 		{
-            		$result = $result && $value;
-        	}
-        	else
-        	{
-        		$result = $result || $value;
-        	}
-	}
+			$value = $options['completion_gapcompleted'] <= (($success) * 100 / $count);
 
-	return $result;
+
+			if ($type == COMPLETION_AND)
+			{
+				$result = $result && $value;
+			}
+			else
+			{
+				$result = $result || $value;
+			}
+		}
+
+		return $result;
+	}
 }
 
 /**
@@ -487,7 +505,6 @@ function elang_get_coursemodule_info($coursemodule)
 	}
 
 	$options = json_decode($elang->options, true);
-
 	$info = new cached_cm_info;
 
 	require_once dirname(__FILE__) . '/locallib.php';
