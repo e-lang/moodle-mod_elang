@@ -129,6 +129,7 @@ $string['top_error'] = 'Vous devez entrez un nombre. 20 est une valeur typique.'
 $string['top_help'] = 'Cela définit la marge du haut pour les fichiers pdf générés';
 $string['top'] = 'Marge haute des fichiers pdf';
 $string['Unauthorized'] = 'Non autorisé';
+$string['unenrolled_user'] = 'Utilisateur non inscrit';
 $string['update_warning'] = "Si vous modifiez un exercice, toute l'activité des étudiants sera effacée pour cet exercice";
 $string['updatetable'] = 'Mise à jour de la table';
 $string['upload'] = "Fichiers de l'exercice";

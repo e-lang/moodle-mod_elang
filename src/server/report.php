@@ -259,6 +259,9 @@ else
 			$event->trigger();
 		}
 
+		// Output starts here.
+		echo $OUTPUT->header();
+
 		// Display the report for one user
 		if (is_enrolled($context, $id_user, 'mod/elang:isinreport'))
 		{
@@ -275,9 +278,6 @@ else
 				)
 			);
 			$studentnode->make_active();
-
-			// Output starts here.
-			echo $OUTPUT->header();
 
 			// Prepare the table
 			$table = new html_table;
@@ -344,6 +344,13 @@ else
 			// Output the table
 			echo html_writer::table($table);
 		}
+		else
+		{
+			throw new moodle_exception('unenrolled_user', 'elang');
+		}
+
+		// Finish the page.
+		echo $OUTPUT->footer();
 	}
 	else
 	{
@@ -600,10 +607,10 @@ else
 
 		// Displays the form
 		$mform->display();
-	}
 
-	// Finish the page.
-	echo $OUTPUT->footer();
+		// Finish the page.
+		echo $OUTPUT->footer();
+	}
 
 	die;
 }

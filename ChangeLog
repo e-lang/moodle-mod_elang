@@ -29,6 +29,7 @@ $ -> Language fix or change
  + Enable activity completion (Thanks to Ralf Erlebach)
  + Add a mod/elang:isinreport capability to report only users that have this ability ('student' archetype by default)
  -! Remove useless language string
+ # Issue when a report is done for a unenrolled user
 
 2015-06-21  Christophe Demko <chdemko@gmail.com>
  + Comparison between answer and correct value can be done using ASCII transliteration

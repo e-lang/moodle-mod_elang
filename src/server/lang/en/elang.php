@@ -129,6 +129,7 @@ $string['top_error'] = 'You should enter a number here. Typical value is 20.';
 $string['top_help'] = 'This defines the pdf top margin in millimeters';
 $string['top'] = 'Pdf top margin';
 $string['Unauthorized'] = 'Unauthorized';
+$string['unenrolled_user'] = 'User unenrolled';
 $string['update_warning'] = 'If you modify an exercise, all students activity will be discarded';
 $string['updatetable'] = 'Save and update table';
 $string['upload'] = 'Files exercise';
