@@ -368,7 +368,6 @@ function elang_get_completion_state($course, $cm, $userid, $type = false)
 		{
 			$value = $options['completion_gapcompleted'] <= (($success) * 100 / $count);
 
-
 			if ($type == COMPLETION_AND)
 			{
 				$result = $result && $value;

@@ -534,13 +534,13 @@ switch ($task)
 		}
 
 		// Check completion
-/*		$completion = new completion_info($course);
+		$completion = new completion_info($course);
 
 		if ($completion->is_enabled($cm))
 		{
 			$completion->update_state($cm, COMPLETION_COMPLETE);
 		}
-*/
+
 		// Send the response
 		$cue_text = Elang\generateCueText($elements, $data, '-', $repeatedunderscore);
 		Elang\sendResponse(array('cue' => $cue_text, 'content' => $elements[$number]['content']));
