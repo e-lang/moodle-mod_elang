@@ -25,6 +25,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+2015-07-07  Christophe Demko <chdemko@gmail.com>
+ + Enable activity completion (Thanks to Ralf Erlebach)
+
 2015-06-21  Christophe Demko <chdemko@gmail.com>
  + Comparison between answer and correct value can be done using ASCII transliteration
 
