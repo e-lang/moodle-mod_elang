@@ -137,7 +137,7 @@ if ($format == 'csv')
 	$id_group = optional_param('id_group', 0, PARAM_INT);
 
 	// Get the enrolled users
-	$users = get_enrolled_users($context, '', $id_group, 'u.id, u.firstname, u.lastname, u.email', 'lastname, firstname, email');
+	$users = get_enrolled_users($context, 'mod/elang:isinreport', $id_group, 'u.id, u.firstname, u.lastname, u.email', 'lastname, firstname, email');
 
 	// Get answers from the users
 	if (!empty($users))
@@ -260,7 +260,7 @@ else
 		}
 
 		// Display the report for one user
-		if (is_enrolled($context, $id_user))
+		if (is_enrolled($context, $id_user, 'mod/elang:isinreport'))
 		{
 			$student = $DB->get_record('user', array('id' => $id_user), 'firstname, lastname, email');
 
@@ -495,7 +495,15 @@ else
 		$cache->set('sort', $sort);
 
 		// Get the enrolled users
-		$users = get_enrolled_users($context, '', $id_group, 'u.id, u.firstname, u.lastname, u.email', $sort, $page * $perpage, $perpage);
+		$users = get_enrolled_users(
+			$context,
+			'mod/elang:isinreport',
+			$id_group,
+			'u.id, u.firstname, u.lastname, u.email',
+			$sort,
+			$page * $perpage,
+			$perpage
+		);
 
 		// Prepare data for the table
 		$table->data = array();

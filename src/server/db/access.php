@@ -68,4 +68,13 @@ $capabilities = array(
 			'manager' => CAP_ALLOW
 		)
 	),
+
+	'mod/elang:isinreport' => array(
+		'captype' => 'read',
+		'contextlevel' => CONTEXT_MODULE,
+		'archetypes' => array(
+			'student' => CAP_ALLOW,
+		),
+		'clonepermissionsfrom' => 'moodle/course:isincompletionreports'
+	),
 );
