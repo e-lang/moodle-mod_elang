@@ -31,5 +31,3 @@ $plugin->release   = '@RELEASE@';
 
 // Maturity: MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC, MATURITY_STABLE
 $plugin->maturity  = @MATURITY@;
-
-
