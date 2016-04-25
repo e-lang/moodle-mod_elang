@@ -8,26 +8,28 @@
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013-2015 University of La Rochelle, France
+ * @copyright   2013-2016 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 // The current module version (Date: YYYYMMDDXX). If version == 0 then module will not be installed
-$module->version   = @VERSION@;
+$plugin->version   = @VERSION@;
 
 // Requires this Moodle version
-$module->requires  = 2012062500;
+$plugin->requires  = 2012062500;
 
 // Period for cron to check this module (secs)
-$module->cron      = 0;
+$plugin->cron      = 0;
 
 // To check on upgrade, that module sits in correct place
-$module->component = 'mod_elang';
+$plugin->component = 'mod_elang';
 
 // Human-friendly version name
-$module->release   = '@RELEASE@';
+$plugin->release   = '@RELEASE@';
 
 // Maturity: MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC, MATURITY_STABLE
-$module->maturity  = @MATURITY@;
+$plugin->maturity  = @MATURITY@;
+
+

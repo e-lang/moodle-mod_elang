@@ -1,6 +1,6 @@
 0. Metadata
 -----------
-Copyright:  2013-2015 University of La Rochelle, France
+Copyright:  2013-2016 University of La Rochelle, France
 License:    http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
 
 1. Copyright and disclaimer
@@ -24,6 +24,11 @@ $ -> Language fix or change
 ^ -> Change
 - -> Removed
 ! -> Note
+
+----------------------------------------- stable-1.2.0 -----------------------------------------
+
+2016-04-25  Christophe Demko <chdemko@gmail.com>
+ ^ Change $module by $plugin in version.php
 
 2015-07-07  Christophe Demko <chdemko@gmail.com>
  + Enable activity completion (Thanks to Ralf Erlebach)
