@@ -351,7 +351,9 @@ switch ($task)
         }
 
         $previous_locale = setlocale(LC_ALL, 0);
-        setlocale(LC_ALL, $options["language"]);
+        if (false === setlocale(LC_ALL, $options["language"])) {
+			setlocale(LC_ALL, $previous_locale);
+		}
 
         if ($parsed_text == $parsed_content
             || ($options['usetransliteration'] && @iconv('UTF-8', 'ASCII//TRANSLIT', $parsed_text) == @iconv('UTF-8', 'ASCII//TRANSLIT', $parsed_content)))
