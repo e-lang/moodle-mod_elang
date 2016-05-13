@@ -340,12 +340,26 @@ switch ($task)
 
 		// Compare strings ignoring case
 		// TODO: insert here the use of the Levenshtein distance
-		if (mb_strtolower($text, 'UTF-8') == mb_strtolower($elements[$number]['content'], 'UTF-8')
-			|| $options['usetransliteration']
-			&& strtolower(@iconv('UTF-8', 'ASCII//TRANSLIT', $text)) == strtolower(@iconv('UTF-8', 'ASCII//TRANSLIT', $elements[$number]['content'])))
-		{
-			$text = $elements[$number]['content'];
-		}
+        if (false == $options['usecasesensitive'])
+        {
+            $parsed_text = mb_strtolower($text, 'UTF-8');
+            $parsed_content = mb_strtolower($elements[$number]['content'], 'UTF-8');
+        }
+        else {
+            $parsed_text = $text;
+            $parsed_content = $elements[$number]['content'];
+        }
+
+        $previous_locale = setlocale(LC_ALL, 0);
+        setlocale(LC_ALL, $options["language"]);
+
+        if ($parsed_text == $parsed_content
+            || ($options['usetransliteration'] && @iconv('UTF-8', 'ASCII//TRANSLIT', $parsed_text) == @iconv('UTF-8', 'ASCII//TRANSLIT', $parsed_content)))
+        {
+            $text = $elements[$number]['content'];
+        }
+
+        setlocale(LC_ALL, $previous_locale);
 
 		// Log action
 		if (!empty($text))

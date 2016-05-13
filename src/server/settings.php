@@ -158,4 +158,13 @@ if ($ADMIN->fulltree)
 			0
 		)
 	);
+
+	$settings->add(
+		new admin_setting_configcheckbox(
+			'elang/usecasesensitive',
+			get_string('usecasesensitive', 'elang'),
+			get_string('usecasesensitive_config', 'elang'),
+			1
+		)
+	);
 }

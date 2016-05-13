@@ -188,6 +188,9 @@ class mod_elang_mod_form extends moodleform_mod
 
 		$mform->addElement('checkbox', 'usetransliteration', get_string('usetransliteration', 'elang'));
 		$mform->addHelpButton('usetransliteration', 'usetransliteration', 'elang');
+		
+		$mform->addElement('checkbox', 'usecasesensitive', get_string('usecasesensitive', 'elang'));
+		$mform->addHelpButton('usecasesensitive', 'usecasesensitive', 'elang');
 
 		// Add standard elements, common to all modules
 		$this->standard_coursemodule_elements();
@@ -334,6 +337,7 @@ class mod_elang_mod_form extends moodleform_mod
 			$default_values['top'] = isset($options['top']) ? $options['top'] : 20;
 			$default_values['size'] = isset($options['size']) ? $options['size'] : 16;
 			$default_values['usetransliteration'] = isset($options['usetransliteration']) ? $options['usetransliteration'] : false;
+			$default_values['usecasesensitive'] = isset($options['usecasesensitive']) ? $options['usecasesensitive'] : false;
 			$default_values['completion_gapfilled'] = isset($options['completion_gapfilled']) ? $options['completion_gapfilled'] : 0;
 			$default_values['completion_gapcompleted'] = isset($options['completion_gapcompleted']) ? $options['completion_gapcompleted'] : 0;
 			$default_values['completion_gapfilledenabled'] = $default_values['completion_gapfilled'] > 0;
@@ -350,6 +354,7 @@ class mod_elang_mod_form extends moodleform_mod
 			$default_values['top'] = $config->top;
 			$default_values['size'] = $config->size;
 			$default_values['usetransliteration'] = $config->usetransliteration;
+			$default_values['usecasesensitive'] = $config->usecasesensitive;
 			$default_values['completion_gapfilled'] = 0;
 			$default_values['completion_gapcompleted'] = 0;
 			$default_values['completion_gapfilledenabled'] = false;
