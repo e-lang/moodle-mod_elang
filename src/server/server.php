@@ -339,29 +339,32 @@ switch ($task)
 		$text = preg_replace(array('/^\s*/', '/\s*$/', '/\s+/'), array('', '', ' '), optional_param('text', '', PARAM_TEXT));
 
 		// Compare strings ignoring case
-        if (false == $options['usecasesensitive'])
-        {
-            $parsed_text = mb_strtolower($text, 'UTF-8');
-            $parsed_content = mb_strtolower($elements[$number]['content'], 'UTF-8');
-        }
-        else {
-            $parsed_text = $text;
-            $parsed_content = $elements[$number]['content'];
-        }
+		if (false == $options['usecasesensitive'])
+		{
+			$parsed_text = mb_strtolower($text, 'UTF-8');
+			$parsed_content = mb_strtolower($elements[$number]['content'], 'UTF-8');
+		}
+		else
+		{
+			$parsed_text = $text;
+			$parsed_content = $elements[$number]['content'];
+		}
 
-        $previous_locale = setlocale(LC_ALL, 0);
-        if (false === setlocale(LC_ALL, $options["language"])) {
+		$previous_locale = setlocale(LC_ALL, 0);
+		
+		if (false === setlocale(LC_ALL, $options["language"])) {
 			setlocale(LC_ALL, $previous_locale);
 		}
 
-        if ($parsed_text == $parsed_content
-            || ($options['usetransliteration'] && @iconv('UTF-8', 'ASCII//TRANSLIT', $parsed_text) == @iconv('UTF-8', 'ASCII//TRANSLIT', $parsed_content))
+		if ($parsed_text == $parsed_content
+			|| ($options['usetransliteration'] 
+				&& @iconv('UTF-8', 'ASCII//TRANSLIT', $parsed_text) == @iconv('UTF-8', 'ASCII//TRANSLIT', $parsed_content)) 
 			|| \Elang\jaro($parsed_text, $parsed_content) >= $options['jaroDistance'])
-        {
-            $text = $elements[$number]['content'];
-        }
+		{
+			$text = $elements[$number]['content'];
+		}
 
-        setlocale(LC_ALL, $previous_locale);
+		setlocale(LC_ALL, $previous_locale);
 
 		// Log action
 		if (!empty($text))

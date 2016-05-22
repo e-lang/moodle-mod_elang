@@ -188,12 +188,12 @@ class mod_elang_mod_form extends moodleform_mod
 
 		$mform->addElement('checkbox', 'usecasesensitive', get_string('usecasesensitive', 'elang'));
 		$mform->addHelpButton('usecasesensitive', 'usecasesensitive', 'elang');
-		
+
 		$mform->addElement('checkbox', 'usetransliteration', get_string('usetransliteration', 'elang'));
 		$mform->addHelpButton('usetransliteration', 'usetransliteration', 'elang');
 
-        $mform->addElement('text', 'jaroDistance', get_string('jaroDistance', 'elang'));
-        $mform->addHelpButton('jaroDistance', 'jaroDistance', 'elang');
+		$mform->addElement('text', 'jaroDistance', get_string('jaroDistance', 'elang'));
+		$mform->addHelpButton('jaroDistance', 'jaroDistance', 'elang');
 
 		// Add standard elements, common to all modules
 		$this->standard_coursemodule_elements();
@@ -469,7 +469,9 @@ class mod_elang_mod_form extends moodleform_mod
 		}
 
 		$jaro = str_replace(",", ".", $data['jaroDistance']);
-		if (!is_numeric($jaro) || $jaro <= 0 || $jaro > 1) {
+
+		if (!is_numeric($jaro) || $jaro <= 0 || $jaro > 1)
+		{
 			$errors['jaroDistance'] = get_string('jaroDistance_error', 'elang');
 		}
 

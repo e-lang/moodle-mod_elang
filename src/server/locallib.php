@@ -463,10 +463,10 @@ function levenshteinDistance($str1, $str2, $costReplace = 2, $encoding = 'UTF-8'
 /**
  * Compute the Jaro distance between two multi-bytes string
  *
- * @param string $str1 First string
- * @param string $str2 Second string
+ * @param   string  $str1  First string
+ * @param   string  $str2  Second string
  *
- * @return float Jaro distance between $str1 and $str2
+ * @return  float  Jaro distance between $str1 and $str2
  */
 function jaro($str1, $str2)
 {
@@ -480,10 +480,12 @@ function jaro($str1, $str2)
 
 	// Search all matching characters
 	$common_chars = 0;
+
 	for ($i = 0; $i < $str1_len; $i++)
 	{
 		$bottom_limit = max(0, $i - $range);
 		$top_limit    = min($str2_len, $i + $range);
+
 		for ($j = $bottom_limit; $j <= $top_limit; $j++)
 		{
 			if (mb_substr($str1, $i, 1) == mb_substr($str2, $j, 1) && $str2_match[$j] != "1")
@@ -504,6 +506,7 @@ function jaro($str1, $str2)
 
 	$k              = 0;
 	$transpositions = 0;
+
 	for ($i = 0; $i < $str1_len; $i++)
 	{
 		if ($str1_match[$i] == "1")
@@ -516,6 +519,7 @@ function jaro($str1, $str2)
 					break;
 				}
 			}
+
 			if ($str1[$i] != $str2[$j])
 			{
 				$transpositions++;
