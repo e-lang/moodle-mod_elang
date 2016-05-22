@@ -339,7 +339,6 @@ switch ($task)
 		$text = preg_replace(array('/^\s*/', '/\s*$/', '/\s+/'), array('', '', ' '), optional_param('text', '', PARAM_TEXT));
 
 		// Compare strings ignoring case
-		// TODO: insert here the use of the Levenshtein distance
         if (false == $options['usecasesensitive'])
         {
             $parsed_text = mb_strtolower($text, 'UTF-8');
@@ -356,7 +355,8 @@ switch ($task)
 		}
 
         if ($parsed_text == $parsed_content
-            || ($options['usetransliteration'] && @iconv('UTF-8', 'ASCII//TRANSLIT', $parsed_text) == @iconv('UTF-8', 'ASCII//TRANSLIT', $parsed_content)))
+            || ($options['usetransliteration'] && @iconv('UTF-8', 'ASCII//TRANSLIT', $parsed_text) == @iconv('UTF-8', 'ASCII//TRANSLIT', $parsed_content))
+			|| \Elang\jaro($parsed_text, $parsed_content) >= $options['jaroDistance'])
         {
             $text = $elements[$number]['content'];
         }

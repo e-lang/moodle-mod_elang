@@ -152,6 +152,15 @@ if ($ADMIN->fulltree)
 
 	$settings->add(
 		new admin_setting_configcheckbox(
+			'elang/usecasesensitive',
+			get_string('usecasesensitive', 'elang'),
+			get_string('usecasesensitive_config', 'elang'),
+			1
+		)
+	);
+
+	$settings->add(
+		new admin_setting_configcheckbox(
 			'elang/usetransliteration',
 			get_string('usetransliteration', 'elang'),
 			get_string('usetransliteration_config', 'elang'),
@@ -160,10 +169,10 @@ if ($ADMIN->fulltree)
 	);
 
 	$settings->add(
-		new admin_setting_configcheckbox(
-			'elang/usecasesensitive',
-			get_string('usecasesensitive', 'elang'),
-			get_string('usecasesensitive_config', 'elang'),
+		new admin_setting_configtext(
+			'elang/jaroDistance',
+			get_string('jaroDistance', 'elang'),
+			get_string('jaroDistance_config', 'elang'),
 			1
 		)
 	);

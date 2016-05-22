@@ -91,6 +91,7 @@ function elang_add_instance(stdClass $elang, mod_elang_mod_form $mform = null)
 			'size' => isset($elang->size) ? $elang->size : 16,
 			'usetransliteration' => isset($elang->usetransliteration) ? true : false,
 			'usecasesensitive' => isset($elang->usecasesensitive) ? true : false,
+			'jaroDistance' => isset($elang->jaroDistance) ? $elang->jaroDistance : 1,
 			'completion_gapfilled' => isset($elang->completion_gapfilled) ? $elang->completion_gapfilled : 0,
 			'completion_gapcompleted' => isset($elang->completion_gapcompleted) ? $elang->completion_gapcompleted : 0,
 		)
@@ -140,6 +141,7 @@ function elang_update_instance(stdClass $elang, mod_elang_mod_form $mform = null
 			'size' => isset($elang->size) ? $elang->size : 16,
 			'usetransliteration' => isset($elang->usetransliteration) ? true : false,
 			'usecasesensitive' => isset($elang->usecasesensitive) ? true : false,
+			'jaroDistance' => isset($elang->jaroDistance) ? str_replace(",", ".", $elang->jaroDistance) : 1,
 			'completion_gapfilled' => isset($elang->completion_gapfilled) ? $elang->completion_gapfilled : 0,
 			'completion_gapcompleted' => isset($elang->completion_gapcompleted) ? $elang->completion_gapcompleted : 0,
 		)
