@@ -352,7 +352,7 @@ switch ($task)
 
 		$previous_locale = setlocale(LC_ALL, 0);
 
-		if (false === setlocale(LC_ALL, $options["language"]))
+		if (false === setlocale(LC_ALL, str_replace("-",  "_", $options["language"])))
 		{
 			setlocale(LC_ALL, $previous_locale);
 		}
