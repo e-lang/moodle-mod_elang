@@ -74,6 +74,6 @@ class LocalLibTest extends PHPUnit_Framework_TestCase
 	public function testJaro($str1, $str2, $precision, $jaro)
 	{
 		// Test Jaro's distance
-		$this->assertEquals(round(Elang\jaro($str1, $str2), $precision), $jaro);
+		$this->assertEquals(round(Elang\jaro($str1, $str2), $precision), round($jaro, $precision));
 	}
 }
