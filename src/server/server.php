@@ -352,15 +352,15 @@ switch ($task)
 
 		$previous_locale = setlocale(LC_ALL, 0);
 
-		if (false === setlocale(LC_ALL, str_replace("-",  "_", $options["language"])))
+		// Use the locales associated to the language tag
+		if (false === setlocale(LC_ALL, Elang\getLocale($options["language"])))
 		{
 			setlocale(LC_ALL, $previous_locale);
 		}
 
 		if ($parsed_text == $parsed_content
-			|| ($options['usetransliteration']
-			&& @iconv('UTF-8', 'ASCII//TRANSLIT', $parsed_text) == @iconv('UTF-8', 'ASCII//TRANSLIT', $parsed_content))
-			|| \Elang\jaro($parsed_text, $parsed_content) >= $options['jaroDistance'])
+			|| $options['usetransliteration'] && @iconv('UTF-8', 'ASCII//TRANSLIT', $parsed_text) == @iconv('UTF-8', 'ASCII//TRANSLIT', $parsed_content)
+			|| Elang\jaro($parsed_text, $parsed_content) >= $options['jaroDistance'])
 		{
 			$text = $elements[$number]['content'];
 		}

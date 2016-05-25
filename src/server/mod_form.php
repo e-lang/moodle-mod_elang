@@ -193,6 +193,7 @@ class mod_elang_mod_form extends moodleform_mod
 		$mform->addHelpButton('usetransliteration', 'usetransliteration', 'elang');
 
 		$mform->addElement('text', 'jaroDistance', get_string('jaroDistance', 'elang'));
+		$mform->setType('jaroDistance', PARAM_FLOAT);
 		$mform->addHelpButton('jaroDistance', 'jaroDistance', 'elang');
 
 		// Add standard elements, common to all modules
@@ -421,6 +422,7 @@ class mod_elang_mod_form extends moodleform_mod
 					try
 					{
 						$caption = new \Captioning\Format\WebvttFile($filepath);
+						$caption->setUseIconv(function_exists('mb_convert_encoding'));
 						$noerror = true;
 						break;
 					}
@@ -432,6 +434,7 @@ class mod_elang_mod_form extends moodleform_mod
 					try
 					{
 						$caption = new \Captioning\Format\SubripFile($filepath);
+						$caption->setUseIconv(function_exists('mb_convert_encoding'));
 						$noerror = true;
 						break;
 					}

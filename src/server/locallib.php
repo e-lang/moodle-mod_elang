@@ -612,3 +612,93 @@ function getLanguages()
 		'cy-GB' => 'Welsh (United Kingdom)'
 	);
 }
+
+/**
+ * Get the list of all locales
+ *
+ * @param   string  $tag  Language tag
+ *
+ * @return  array  List of locale (windows and linux) for the given language
+ *
+ * @since  1.3.0
+ */
+function getLocale($tag)
+{
+	$locales = array(
+		'af-ZA' => array('af_ZA.UTF-8', 'Afrikaans_South Africa.1252'),
+		'ar-AA' => array('ar_SA.UTF-8',	'Arabic_Saudi Arabia.1256'),
+		'hy-AM' => array('hy_AM.UTF-8', 'Armenian'),
+		'az-AZ' => array('az_AZ.UTF-8'),
+		'id-ID' => array('id_ID.UTF-8', 'Indonesian_indonesia.1252'),
+		'be-BY' => array('be_BY.UTF-8', 'Belarusian_Belarus.1251'),
+		'bn-BD' => array('bn_IN.UTF-8'),
+		'bs-BA' => array('bs_BA.UTF-8', 'Bosnian (Latin)'),
+		'bg-BG' => array('bg_BG.UTF-8', 'Bulgarian_Bulgaria.1251'),
+		'ca-ES' => array('ca_ES.UTF-8', 'Catalan_Spain.1252'),
+		'zh-CN' => array('zh_CN.UTF-8', 'Chinese_China.936'),
+		'zh-TW' => array('zh_TW.UTF-8', 'Chinese_Taiwan.950'),
+		'hr-HR' => array('hr_HR.UTF-8', 'Croatian_Croatia.1250'),
+		'cs-CZ' => array('cs_CZ.UTF-8', 'Czech_Czech Republic.1250'),
+		'da-DK' => array('da_DK.UTF-8', 'Danish_Denmark.1252'),
+		'en-AU' => array('en_AU.UTF-8', 'english-aus'),
+		'en-GB' => array('en_GB.UTF-8', 'english-uk'),
+		'en-US' => array('en_US.UTF-8', 'english-us'),
+		'eo-XX' => array('en_XX.UTF-8'),
+		'et-EE' => array('et_EE.UTF-8', 'Estonian_Estonia.1257'),
+		'eu-ES' => array('eu_ES.UTF-8', 'Basque_Spain.1252'),
+		'fi-FI' => array('fi_FI.UTF-8', 'Finnish_Finland.1252'),
+		'fr-FR' => array('fr_FR.UTF-8', 'fr_CH.UTF-8', 'fr_BE.UTF-8', 'French_France.1252'),
+		'gl-ES' => array('gl_ES.UTF-8', 'Galician_Spain.1252'),
+		'de-DE' => array('de_DE.UTF-8', 'German_Germany.1252'),
+		'el-GR' => array('el_GR.UTF-8', 'Greek_Greece.1253'),
+		'gu-IN' => array('gu.UTF-8', 'Gujarati_India.0'),
+		'he-IL' => array('he_IL.utf8', 'Hebrew_Israel.1255'),
+		'hi-IN' => array('hi_IN.UTF-8', 'Hindi.65001'),
+		'hu-HU' => array('hu.UTF-8', 'Hungarian_Hungary.1250'),
+		'it-IT' => array('it_IT.UTF-8', 'Italian_Italy.1252'),
+		'ja-JP' => array('ja_JP.UTF-8', 'Japanese_Japan.932'),
+		'km-KH' => array('km_KH.UTF-8', 'Khmer.65001'),
+		'ko-KR' => array('ko_KR.UTF-8', 'Korean_Korea.949'),
+		'ckb-IQ' => array('ckb_IQ.UTF-8'),
+		'lo-LA' => array('lo_LA.UTF-8', 'Lao_Laos.UTF-8'),
+		'lv-LV' => array('lat.UTF-8', 'Latvian_Latvia.1257'),
+		'lt-LT' => array('lt_LT.UTF-8', 'Lithuanian_Lithuania.1257'),
+		'mk-MK' => array('mk_MK.UTF-8'),
+		'ml-IN' => array('ml_IN.UTF-8', 'Malayalam_India.x-iscii-ma'),
+		'mn-MN' => array('mn.UTF-8', 'Cyrillic_Mongolian.1251'),
+		'nl-NL' => array('nl_NL.UTF-8', 'Dutch_Netherlands.1252'),
+		'nb-NO' => array('nb_NO.UTF-8',),
+		'nn-NO' => array('nn_NO.UTF-8', 'Norwegian-Nynorsk_Norway.1252'),
+		'fa-IR' => array('fa_IR.UTF-8', 'Farsi_Iran.1256'),
+		'pl-PL' => array('pl.UTF-8', 'Polish_Poland.1250'),
+		'pt-BR' => array('pt_BR.UTF-8', 'Portuguese_Brazil.1252'),
+		'pt-PT' => array('pt_PT.UTF-8', 'Portuguese_Portugal.1252'),
+		'ro-RO' => array('ro_RO.UTF-8', 'Romanian_Romania.1250'),
+		'ru-RU' => array('ru_RU.UTF-8', 'Russian_Russia.1251'),
+		'gd-GB' => array('gd_GB.UTF-8'),
+		'sr-RS' => array('sr_RS.UTF-8'),
+		'sr-YU' => array('SH_YU.UTF-8'),
+		'sq-AL' => array('sq_AL.UTF-8', 'Albanian_Albania.1250'),
+		'sk-SK' => array('sk_SK.UTF-8', 'Slovak_Slovakia.1250'),
+		'es-ES' => array('es_ES.UTF-8', 'Spanish_Spain.1252'),
+		'sv-SE' => array('sv_SE.UTF-8', 'Swedish_Sweden.1252'),
+		'sw-KE' => array('sw_KE.UTF-8'),
+		'ta-IN' => array('ta_IN.UTF-8', 'English_Australia.1252'),
+		'th-TH' => array('th_TH.UTF-8', 'Thai_Thailand.874'),
+		'tr-TR' => array('tr_TR.UTF-8', 'Turkish_Turkey.1254'),
+		'uk-UA' => array('uk_UA.UTF-8', 'Ukrainian_Ukraine.1251'),
+		'ur-PK' => array('ur_PK.UTF-8'),
+		'ug-CN' => array('ug_CN/UTF-8'),
+		'vi-VN' => array('vi_VN.UTF-8'),
+		'cy-GB' => array('CY_GB.UTF-8')
+	);
+
+	if (array_key_exists($tag, $locales))
+	{
+		return $locales[$tag];
+	}
+	else
+	{
+		return array();
+	}
+}
