@@ -186,8 +186,14 @@ class mod_elang_mod_form extends moodleform_mod
 		$mform->addRule('size', get_string('size_error', 'elang'), 'numeric', null, 'client');
 		$mform->setType('size', PARAM_INT);
 
+		$mform->addElement('checkbox', 'usecasesensitive', get_string('usecasesensitive', 'elang'));
+		$mform->addHelpButton('usecasesensitive', 'usecasesensitive', 'elang');
+
 		$mform->addElement('checkbox', 'usetransliteration', get_string('usetransliteration', 'elang'));
 		$mform->addHelpButton('usetransliteration', 'usetransliteration', 'elang');
+
+		$mform->addElement('text', 'jaroDistance', get_string('jaroDistance', 'elang'));
+		$mform->addHelpButton('jaroDistance', 'jaroDistance', 'elang');
 
 		// Add standard elements, common to all modules
 		$this->standard_coursemodule_elements();
@@ -334,6 +340,8 @@ class mod_elang_mod_form extends moodleform_mod
 			$default_values['top'] = isset($options['top']) ? $options['top'] : 20;
 			$default_values['size'] = isset($options['size']) ? $options['size'] : 16;
 			$default_values['usetransliteration'] = isset($options['usetransliteration']) ? $options['usetransliteration'] : false;
+			$default_values['usecasesensitive'] = isset($options['usecasesensitive']) ? $options['usecasesensitive'] : false;
+			$default_values['jaroDistance'] = isset($options['jaroDistance']) ? $options['jaroDistance'] : 1;
 			$default_values['completion_gapfilled'] = isset($options['completion_gapfilled']) ? $options['completion_gapfilled'] : 0;
 			$default_values['completion_gapcompleted'] = isset($options['completion_gapcompleted']) ? $options['completion_gapcompleted'] : 0;
 			$default_values['completion_gapfilledenabled'] = $default_values['completion_gapfilled'] > 0;
@@ -350,6 +358,8 @@ class mod_elang_mod_form extends moodleform_mod
 			$default_values['top'] = $config->top;
 			$default_values['size'] = $config->size;
 			$default_values['usetransliteration'] = $config->usetransliteration;
+			$default_values['usecasesensitive'] = $config->usecasesensitive;
+			$default_values['jaroDistance'] = $config->jaroDistance;
 			$default_values['completion_gapfilled'] = 0;
 			$default_values['completion_gapcompleted'] = 0;
 			$default_values['completion_gapfilledenabled'] = false;
@@ -456,6 +466,13 @@ class mod_elang_mod_form extends moodleform_mod
 				// File is not in vtt or subrip format
 				$errors['subtitle'] = get_string('subtitleinvalidformat', 'elang');
 			}
+		}
+
+		$jaro = str_replace(",", ".", $data['jaroDistance']);
+
+		if (!is_numeric($jaro) || $jaro <= 0 || $jaro > 1)
+		{
+			$errors['jaroDistance'] = get_string('jaroDistance_error', 'elang');
 		}
 
 		return $errors;

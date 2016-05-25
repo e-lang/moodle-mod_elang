@@ -461,6 +461,79 @@ function levenshteinDistance($str1, $str2, $costReplace = 2, $encoding = 'UTF-8'
 }
 
 /**
+ * Compute the Jaro distance between two multi-bytes string
+ *
+ * @param   string  $str1  First string
+ * @param   string  $str2  Second string
+ *
+ * @return  float  Jaro distance between $str1 and $str2
+ */
+function jaro($str1, $str2)
+{
+	$str1_len   = mb_strlen($str1);
+	$str2_len   = mb_strlen($str2);
+	$range      = intval(max($str1_len, $str2_len) - 1);
+
+	// Found common chars in each string
+	$str1_match = str_repeat("0", $str1_len);
+	$str2_match = str_repeat("0", $str2_len);
+
+	// Search all matching characters
+	$common_chars = 0;
+
+	for ($i = 0; $i < $str1_len; $i++)
+	{
+		$bottom_limit = max(0, $i - $range);
+		$top_limit    = min($str2_len, $i + $range);
+
+		for ($j = $bottom_limit; $j <= $top_limit; $j++)
+		{
+			if (mb_substr($str1, $i, 1) == mb_substr($str2, $j, 1) && $str2_match[$j] != "1")
+			{
+				$str1_match[$i] = "1";
+				$str2_match[$j] = "1";
+				$common_chars++;
+				break;
+			}
+		}
+	}
+
+	// No characters in common
+	if ($common_chars == 0)
+	{
+		return 0.;
+	}
+
+	$k              = 0;
+	$transpositions = 0;
+
+	for ($i = 0; $i < $str1_len; $i++)
+	{
+		if ($str1_match[$i] == "1")
+		{
+			for ($j = $k; $j < $str2_len; $j++)
+			{
+				if ($str2_match[$j] == "1")
+				{
+					$k = $j + 1;
+					break;
+				}
+			}
+
+			if ($str1[$i] != $str2[$j])
+			{
+				$transpositions++;
+			}
+		}
+	}
+
+	$m = floatval($common_chars);
+	$t = floatval($transpositions) / 2.;
+
+	return floatval(($m / $str1_len + $m / $str2_len + ($m - $t) / $m) / 3.);
+}
+
+/**
  * Get the list of all languages
  *
  * @return  array  Map array of the form tag => Language name
