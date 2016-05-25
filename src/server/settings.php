@@ -173,7 +173,8 @@ if ($ADMIN->fulltree)
 			'elang/jaroDistance',
 			get_string('jaroDistance', 'elang'),
 			get_string('jaroDistance_config', 'elang'),
-			1
+			1,
+			'/^(0\.[0-9]*[1-9])|1$/'
 		)
 	);
 }
