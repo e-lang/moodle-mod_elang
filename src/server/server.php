@@ -339,13 +339,33 @@ switch ($task)
 		$text = preg_replace(array('/^\s*/', '/\s*$/', '/\s+/'), array('', '', ' '), optional_param('text', '', PARAM_TEXT));
 
 		// Compare strings ignoring case
-		// TODO: insert here the use of the Levenshtein distance
-		if (mb_strtolower($text, 'UTF-8') == mb_strtolower($elements[$number]['content'], 'UTF-8')
-			|| $options['usetransliteration']
-			&& strtolower(@iconv('UTF-8', 'ASCII//TRANSLIT', $text)) == strtolower(@iconv('UTF-8', 'ASCII//TRANSLIT', $elements[$number]['content'])))
+		if (false == $options['usecasesensitive'])
+		{
+			$parsed_text = mb_strtolower($text, 'UTF-8');
+			$parsed_content = mb_strtolower($elements[$number]['content'], 'UTF-8');
+		}
+		else
+		{
+			$parsed_text = $text;
+			$parsed_content = $elements[$number]['content'];
+		}
+
+		$previous_locale = setlocale(LC_ALL, 0);
+
+		if (false === setlocale(LC_ALL, str_replace("-",  "_", $options["language"])))
+		{
+			setlocale(LC_ALL, $previous_locale);
+		}
+
+		if ($parsed_text == $parsed_content
+			|| ($options['usetransliteration']
+			&& @iconv('UTF-8', 'ASCII//TRANSLIT', $parsed_text) == @iconv('UTF-8', 'ASCII//TRANSLIT', $parsed_content))
+			|| \Elang\jaro($parsed_text, $parsed_content) >= $options['jaroDistance'])
 		{
 			$text = $elements[$number]['content'];
 		}
+
+		setlocale(LC_ALL, $previous_locale);
 
 		// Log action
 		if (!empty($text))
