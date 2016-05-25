@@ -40,18 +40,19 @@ class LocalLibTest extends PHPUnit_Framework_TestCase
 	 */
 	public function casesJaro()
 	{
+		// See https://fr.wikipedia.org/wiki/Distance_de_Jaro-Winkler
 		return array(
 			array(
 				'MARTHA',
 				'MARHTA',
 				2,
-				0.94
+				0.944444444
 			),
 			array(
 				'DWAYNE',
 				'DUANE',
 				2,
-				0.82
+				0.822222222
 			),
 		);
 	}
