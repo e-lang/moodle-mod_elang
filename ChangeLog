@@ -27,8 +27,9 @@ $ -> Language fix or change
 
 2016-05-25  Christophe Demko <chdemko@gmail.com>
  # Set the focus to the next input when help is asked or a success is set and keep the focus on the current input else
+ + Implement unit test for Jaro's distance
 
-2016-05-25  Christophe Demko <chdemko@gmail.com>
+2016-05-25  David-Dwayne Cachau <https://github.com/Safranil>
  + Implement Jaro's distance for tolerant fault checking
  + Use the current language locale if available
  + Set an option for converting to lower case
