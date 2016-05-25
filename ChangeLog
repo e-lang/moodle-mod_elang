@@ -26,6 +26,9 @@ $ -> Language fix or change
 ! -> Note
 
 2016-05-25  Christophe Demko <chdemko@gmail.com>
+ # Set the focus to the next input when help is asked or a success is set and keep the focus on the current input else
+
+2016-05-25  Christophe Demko <chdemko@gmail.com>
  + Implement Jaro's distance for tolerant fault checking
  + Use the current language locale if available
  + Set an option for converting to lower case

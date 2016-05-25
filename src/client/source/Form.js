@@ -30,7 +30,7 @@ enyo.kind({
 	 * - request: the request object
 	 * Each property will have public setter and getter methods
 	 */
-	published: {cue: null, request: null},
+	published: {cue: null, request: null, focus: null},
 
 	/**
 	 * Handlers:
@@ -114,11 +114,19 @@ enyo.kind({
 						}
 
 						this.createComponents([data, {tag: 'span', content: ' '}], {owner: this});
+						
 						break;
 				}
 			}
+		}
 
-			this.focus();
+		if (this.focus == null)
+		{
+			this.firstFocus();
+		}
+		else
+		{
+			this.$[this.focus].$.input.set('defaultFocus', true);
 		}
 
 		this.render();
@@ -131,7 +139,7 @@ enyo.kind({
 	 *
 	 * @since 1.0.0
 	 */
-	focus: function ()
+	firstFocus: function ()
 	{
 		for (var component in this.$)
 		{
@@ -141,6 +149,47 @@ enyo.kind({
 				break;
 			}
 		}
+	},
+
+	/**
+	 * Set the focus to the next input field available
+	 *
+	 * @param   current  string  Current focus
+	 *
+	 * @return  void
+	 *
+	 * @since 1.0.0
+	 */
+	nextFocus: function (current)
+	{
+		found = false;
+
+		for (var component in this.$)
+		{
+			if (component == current)
+			{
+				found = true;
+			}
+			else if (found && typeof this.$[component].$.input !== 'undefined')
+			{
+				this.focus = component;
+				return;
+			}
+		}
+
+		if (found)
+		{
+			for (var component in this.$)
+			{
+				if (typeof this.$[component].$.input !== 'undefined')
+				{
+					this.focus = component;
+					break;
+				}
+			}
+		}
+
+		this.focus = null;
 	},
 
 	/**
@@ -218,7 +267,7 @@ enyo.kind({
 				data.elements[inRequest.sender.name] = {content: inResponse.content, type: 'success'};
 				data.success++;
 				this.doSuccessIncrement();
-				this.focus();
+				this.nextFocus(inRequest.sender.name);
 				this.render();
 				break;
 			case 'failure':
@@ -243,6 +292,7 @@ enyo.kind({
 				}
 
 				data.elements[inRequest.sender.name].content = inRequest.sender.getValue();
+				this.setFocus(inRequest.sender.name);
 				break;
 		}
 
@@ -308,6 +358,7 @@ enyo.kind({
 		data.elements[inRequest.sender.number] = {content: inResponse.content, type: 'help'};
 		data.help++;
 		this.cue.setHelp(data.help).setError(data.error).setRemaining(data.remaining).render();
+		this.nextFocus(inRequest.sender.name);
 		this.cueChanged();
 		this.render();
 		this.doTrackChange({number: this.cue.getData().number, text: inResponse.cue});
