@@ -25,6 +25,11 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+2016-05-25  Christophe Demko <chdemko@gmail.com>
+ + Implement Jaro's distance for tolerant fault checking
+ + Use the current language locale if available
+ + Set an option for converting to lower case
+
 ----------------------------------------- stable-1.2.0 -----------------------------------------
 
 2016-04-25  Christophe Demko <chdemko@gmail.com>
