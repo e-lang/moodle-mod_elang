@@ -102,7 +102,7 @@ class mod_elang_mod_form extends moodleform_mod
 			$subtitlemaxsize = intval($subtitlemaxsize);
 		}
 
-		// Get the subtitle maxsize
+		// Get the poster maxsize
 		$postermaxsize = $config->postermaxsize;
 
 		if (preg_match('/Gb$/', $postermaxsize))
