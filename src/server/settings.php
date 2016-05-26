@@ -49,8 +49,8 @@ if ($ADMIN->fulltree)
 			'elang/videomaxsize',
 			get_string('videomaxsize', 'elang'),
 			get_string('videomaxsize_config', 'elang'),
-			10000000,
-			PARAM_INT
+			'10Mb',
+			'/^(([1-9][0-9]*)|((([1-9][0-9]*(\.[0-9]*[1-9])?)|(0\.[0-9]*[1-9]))[MGK]b))$/'
 		)
 	);
 
@@ -59,8 +59,8 @@ if ($ADMIN->fulltree)
 			'elang/postermaxsize',
 			get_string('postermaxsize', 'elang'),
 			get_string('postermaxsize_config', 'elang'),
-			1000000,
-			PARAM_INT
+			'1Mb',
+			'/^(([1-9][0-9]*)|((([1-9][0-9]*(\.[0-9]*[1-9])?)|(0\.[0-9]*[1-9]))[MGK]b))$/'
 		)
 	);
 
@@ -69,8 +69,8 @@ if ($ADMIN->fulltree)
 			'elang/subtitlemaxsize',
 			get_string('subtitlemaxsize', 'elang'),
 			get_string('subtitlemaxsize_config', 'elang'),
-			100000,
-			PARAM_INT
+			'100Kb',
+			'/^(([1-9][0-9]*)|((([1-9][0-9]*(\.[0-9]*[1-9])?)|(0\.[0-9]*[1-9]))[MGK]b))$/'
 		)
 	);
 	$settings->add(
@@ -191,7 +191,7 @@ if ($ADMIN->fulltree)
 			get_string('jaroDistance', 'elang'),
 			get_string('jaroDistance_config', 'elang'),
 			1,
-			'/^(0\.[0-9]*[1-9])|1$/'
+			'/^((0\.[0-9]*[1-9])|1)$/'
 		)
 	);
 }

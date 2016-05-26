@@ -62,6 +62,66 @@ class mod_elang_mod_form extends moodleform_mod
 		// Get the setting for elang
 		$config = get_config('elang');
 
+		// Get the video maxsize
+		$videomaxsize = $config->videomaxsize;
+
+		if (preg_match('/Gb$/', $videomaxsize))
+		{
+			$videomaxsize = intval(floatval($videomaxsize) * 1000000000);
+		}
+		else if (preg_match('/Mb$/', $videomaxsize))
+		{
+			$videomaxsize = intval(floatval($videomaxsize) * 1000000);
+		}
+		else if (preg_match('/Kb$/', $videomaxsize))
+		{
+			$videomaxsize = intval(floatval($videomaxsize) * 1000);
+		}
+		else
+		{
+			$videomaxsize = intval($videomaxsize);
+		}
+
+		// Get the subtitle maxsize
+		$subtitlemaxsize = $config->subtitlemaxsize;
+
+		if (preg_match('/Gb$/', $videomaxsize))
+		{
+			$subtitlemaxsize = intval(floatval($subtitlemaxsize) * 1000000000);
+		}
+		else if (preg_match('/Mb$/', $videomaxsize))
+		{
+			$subtitlemaxsize = intval(floatval($subtitlemaxsize) * 1000000);
+		}
+		else if (preg_match('/Kb$/', $videomaxsize))
+		{
+			$subtitlemaxsize = intval(floatval($subtitlemaxsize) * 1000);
+		}
+		else
+		{
+			$subtitlemaxsize = intval($subtitlemaxsize);
+		}
+
+		// Get the subtitle maxsize
+		$postermaxsize = $config->postermaxsize;
+
+		if (preg_match('/Gb$/', $videomaxsize))
+		{
+			$postermaxsize = intval(floatval($postermaxsize) * 1000000000);
+		}
+		else if (preg_match('/Mb$/', $videomaxsize))
+		{
+			$postermaxsize = intval(floatval($postermaxsize) * 1000000);
+		}
+		else if (preg_match('/Kb$/', $videomaxsize))
+		{
+			$postermaxsize = intval(floatval($postermaxsize) * 1000);
+		}
+		else
+		{
+			$postermaxsize = intval($postermaxsize);
+		}
+
 		// Get the form
 		$mform = $this->_form;
 
@@ -119,7 +179,7 @@ class mod_elang_mod_form extends moodleform_mod
 			'videos',
 			get_string('videos', 'elang'),
 			null,
-			array('subdirs' => 0, 'maxbytes' => $config->videomaxsize, 'maxfiles' => 20, 'accepted_types' => array('video'))
+			array('subdirs' => 0, 'maxbytes' => $videomaxsize, 'maxfiles' => 20, 'accepted_types' => array('video'))
 		);
 		$mform->addHelpButton('videos', 'videos', 'elang');
 		$mform->addRule('videos', null, 'required', null, 'client');
@@ -135,7 +195,7 @@ class mod_elang_mod_form extends moodleform_mod
 			'subtitle',
 			get_string('subtitle', 'elang'),
 			null,
-			array('subdirs' => 0, 'maxbytes' => $config->subtitlemaxsize, 'maxfiles' => 1, 'accepted_types' => array('subtitle'))
+			array('subdirs' => 0, 'maxbytes' => $subtitlemaxsize, 'maxfiles' => 1, 'accepted_types' => array('subtitle'))
 		);
 		$mform->addHelpButton('subtitle', 'subtitle', 'elang');
 		$mform->addRule('subtitle', null, 'required', null, 'client');
@@ -145,7 +205,7 @@ class mod_elang_mod_form extends moodleform_mod
 			'poster',
 			get_string('poster', 'elang'),
 			null,
-			array('subdirs' => 0, 'maxbytes' => $config->postermaxsize, 'maxfiles' => 1, 'accepted_types' => array('image'))
+			array('subdirs' => 0, 'maxbytes' => $postermaxsize, 'maxfiles' => 1, 'accepted_types' => array('image'))
 		);
 		$mform->addHelpButton('poster', 'poster', 'elang');
 
