@@ -437,10 +437,12 @@ else
 
 		// Display download link
 		$variables = array('id' => $cm->id, 'format' => 'csv');
+
 		if ($id_group != 0)
 		{
 			$variables['id_group'] = $id_group;
 		}
+
 		echo html_writer::link(new moodle_url('/mod/elang/view.php', $variables), get_string('download', 'elang'));
 
 		echo $OUTPUT->help_icon('download', 'elang');
