@@ -27,6 +27,7 @@ $ -> Language fix or change
 
 2016-05-26  Christophe Demko <chdemko@gmail.com>
  # Fix some bugs in permissions and roles
+ + Add the list of encodings supported by the moodle site
 
 2016-05-25  Christophe Demko <chdemko@gmail.com>
  # Set the focus to the next input when help is asked or a success is set and keep the focus on the current input else

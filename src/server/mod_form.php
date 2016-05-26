@@ -405,7 +405,18 @@ class mod_elang_mod_form extends moodleform_mod
 				}
 
 				// Try to detect encoding
-				$contents = Elang\transcodeSubtitle(file_get_contents($filepath));
+				$config = get_config('elang');
+
+				if (isset($config->encodings))
+				{
+					$encodings = $config->encodings;
+				}
+				else
+				{
+					$encodings = null;
+				}
+
+				$contents = Elang\transcodeSubtitle(file_get_contents($filepath), 'UTF-8', $encodings);
 
 				if (false === $contents)
 				{

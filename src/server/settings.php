@@ -22,6 +22,13 @@ if ($ADMIN->fulltree)
 	require_once dirname(__FILE__) . '/locallib.php';
 	require_once $CFG->libdir . '/resourcelib.php';
 	$languages = Elang\getLanguages();
+	$tmp = Elang\getEncodings();
+	$encodings = array();
+
+	foreach ($tmp as $encoding)
+	{
+		$encodings[$encoding] = $encoding;
+	}
 
 	// General settings
 	if (version_compare(moodle_major_version(true), '2.8', '<'))
@@ -110,6 +117,16 @@ if ($ADMIN->fulltree)
 			get_string('language_config', 'elang'),
 			array_keys($languages),
 			$languages
+		)
+	);
+
+	$settings->add(
+		new admin_setting_configmultiselect(
+			'elang/encoding',
+			get_string('encoding', 'elang'),
+			get_string('encoding_config', 'elang'),
+			$encodings,
+			$encodings
 		)
 	);
 

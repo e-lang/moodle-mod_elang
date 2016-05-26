@@ -151,20 +151,15 @@ function generateCueText($data, $user, $char='-', $repeated = 10)
 }
 
 /**
- * Detect and transcode encoding of a string into UTF-8 or another given encoding (using iconv instead the less reliable mb_convert_encoding)
+ * Get the list of supported encodings
  *
- * @param   string  $contents     the string to be analysed and to be converted (as reference)
- * @param   string  $encoding_to  the target encoding
+ * @return  array  Supported encodings
  *
- * @return  string  the new content
- *
- * @since  1.1.0
- *
- * @author  Ralf Erlebach
+ * @since  1.3.0
  */
-function transcodeSubtitle($contents, $encoding_to = 'UTF-8')
+function getEncodings()
 {
-	$detect_order = array(
+	return array(
 		"UTF-8",
 		"ASCII",
 		"ISO-8859-1",
@@ -187,11 +182,33 @@ function transcodeSubtitle($contents, $encoding_to = 'UTF-8')
 		"Windows-1252",
 		"Windows-1254"
 	);
+}
 
+/**
+ * Detect and transcode encoding of a string into UTF-8 or another given encoding (using iconv instead the less reliable mb_convert_encoding)
+ *
+ * @param   string  $contents      the string to be analysed and to be converted (as reference)
+ * @param   string  $encoding_to   the target encoding
+ * @param   string  $detect_order  the list of encodings in a specicific order
+ *
+ * @return  string  the new content
+ *
+ * @since  1.1.0
+ *
+ * @author  Ralf Erlebach
+ */
+function transcodeSubtitle($contents, $encoding_to = 'UTF-8', $detect_order = null)
+{
 	// $encoding_to is explicitely given as null, there is nothing to do
 	if (!$encoding_to)
 	{
 		return $contents;
+	}
+
+	// Get the detect order
+	if ($detect_order == null)
+	{
+		$detect_order = getEncodings();
 	}
 
 	if (function_exists('mb_detect_encoding'))
