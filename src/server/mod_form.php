@@ -69,11 +69,11 @@ class mod_elang_mod_form extends moodleform_mod
 		{
 			$videomaxsize = intval(floatval($videomaxsize) * 1000000000);
 		}
-		else if (preg_match('/Mb$/', $videomaxsize))
+		elseif (preg_match('/Mb$/', $videomaxsize))
 		{
 			$videomaxsize = intval(floatval($videomaxsize) * 1000000);
 		}
-		else if (preg_match('/Kb$/', $videomaxsize))
+		elseif (preg_match('/Kb$/', $videomaxsize))
 		{
 			$videomaxsize = intval(floatval($videomaxsize) * 1000);
 		}
@@ -89,11 +89,11 @@ class mod_elang_mod_form extends moodleform_mod
 		{
 			$subtitlemaxsize = intval(floatval($subtitlemaxsize) * 1000000000);
 		}
-		else if (preg_match('/Mb$/', $videomaxsize))
+		elseif (preg_match('/Mb$/', $videomaxsize))
 		{
 			$subtitlemaxsize = intval(floatval($subtitlemaxsize) * 1000000);
 		}
-		else if (preg_match('/Kb$/', $videomaxsize))
+		elseif (preg_match('/Kb$/', $videomaxsize))
 		{
 			$subtitlemaxsize = intval(floatval($subtitlemaxsize) * 1000);
 		}
@@ -109,11 +109,11 @@ class mod_elang_mod_form extends moodleform_mod
 		{
 			$postermaxsize = intval(floatval($postermaxsize) * 1000000000);
 		}
-		else if (preg_match('/Mb$/', $videomaxsize))
+		elseif (preg_match('/Mb$/', $videomaxsize))
 		{
 			$postermaxsize = intval(floatval($postermaxsize) * 1000000);
 		}
-		else if (preg_match('/Kb$/', $videomaxsize))
+		elseif (preg_match('/Kb$/', $videomaxsize))
 		{
 			$postermaxsize = intval(floatval($postermaxsize) * 1000);
 		}
