@@ -61,7 +61,7 @@ $capabilities = array(
 
 	'mod/elang:report' => array(
 		'captype' => 'read',
-		'contextlevel' => CONTEXT_COURSE,
+		'contextlevel' => CONTEXT_MODULE,
 		'archetypes' => array(
 			'teacher' => CAP_ALLOW,
 			'editingteacher' => CAP_ALLOW,

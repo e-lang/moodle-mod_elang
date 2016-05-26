@@ -378,7 +378,7 @@ else
 		$mform = new mod_elang_report_form((string) new moodle_url('/mod/elang/view.php', array('id' => $cm->id)));
 
 		// Create the session cache
-		$cache = cache::make_from_params(cache_store::MODE_SESSION, 'mod_assign', 'useridlist');
+		$cache = cache::make_from_params(cache_store::MODE_SESSION, 'mod_elang', 'useridlist');
 
 		// Get the date from the form
 		if ($fromform = $mform->get_data())
@@ -436,26 +436,12 @@ else
 		echo $OUTPUT->heading(get_string('reportallstudents', 'elang'));
 
 		// Display download link
+		$variables = array('id' => $cm->id, 'format' => 'csv');
 		if ($id_group != 0)
 		{
-			echo html_writer::link(
-				new moodle_url(
-					'/mod/elang/view.php',
-					array('id' => $cm->id, 'format' => 'csv', 'id_group' => $id_group)
-				),
-				get_string('download', 'elang')
-			);
+			$variables['id_group'] = $id_group;
 		}
-		else
-		{
-			echo html_writer::link(
-				new moodle_url(
-					'/mod/elang/view.php',
-					array('id' => $cm->id, 'format' => 'csv')
-				),
-				get_string('download', 'elang')
-			);
-		}
+		echo html_writer::link(new moodle_url('/mod/elang/view.php', $variables), get_string('download', 'elang'));
 
 		echo $OUTPUT->help_icon('download', 'elang');
 
@@ -598,7 +584,7 @@ else
 		{
 			// Output the pagination
 			echo $OUTPUT->paging_bar(
-				count_enrolled_users($context, '', $id_group),
+				count_enrolled_users($context, 'mod/elang:isinreport', $id_group),
 				$page,
 				$perpage,
 				new moodle_url('/mod/elang/view.php', array('id' => $cm->id))
