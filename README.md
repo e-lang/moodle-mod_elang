@@ -8,7 +8,7 @@ See [http://e-lang.github.io/moodle-mod_elang](http://e-lang.github.io/moodle-mo
 Build
 -----
 
-Make sure you have install *composer* and *bower* on your system.
+Make sure you have installed *composer* and *bower* on your system.
 
 * Run
 
