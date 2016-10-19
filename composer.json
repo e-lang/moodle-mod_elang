@@ -52,6 +52,7 @@
 			"mkdir -p build/elang",
 			"cp -Rf src/server/* build/elang",
 			"cp -Rf vendor/ build/elang",
+			"find build/elang -type d -empty -delete",
 			"sed 's/@RELEASE@/'`cat RELEASE`'/' build/elang/version.php > build/elang/version2.php",
 			"sed 's/@VERSION@/'`cat .DATE``cat .NUMBER`'/' build/elang/version2.php > build/elang/version3.php",
 			"sed 's/@MATURITY@/'`cat MATURITY`'/' build/elang/version3.php > build/elang/version.php",
