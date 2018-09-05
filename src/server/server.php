@@ -8,7 +8,7 @@
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013-2016 University of La Rochelle, France
+ * @copyright   2013-2018 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
  * @since       0.0.1
@@ -353,13 +353,14 @@ switch ($task)
 		$previous_locale = setlocale(LC_ALL, 0);
 
 		// Use the locales associated to the language tag
-		if (false === setlocale(LC_ALL, Elang\getLocale($options["language"])))
+		if (false === setlocale(LC_ALL, Elang\getLocale($elang->language)))
 		{
 			setlocale(LC_ALL, $previous_locale);
 		}
 
 		if ($parsed_text == $parsed_content
-			|| $options['usetransliteration'] && @iconv('UTF-8', 'ASCII//TRANSLIT', $parsed_text) == @iconv('UTF-8', 'ASCII//TRANSLIT', $parsed_content)
+			|| $options['usetransliteration']
+			&& @iconv('UTF-8', 'ASCII//TRANSLIT', $parsed_text) == @iconv('UTF-8', 'ASCII//TRANSLIT', $parsed_content)
 			|| Elang\jaro($parsed_text, $parsed_content) >= $options['jaroDistance'])
 		{
 			$text = $elements[$number]['content'];

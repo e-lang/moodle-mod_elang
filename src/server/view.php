@@ -8,7 +8,7 @@
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013-2016 University of La Rochelle, France
+ * @copyright   2013-2018 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
  * @since       0.0.1
@@ -38,15 +38,6 @@ $elang = $DB->get_record('elang', array('id' => $cm->instance), '*', MUST_EXIST)
 // Verify the login
 require_login($course, true, $cm);
 
-// Update completion state
-$completion = new completion_info($course);
-
-if ($completion->is_enabled($cm))
-{
-	$completion->set_module_viewed($cm);
-	$completion->update_state($cm, COMPLETION_UNKNOWN);
-}
-
 // Get the context
 $context = context_module::instance($cm->id);
 
@@ -56,5 +47,13 @@ if (has_capability('mod/elang:report', $context) && $view != 'player')
 }
 else
 {
+	// Update completion state
+	$completion = new completion_info($course);
+
+	if ($completion->is_enabled($cm))
+	{
+		$completion->set_module_viewed($cm);
+	}
+
 	require_once dirname(__FILE__) . '/play.php';
 }

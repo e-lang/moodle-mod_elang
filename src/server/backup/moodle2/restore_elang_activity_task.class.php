@@ -1,12 +1,12 @@
 <?php
 
 /**
- * elang restore task that provides all the settings 
+ * elang restore task that provides all the settings
  * and steps to perform one complete restore of the activity
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013-2016 University of La Rochelle, France
+ * @copyright   2013-2018 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
  * @since       1.1.0
@@ -16,7 +16,7 @@
 require_once $CFG->dirroot . '/mod/elang/backup/moodle2/restore_elang_stepslib.php';
 
 /**
- * elang restore task that provides all the settings 
+ * elang restore task that provides all the settings
  * and steps to perform one complete restore of the activity
  *
  * @since  1.1.0

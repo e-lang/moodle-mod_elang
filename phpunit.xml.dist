@@ -2,7 +2,6 @@
 	bootstrap="test/bootstrap.php"
 	colors="true"
 	stopOnFailure="false"
-	testdox="true"
 	verbose="true"
 	processIsolation="false"
 	backupStaticAttributes="false"

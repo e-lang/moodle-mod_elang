@@ -8,7 +8,7 @@
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013-2016 University of La Rochelle, France
+ * @copyright   2013-2018 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
  * @since       0.0.1
@@ -87,13 +87,15 @@ $string['reportallstudents'] = 'Report for students';
 $string['reportonestudent'] = '%1$s %2$s (%3$s)';
 $string['reportoptions'] = 'Options';
 $string['requestfailed'] = 'Request failed';
+$string['resetplayer'] = 'Reset your own student\'s view';
+$string['resetplayer_help'] = 'This will reset your own response for the student\'s view';
 $string['servicetimeout'] = 'Service Timeout';
 $string['serviceunavailable'] = 'Service Unavailable';
 $string['settings'] = 'Specific module settings';
 $string['showlanguage_config'] = 'Show the language in the course module title';
 $string['showlanguage_help'] = 'Show the language in the course module title';
 $string['showlanguage'] = 'Show language';
-$string['showplayer'] = 'Display student\'s view';
+$string['showplayer'] = 'Display your own student\'s view';
 $string['showplayer_help'] = 'Play the module as a student';
 $string['size_config'] = 'This defines the pdf font size';
 $string['size_error'] = 'You should enter a number here. Typical value is 16.';

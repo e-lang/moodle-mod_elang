@@ -5,7 +5,7 @@
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013-2016 University of La Rochelle, France
+ * @copyright   2013-2018 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
  * @since       1.1.0
@@ -44,7 +44,7 @@ class restore_elang_activity_structure_step extends restore_activity_structure_s
 	 * Create a copy of former activity, add it to DB
 	 *
 	 * @param   array  $data  The data making the activity.
-	 * 
+	 *
 	 * @return void
 	 */
 	protected function process_elang($data)

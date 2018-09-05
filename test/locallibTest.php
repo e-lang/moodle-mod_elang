@@ -8,6 +8,8 @@
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  */
 
+use PHPUnit\Framework\TestCase;
+
 require __DIR__ . '/../src/server/locallib.php';
 
 /**
@@ -15,7 +17,7 @@ require __DIR__ . '/../src/server/locallib.php';
  *
  * @since  1.3.0
  */
-class LocalLibTest extends PHPUnit_Framework_TestCase
+class LocalLibTest extends TestCase
 {
 	/**
 	 * Sets up the fixture, for example, opens a network connection.

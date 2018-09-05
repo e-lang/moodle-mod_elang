@@ -3,545 +3,547 @@
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013-2016 University of La Rochelle, France
+ * @copyright   2013-2018 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
  * @since       0.0.1
  */
-enyo.kind({
-	/**
-	 * Name of the kind
-	 */
-	name: 'Elang.App',
+enyo.kind(
+	{
+		/**
+		 * Name of the kind
+		 */
+		name: 'Elang.App',
 
-	/**
-	 * Published properties:
-	 * - url: server url
-	 * - timeout: server timeout in milliseconds
-	 * - callbackName: the callback name for a jsonp request
-	 * Each property will have public setter and a getter methods
-	 */
-	published: {url: null, timeout: null, callbackName: null},
+		/**
+		 * Published properties:
+		 * - url: server url
+		 * - timeout: server timeout in milliseconds
+		 * - callbackName: the callback name for a jsonp request
+		 * Each property will have public setter and a getter methods
+		 */
+		published: {url: null, timeout: null, callbackName: null},
 
-	/**
-	 * Handlers:
-	 - onCueSelect: fired when a cue is selected
-	 - onPageChange: fired when a new page is selected
-	 - onCueDeselect: fired when a cue is deselected
-	 - onTrackChange: fired when a text track is changed
-	 - onHelpIncrement: fired when an help increment is fired
-	 - onSuccessIncrement: fired when a success increment is fired,
-	 - onErrorIncrement: fired when an error increment is fired,
-	 - onErrorDecrement: fired when an error decrement is fired,
-	 - ontimeupdate: fired when the video time changed
-	 - onFail: fired when an ajax error occurred
-	 */
-	handlers: {
-		onCueSelect: 'cueSelect',
-		onPageChange: 'cueDeselect',
-		onCueDeselect: 'cueDeselect',
-		onTrackChange: 'trackChange',
-		onHelpIncrement: 'helpIncrement',
-		onSuccessIncrement: 'successIncrement',
-		onErrorIncrement: 'errorIncrement',
-		onErrorDecrement: 'errorDecrement',
-		ontimeupdate: 'timeUpdate',
-		onFail: 'fail'
-	},
-
-	/**
-	 * Events:
-	 * - onFail: fired when an ajax request failed
-	 */
-	events: {onFail: ''},
-
-	/**
-	 * css classes
-	 */
-	classes: 'container-fluid',
-
-	/**
-	 * css styles
-	 */
-	style: 'overflow: auto;',
-
-	/**
-	 * Named components:
-	 * - head (Elang.Head): The head of the application containing the title and a pdf button
-	 * - indicator (Elang.Progressbar): Student's progress
-	 * - video (Elang.Video): Video exercise
-	 * - progressbar (Elang.Progressbar): Video progress bar
-	 * - cues (Elang.Cues): Cues list
-	 */
-	components: [
-		// Title and indicator
-		{
-			classes: 'row',
-			components: [
-				{
-					classes: 'col-md-12',
-					components: [
-						// title
-						{kind: 'Elang.Head', name: 'head'},
-
-						// indicator
-						{kind: 'Elang.Progressbar', name: 'indicator'}
-					]
-				}
-			]
+		/**
+		 * Handlers:
+		 - onCueSelect: fired when a cue is selected
+		 - onPageChange: fired when a new page is selected
+		 - onCueDeselect: fired when a cue is deselected
+		 - onTrackChange: fired when a text track is changed
+		 - onHelpIncrement: fired when an help increment is fired
+		 - onSuccessIncrement: fired when a success increment is fired,
+		 - onErrorIncrement: fired when an error increment is fired,
+		 - onErrorDecrement: fired when an error decrement is fired,
+		 - ontimeupdate: fired when the video time changed
+		 - onFail: fired when an ajax error occurred
+		 */
+		handlers: {
+			onCueSelect: 'cueSelect',
+			onPageChange: 'cueDeselect',
+			onCueDeselect: 'cueDeselect',
+			onTrackChange: 'trackChange',
+			onHelpIncrement: 'helpIncrement',
+			onSuccessIncrement: 'successIncrement',
+			onErrorIncrement: 'errorIncrement',
+			onErrorDecrement: 'errorDecrement',
+			ontimeupdate: 'timeUpdate',
+			onFail: 'fail'
 		},
 
-		// Video, progressbar, input and cues list
+		/**
+		 * Events:
+		 * - onFail: fired when an ajax request failed
+		 */
+		events: {onFail: ''},
+
+		/**
+		 * css classes
+		 */
+		classes: 'container-fluid',
+
+		/**
+		 * css styles
+		 */
+		style: 'overflow: auto;',
+
+		/**
+		 * Named components:
+		 * - head (Elang.Head): The head of the application containing the title and a pdf button
+		 * - indicator (Elang.Progressbar): Student's progress
+		 * - video (Elang.Video): Video exercise
+		 * - progressbar (Elang.Progressbar): Video progress bar
+		 * - cues (Elang.Cues): Cues list
+		 */
+		components: [
+			// Title and indicator
+			{
+				classes: 'row',
+				components: [
+					{
+						classes: 'col-md-12',
+						components: [
+							// title
+							{kind: 'Elang.Head', name: 'head'},
+
+							// indicator
+							{kind: 'Elang.Progressbar', name: 'indicator'}
+						]
+					}
+				]
+			},
+
+			// Video, progressbar, input and cues list
+			{
+				classes: 'row',
+				components: [
+					{
+						classes: 'col-md-6',
+						components: [
+							// video
+							{kind: 'Elang.Video', name: 'video', showControls: true, preload: 'auto'},
+
+							// progressbar
+							{kind: 'Elang.Progressbar', name: 'progressbar'},
+
+							// input
+							{kind: 'Elang.Form', name: 'form'}
+						]
+					},
+					{
+						classes: 'col-md-6',
+						components: [
+							// cues
+							{kind: 'Elang.Cues', name: 'cues'}
+						]
+					}
+				]
+			},
+
+			// Modal to alert when the ajax request failed
+			{kind: 'Elang.Modal', name: 'modal'}
+		],
+
+		/**
+		 * The request object
+		 *
+		 * @protected
+		 *
+		 * @since  0.0.3
+		 */
+		request: null,
+
+		/**
+		 * Request the data
+		 *
+		 * @public
+		 *
+		 * @return  void
+		 *
+		 * @since  0.0.1
+		 */
+		requestData: function ()
 		{
-			classes: 'row',
-			components: [
-				{
-					classes: 'col-md-6',
-					components: [
-						// video
-						{kind: 'Elang.Video', name: 'video', showControls: true, preload: 'auto'},
+			// Tells Ajax what the callback success function is
+			this.request.response(enyo.bind(this, 'success'));
 
-						// progressbar
-						{kind: 'Elang.Progressbar', name: 'progressbar'},
+			// Tells Ajax what the callback failure function is
+			this.request.error(enyo.bind(this, 'failure'));
 
-						// input
-						{kind: 'Elang.Form', name: 'form'}
-					]
-				},
-				{
-					classes: 'col-md-6',
-					components: [
-						// cues
-						{kind: 'Elang.Cues', name: 'cues'}
-					]
-				}
-			]
+			// Makes the Ajax call with parameters
+			this.request.go({task: 'data'});
 		},
 
-		// Modal to alert when the ajax request failed
-		{kind: 'Elang.Modal', name: 'modal'}
-	],
-
-	/**
-	 * The request object
-	 *
-	 * @protected
-	 *
-	 * @since  0.0.3
-	 */
-	request: null,
-
-	/**
-	 * Request the data
-	 *
-	 * @public
-	 *
-	 * @return  void
-	 *
-	 * @since  0.0.1
-	 */
-	requestData: function ()
-	{
-		// Tells Ajax what the callback success function is
-		this.request.response(enyo.bind(this, 'success'));
-
-		// Tells Ajax what the callback failure function is
-		this.request.error(enyo.bind(this, 'failure'));
-
-		// Makes the Ajax call with parameters
-		this.request.go({task: 'data'});
-	},
-
-	/**
-	 * Create method
-	 *
-	 * @protected
-	 *
-	 * @since  0.0.3
-	 */
-	create: function ()
-	{
-		this.inherited(arguments);
-		this.callbackNameChanged();
-	},
-
-	/**
-	 * Detect a change in the callbackName property
-	 *
-	 * @protected
-	 *
-	 * @param   oldValue  string|null  The callbackName old value
-	 *
-	 * @since  0.0.3
-	 */
-	callbackNameChanged: function (oldValue)
-	{
-		if (this.callbackName == null)
+		/**
+		 * Create method
+		 *
+		 * @protected
+		 *
+		 * @since  0.0.3
+		 */
+		create: function ()
 		{
-			// Request creation. The handleAs parameter is 'json' by default
-			this.request = new enyo.Ajax(
-				{
-					// Set the URL
-					url: this.url,
+			this.inherited(arguments);
+			this.callbackNameChanged();
+		},
 
-					// Choose the method 'GET' or 'POST'
-					method: 'POST',
-
-					// Set the timeout
-					timeout: this.timeout,
-				}
-			);
-		}
-		else if (oldValue == null)
+		/**
+		 * Detect a change in the callbackName property
+		 *
+		 * @protected
+		 *
+		 * @param   oldValue  string|null  The callbackName old value
+		 *
+		 * @since  0.0.3
+		 */
+		callbackNameChanged: function (oldValue)
 		{
-			this.request = new enyo.JsonpRequest(
-				{
-					// Set the URL
-					url: this.url,
+			if (this.callbackName == null)
+			{
+				// Request creation. The handleAs parameter is 'json' by default
+				this.request = new enyo.Ajax(
+					{
+						// Set the URL
+						url: this.url,
 
-					// Choose the method 'GET' or 'POST'
-					method: 'POST',
+						// Choose the method 'GET' or 'POST'
+						method: 'POST',
 
-					// Set the timeout
-					timeout: this.timeout,
+						// Set the timeout
+						timeout: this.timeout,
+					}
+				);
+			}
+			else if (oldValue == null)
+			{
+				this.request = new enyo.JsonpRequest(
+					{
+						// Set the URL
+						url: this.url,
 
-					// Set the jsonp callback
-					callbackName: this.callbackName
-				}
-			);
-		}
-		else
+						// Choose the method 'GET' or 'POST'
+						method: 'POST',
+
+						// Set the timeout
+						timeout: this.timeout,
+
+						// Set the jsonp callback
+						callbackName: this.callbackName
+					}
+				);
+			}
+			else
+			{
+				this.request.setCallbackName(this.callbackName);
+			}
+
+			this.$.form.setRequest(this.request);
+		},
+
+
+		/**
+		 * Detect a change in the url property
+		 *
+		 * @protected
+		 *
+		 * @param   oldValue  string  The url old value
+		 *
+		 * @since  0.0.3
+		 */
+		urlChanged: function (oldValue)
 		{
-			this.request.setCallbackName(this.callbackName);
-		}
+			this.request.setUrl(this.url);
+		},
 
-		this.$.form.setRequest(this.request);
-	},
-
-
-	/**
-	 * Detect a change in the url property
-	 *
-	 * @protected
-	 *
-	 * @param   oldValue  string  The url old value
-	 *
-	 * @since  0.0.3
-	 */
-	urlChanged: function (oldValue)
-	{
-		this.request.setUrl(this.url);
-	},
-
-	/**
-	 * Detect a change in the timeout property
-	 *
-	 * @protected
-	 *
-	 * @param   oldValue  integer  The timeout old value
-	 *
-	 * @since  0.0.3
-	 */
-	timeoutChanged: function (oldValue)
-	{
-		this.request.setTimeout(this.timeout);
-	},
-
-	/**
-	 * Handle fail event
-	 *
-	 * @protected
-	 *
-	 * @param   inSender  enyo.instance  Sender of the event
-	 * @param   inEvent   Object		 Event fired
-	 *
-	 * @return  true
-	 *
-	 * @since  0.0.1
-	 */
-	fail: function (inSender, inEvent)
-	{
-		var error = inEvent.error;
-		switch (inEvent.error)
+		/**
+		 * Detect a change in the timeout property
+		 *
+		 * @protected
+		 *
+		 * @param   oldValue  integer  The timeout old value
+		 *
+		 * @since  0.0.3
+		 */
+		timeoutChanged: function (oldValue)
 		{
-			case 0:
-				this.$.modal.setData($L('Error'), 'danger', error, $L('Request failed')).render().show();
-				break;
-			case 400:
-				this.$.modal.setData($L('Error'), 'danger', error, $L('badrequest')).render().show();
-				break;
-			case 401:
-				this.$.modal.setData($L('Error'), 'danger', error, $L('Unauthorized')).render().show();
-				break;
-			case 403:
-				this.$.modal.setData($L('Error'), 'danger', error, $L('Forbidden')).render().show();
-				break;
-			case 404:
-				this.$.modal.setData($L('Error'), 'danger', error, $L('notfound')).render().show();
-				break;
-			case 500:
-				this.$.modal.setData($L('Error'), 'danger', error, $L('internal_error')).render().show();
-				break;
-			case 501:
-				this.$.modal.setData($L('Error'), 'danger', error, $L('notimplemented')).render().show();
-				break;
-			case 503:
-				this.$.modal.setData($L('Error'), 'danger', error, $L('serviceunavailable')).render().show();
-				break;
-			case 'timeout':
-				this.$.modal.setData($L('Error'), 'danger', $L('Timeout'), $L('timeout_server')).render().show();
-				break;
-		}
+			this.request.setTimeout(this.timeout);
+		},
 
-		// Prevents event propagation
-		return true;
-	},
-
-	/**
-	 * Callback failure function
-	 *
-	 * @protected
-	 *
-	 * @param   inRequest  enyo.Ajax      Request use for Ajax
-	 * @param   inError    string|number  Error code
-	 *
-	 * @return  void
-	 *
-	 * @since  0.0.1
-	 */
-	failure: function (inRequest, inError)
-	{
-		this.doFail({error: inError});
-		inRequest.fail(inError);
-	},
-
-	/**
-	 * Callback success function
-	 *
-	 * @protected
-	 *
-	 * @param   inRequest   enyo.Ajax  Request use for Ajax
-	 * @param   inResponse  object     Response bject
-	 *
-	 * @return  void
-	 *
-	 * @since  0.0.1
-	 */
-	success: function (inRequest, inResponse)
-	{
-		// Broadcast the data to the children fields
-
-		// Construct the header
-		this.$.head.setTitle(inResponse.title);
-		this.$.head.setPdf(inResponse.pdf);
-		this.$.head.render();
-
-		// Construct the indicator
-		this.$.indicator.setEnd(inResponse.total);
-		this.$.indicator.setSuccess(inResponse.success);
-		this.$.indicator.setDanger(inResponse.error);
-		this.$.indicator.setInfo(inResponse.help);
-
-		// Construct the cues object
-		this.$.cues.setLimit(inResponse.limit).setElements(inResponse.cues);
-
-		// Construct the form object
-		this.$.form.setRequest(this.request);
-
-		// Construct the video object
-		this.$.video.setSourceComponents(inResponse.sources);
-
-		// Add an optional poster
-		if (inResponse.poster)
+		/**
+		 * Handle fail event
+		 *
+		 * @protected
+		 *
+		 * @param   inSender  enyo.instance  Sender of the event
+		 * @param   inEvent   Object		 Event fired
+		 *
+		 * @return  true
+		 *
+		 * @since  0.0.1
+		 */
+		fail: function (inSender, inEvent)
 		{
-			this.$.video.setPoster(inResponse.poster);
-		}
+			var error = inEvent.error;
+			switch (inEvent.error)
+			{
+				case 0:
+					this.$.modal.setData($L('Error'), 'danger', error, $L('Request failed')).render().show();
+					break;
+				case 400:
+					this.$.modal.setData($L('Error'), 'danger', error, $L('badrequest')).render().show();
+					break;
+				case 401:
+					this.$.modal.setData($L('Error'), 'danger', error, $L('Unauthorized')).render().show();
+					break;
+				case 403:
+					this.$.modal.setData($L('Error'), 'danger', error, $L('Forbidden')).render().show();
+					break;
+				case 404:
+					this.$.modal.setData($L('Error'), 'danger', error, $L('notfound')).render().show();
+					break;
+				case 500:
+					this.$.modal.setData($L('Error'), 'danger', error, $L('internal_error')).render().show();
+					break;
+				case 501:
+					this.$.modal.setData($L('Error'), 'danger', error, $L('notimplemented')).render().show();
+					break;
+				case 503:
+					this.$.modal.setData($L('Error'), 'danger', error, $L('serviceunavailable')).render().show();
+					break;
+				case 'timeout':
+					this.$.modal.setData($L('Error'), 'danger', $L('Timeout'), $L('timeout_server')).render().show();
+					break;
+			}
 
-		// Set the language
-		this.$.video.setLanguage(inResponse.language);
+			// Prevents event propagation
+			return true;
+		},
 
-		// Set the subtitles
-		this.$.video.setTrack(inResponse.track);
+		/**
+		 * Callback failure function
+		 *
+		 * @protected
+		 *
+		 * @param   inRequest  enyo.Ajax      Request use for Ajax
+		 * @param   inError    string|number  Error code
+		 *
+		 * @return  void
+		 *
+		 * @since  0.0.1
+		 */
+		failure: function (inRequest, inError)
+		{
+			this.doFail({error: inError});
+			inRequest.fail(inError);
+		},
 
-		// Render the video
-		this.$.video.render();
+		/**
+		 * Callback success function
+		 *
+		 * @protected
+		 *
+		 * @param   inRequest   enyo.Ajax  Request use for Ajax
+		 * @param   inResponse  object     Response bject
+		 *
+		 * @return  void
+		 *
+		 * @since  0.0.1
+		 */
+		success: function (inRequest, inResponse)
+		{
+			// Broadcast the data to the children fields
 
-		// Hide the progressbar
-		this.$.progressbar.hide();
-	},
+			// Construct the header
+			this.$.head.setTitle(inResponse.title);
+			this.$.head.setPdf(inResponse.pdf);
+			this.$.head.render();
 
-	/**
-	 * Handle select cue event
-	 *
-	 * @protected
-	 *
-	 * @param   inSender  enyo.instance  Sender of the event
-	 * @param   inEvent   Object		 Event fired
-	 *
-	 * @return  true
-	 *
-	 * @since  0.0.1
-	 */
-	cueSelect: function (inSender, inEvent)
-	{
-		var cue = inEvent.originator, data = cue.getData(), begin = data.begin, end = data.end;
+			// Construct the indicator
+			this.$.indicator.setEnd(inResponse.total);
+			this.$.indicator.setSuccess(inResponse.success);
+			this.$.indicator.setDanger(inResponse.error);
+			this.$.indicator.setInfo(inResponse.help);
 
-		this.$.video.pause();
-		this.$.video.setBegin(begin);
-		this.$.video.setCurrentTime(begin);
-		this.$.video.setEnd(end);
+			// Construct the cues object
+			this.$.cues.setLimit(inResponse.limit).setElements(inResponse.cues);
 
-		this.$.form.setCue(cue);
+			// Construct the form object
+			this.$.form.setRequest(this.request);
 
-		this.$.progressbar.setBegin(begin).setWarning(begin).setEnd(end);
-		this.$.progressbar.show();
+			// Construct the video object
+			this.$.video.setSourceComponents(inResponse.sources);
 
-		// Prevents event propagation
-		return true;
-	},
+			// Add an optional poster
+			if (inResponse.poster)
+			{
+				this.$.video.setPoster(inResponse.poster);
+			}
 
-	/**
-	 * Handle deselect cue event
-	 *
-	 * @protected
-	 *
-	 * @param   inSender  enyo.instance  Sender of the event
-	 * @param   inEvent   Object		 Event fired
-	 *
-	 * @return  true
-	 *
-	 * @since  0.0.1
-	 */
-	cueDeselect: function (inSender, inEvent)
-	{
-		this.$.video.setBegin(0);
-		this.$.video.setEnd(Infinity);
+			// Set the language
+			this.$.video.setLanguage(inResponse.language);
 
-		this.$.form.setCue(null);
+			// Set the subtitles
+			this.$.video.setTrack(inResponse.track);
 
-		this.$.progressbar.hide();
+			// Render the video
+			this.$.video.render();
 
-		// Prevents event propagation
-		return true;
-	},
+			// Hide the progressbar
+			this.$.progressbar.hide();
+		},
 
-	/**
-	 * Handle text track change event
-	 *
-	 * @protected
-	 *
-	 * @param   inSender  enyo.instance  Sender of the event
-	 * @param   inEvent   Object		 Event fired
-	 *
-	 * @return  true
-	 *
-	 * @since  0.0.1
-	 */
-	trackChange: function (inSender, inEvent)
-	{
-		this.$.video.changeCue(inEvent.number, inEvent.text);
+		/**
+		 * Handle select cue event
+		 *
+		 * @protected
+		 *
+		 * @param   inSender  enyo.instance  Sender of the event
+		 * @param   inEvent   Object		 Event fired
+		 *
+		 * @return  true
+		 *
+		 * @since  0.0.1
+		 */
+		cueSelect: function (inSender, inEvent)
+		{
+			var cue = inEvent.originator, data = cue.getData(), begin = data.begin, end = data.end;
 
-		// Prevents event propagation
-		return true;
-	},
+			this.$.video.pause();
+			this.$.video.setBegin(begin);
+			this.$.video.setCurrentTime(begin);
+			this.$.video.setEnd(end);
 
-	/**
-	 * Handle help increment event
-	 *
-	 * @protected
-	 *
-	 * @param   inSender  enyo.instance  Sender of the event
-	 * @param   inEvent   Object		 Event fired
-	 *
-	 * @return  true
-	 *
-	 * @since  0.0.3
-	 */
-	helpIncrement: function (inSender, inEvent)
-	{
-		this.$.indicator.setInfo(this.$.indicator.getInfo() + 1);
+			this.$.form.setCue(cue);
 
-		// Prevents event propagation
-		return true;
-	},
+			this.$.progressbar.setBegin(begin).setWarning(begin).setEnd(end);
+			this.$.progressbar.show();
 
-	/**
-	 * Handle success increment event
-	 *
-	 * @protected
-	 *
-	 * @param   inSender  enyo.instance  Sender of the event
-	 * @param   inEvent   Object		 Event fired
-	 *
-	 * @return  true
-	 *
-	 * @since  0.0.3
-	 */
-	successIncrement: function (inSender, inEvent)
-	{
-		this.$.indicator.setSuccess(this.$.indicator.getSuccess() + 1);
+			// Prevents event propagation
+			return true;
+		},
 
-		// Prevents event propagation
-		return true;
-	},
+		/**
+		 * Handle deselect cue event
+		 *
+		 * @protected
+		 *
+		 * @param   inSender  enyo.instance  Sender of the event
+		 * @param   inEvent   Object		 Event fired
+		 *
+		 * @return  true
+		 *
+		 * @since  0.0.1
+		 */
+		cueDeselect: function (inSender, inEvent)
+		{
+			this.$.video.setBegin(0);
+			this.$.video.setEnd(Infinity);
 
-	/**
-	 * Handle error increment event
-	 *
-	 * @protected
-	 *
-	 * @param   inSender  enyo.instance  Sender of the event
-	 * @param   inEvent   Object		 Event fired
-	 *
-	 * @return  true
-	 *
-	 * @since  0.0.3
-	 */
-	errorIncrement: function (inSender, inEvent)
-	{
-		this.$.indicator.setDanger(this.$.indicator.getDanger() + 1);
+			this.$.form.setCue(null);
 
-		// Prevents event propagation
-		return true;
-	},
+			this.$.progressbar.hide();
 
-	/**
-	 * Handle error decrement event
-	 *
-	 * @protected
-	 *
-	 * @param   inSender  enyo.instance  Sender of the event
-	 * @param   inEvent   Object		 Event fired
-	 *
-	 * @return  true
-	 *
-	 * @since  0.0.3
-	 */
-	errorDecrement: function (inSender, inEvent)
-	{
-		this.$.indicator.setDanger(this.$.indicator.getDanger() - 1);
+			// Prevents event propagation
+			return true;
+		},
 
-		// Prevents event propagation
-		return true;
-	},
+		/**
+		 * Handle text track change event
+		 *
+		 * @protected
+		 *
+		 * @param   inSender  enyo.instance  Sender of the event
+		 * @param   inEvent   Object		 Event fired
+		 *
+		 * @return  true
+		 *
+		 * @since  0.0.1
+		 */
+		trackChange: function (inSender, inEvent)
+		{
+			this.$.video.changeCue(inEvent.number, inEvent.text);
 
-	/**
-	 * Handle time update event
-	 *
-	 * @protected
-	 *
-	 * @param   inSender  enyo.instance  Sender of the event
-	 * @param   inEvent   Object		 Event fired
-	 *
-	 * @return  true
-	 *
-	 * @since  0.0.1
-	 */
-	timeUpdate: function (inSender, inEvent)
-	{
-		this.$.progressbar.setWarning(inEvent.originator.getCurrentTime());
+			// Prevents event propagation
+			return true;
+		},
 
-		// Prevents event propagation
-		return false;
-	},
-});
+		/**
+		 * Handle help increment event
+		 *
+		 * @protected
+		 *
+		 * @param   inSender  enyo.instance  Sender of the event
+		 * @param   inEvent   Object		 Event fired
+		 *
+		 * @return  true
+		 *
+		 * @since  0.0.3
+		 */
+		helpIncrement: function (inSender, inEvent)
+		{
+			this.$.indicator.setInfo(this.$.indicator.getInfo() + 1);
+
+			// Prevents event propagation
+			return true;
+		},
+
+		/**
+		 * Handle success increment event
+		 *
+		 * @protected
+		 *
+		 * @param   inSender  enyo.instance  Sender of the event
+		 * @param   inEvent   Object		 Event fired
+		 *
+		 * @return  true
+		 *
+		 * @since  0.0.3
+		 */
+		successIncrement: function (inSender, inEvent)
+		{
+			this.$.indicator.setSuccess(this.$.indicator.getSuccess() + 1);
+
+			// Prevents event propagation
+			return true;
+		},
+
+		/**
+		 * Handle error increment event
+		 *
+		 * @protected
+		 *
+		 * @param   inSender  enyo.instance  Sender of the event
+		 * @param   inEvent   Object		 Event fired
+		 *
+		 * @return  true
+		 *
+		 * @since  0.0.3
+		 */
+		errorIncrement: function (inSender, inEvent)
+		{
+			this.$.indicator.setDanger(this.$.indicator.getDanger() + 1);
+
+			// Prevents event propagation
+			return true;
+		},
+
+		/**
+		 * Handle error decrement event
+		 *
+		 * @protected
+		 *
+		 * @param   inSender  enyo.instance  Sender of the event
+		 * @param   inEvent   Object		 Event fired
+		 *
+		 * @return  true
+		 *
+		 * @since  0.0.3
+		 */
+		errorDecrement: function (inSender, inEvent)
+		{
+			this.$.indicator.setDanger(this.$.indicator.getDanger() - 1);
+
+			// Prevents event propagation
+			return true;
+		},
+
+		/**
+		 * Handle time update event
+		 *
+		 * @protected
+		 *
+		 * @param   inSender  enyo.instance  Sender of the event
+		 * @param   inEvent   Object		 Event fired
+		 *
+		 * @return  true
+		 *
+		 * @since  0.0.1
+		 */
+		timeUpdate: function (inSender, inEvent)
+		{
+			this.$.progressbar.setWarning(inEvent.originator.getCurrentTime());
+
+			// Prevents event propagation
+			return false;
+		},
+	}
+);

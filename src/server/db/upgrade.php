@@ -12,7 +12,7 @@
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013-2016 University of La Rochelle, France
+ * @copyright   2013-2018 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
  * @since       0.0.1
@@ -25,7 +25,7 @@ defined('MOODLE_INTERNAL') || die();
  *
  * @param   int  $oldversion  The old version
  *
- * @return  bool
+ * @return  boolean
  *
  * @since  0.0.1
  */
@@ -36,7 +36,8 @@ function xmldb_elang_upgrade($oldversion)
 	// Loads ddl manager and xmldb classes
 	$dbman = $DB->get_manager();
 
-	/* And upgrade begins here. For each one, you'll need one
+	/*
+	 * And upgrade begins here. For each one, you'll need one
 	 * block of code similar to the next one. Please, delete
 	 * this comment lines once this file start handling proper
 	 * upgrade code.

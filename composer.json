@@ -32,6 +32,10 @@
 	"require": {
 		"captioning/captioning": "2.*"
 	},
+	"require-dev": {
+		"joomla/coding-standards": "~2.0@alpha",
+		"phpunit/phpunit": "^7.0"
+	},
 	"scripts": {
 		"post-install-cmd": [
 			"bower install"
@@ -40,8 +44,8 @@
 			"bower update"
 		],
 		"test": [
-			"phpunit",
-			"phpcs --standard=ruleset.xml src/ test/"
+			"vendor/bin/phpunit",
+			"vendor/bin/phpcs --standard=ruleset.xml src/ test/"
 		],
 		"package": [
 			"[ -f .DATE -a `cat .DATE` -eq `date +%Y%m%d` ] || (date +%Y%m%d > .DATE && echo 00 > .NUMBER)",

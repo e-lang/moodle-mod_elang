@@ -5,7 +5,7 @@
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013-2016 University of La Rochelle, France
+ * @copyright   2013-2018 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
  * @since       1.1.0
@@ -354,6 +354,13 @@ else
 	}
 	else
 	{
+		$reset = optional_param('reset', 0, PARAM_INT);
+
+		if ($reset === 1)
+		{
+			$DB->delete_records('elang_users', array('id_elang' => $cm->instance, 'id_user' => $USER->id));
+		}
+
 		if (version_compare($version, '2.7') < 0)
 		{
 			// Log report action
@@ -431,6 +438,20 @@ else
 		);
 
 		echo $OUTPUT->help_icon('showplayer', 'elang');
+
+		// Display link to the player
+		echo html_writer::empty_tag('br');
+
+		// Display link to the reset the data for the teacher
+		echo html_writer::link(
+			new moodle_url(
+				'/mod/elang/view.php',
+				array('id' => $cm->id, 'reset' => '1')
+			),
+			get_string('resetplayer', 'elang')
+		);
+
+		echo $OUTPUT->help_icon('resetplayer', 'elang');
 
 		// Display the report for a list of users
 		echo $OUTPUT->heading(get_string('reportallstudents', 'elang'));

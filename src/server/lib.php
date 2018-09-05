@@ -11,7 +11,7 @@
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013-2016 University of La Rochelle, France
+ * @copyright   2013-2018 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
  * @since       0.0.1
@@ -67,7 +67,7 @@ function elang_supports($feature)
  * @param   object              $elang  An object from the form in mod_form.php
  * @param   mod_elang_mod_form  $mform  The form
  *
- * @return  int  The id of the newly inserted elang record
+ * @return  integer  The id of the newly inserted elang record
  *
  * @category  core
  *
@@ -266,12 +266,12 @@ function elang_user_complete($course, $user, $mod, $elang)
 /**
  * Obtains the automatic completion state for this elang based on any conditions in elang settings.
  *
- * @param   object  $course  Course
- * @param   object  $cm      Course-module
- * @param   int     $userid  User ID
- * @param   bool    $type    Type of comparison (or/and; can be used as return value if no conditions)
+ * @param   object   $course  Course
+ * @param   object   $cm      Course-module
+ * @param   int      $userid  User ID
+ * @param   boolean  $type    Type of comparison (or/and; can be used as return value if no conditions)
  *
- * @return  bool  true if completed, false if not. (If no conditions, then return value depends on comparison type)
+ * @return  boolean  true if completed, false if not. (If no conditions, then return value depends on comparison type)
  *
  * @since  1.2.0
  */
@@ -414,13 +414,13 @@ function elang_print_recent_activity($course, $viewfullnames, $timestart)
  * custom activity records. These records are then rendered into HTML via
  * {@link elang_print_recent_mod_activity()}.
  *
- * @param   array    &$activities  sequentially indexed array of objects with the 'cmid' property
- * @param   integer  &$index       the index in the $activities to use for the next record
- * @param   integer  $timestart    append activity since this time
- * @param   integer  $courseid     the id of the course we produce the report for
- * @param   integer  $cmid         course module id
- * @param   integer  $userid       check for a particular user's activity only, defaults to 0 (all users)
- * @param   integer  $groupid      check for a particular group's activity only, defaults to 0 (all groups)
+ * @param   array    $activities  sequentially indexed array of objects with the 'cmid' property
+ * @param   integer  $index       the index in the $activities to use for the next record
+ * @param   integer  $timestart   append activity since this time
+ * @param   integer  $courseid    the id of the course we produce the report for
+ * @param   integer  $cmid        course module id
+ * @param   integer  $userid      check for a particular user's activity only, defaults to 0 (all users)
+ * @param   integer  $groupid     check for a particular group's activity only, defaults to 0 (all groups)
  *
  * @return  void  adds items into $activities and increases $index
  *
@@ -462,7 +462,7 @@ function elang_print_recent_mod_activity($activity, $courseid, $detail, $modname
  *
  * @since   0.0.1
  */
-function elang_cron ()
+function elang_cron()
 {
 	return true;
 }

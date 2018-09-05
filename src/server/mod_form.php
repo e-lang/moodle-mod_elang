@@ -8,7 +8,7 @@
  *
  * @package     mod
  * @subpackage  elang
- * @copyright   2013-2016 University of La Rochelle, France
+ * @copyright   2013-2018 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
  * @since       0.0.1
@@ -30,7 +30,36 @@ require_once dirname(__FILE__) . '/locallib.php';
 class mod_elang_mod_form extends moodleform_mod
 {
 	/**
+	 * constructor
+	 *
+	 * @param   mixed  $current  Not documented in moodle
+	 * @param   mixed  $section  Not documented in moodle
+	 * @param   mixed  $cm       Not documented in moodle
+	 * @param   mixed  $course   Not documented in moodle
+	 *
+	 * @since  1.3.2
+	 */
+	public function __construct($current, $section, $cm, $course)
+	{
+		$mimetypes = & core_filetypes::get_types();
+
+		if (!array_key_exists('srt', $mimetypes))
+		{
+			core_filetypes::add_type('srt', 'text/plain', 'text', array(), false, 'Sub Rip track files');
+		}
+
+		if (!array_key_exists('vtt', $mimetypes))
+		{
+			core_filetypes::add_type('vtt', 'text/plain', 'text', array(), false, 'HTML track files');
+		}
+
+		parent::__construct($current, $section, $cm, $course);
+	}
+
+	/**
 	 * The \Captioning\Format\WebvttFile object is successfull
+	 *
+	 * @var  \Captioning\Format\WebvttFile  The vtt object
 	 *
 	 * @since  0.0.1
 	 */
@@ -184,18 +213,12 @@ class mod_elang_mod_form extends moodleform_mod
 		$mform->addHelpButton('videos', 'videos', 'elang');
 		$mform->addRule('videos', null, 'required', null, 'client');
 
-/**		//TODO deal with specific mimetype (moodle does not seem to take this code into account when file is uploaded
-		require_once $CFG->libdir . '/filelib.php';
-		$info = & get_mimetypes_array();
-		$info['vtt'] = array('type' => 'text/vtt', 'icon'=>'text', 'defaulticon'=>true, 'groups' => array('subtitle'));
-		$info['srt'] = array('type' => 'text/plain', 'icon'=>'text', 'defaulticon'=>true, 'groups' => array('subtitle'));
-*/
 		$mform->addElement(
 			'filemanager',
 			'subtitle',
 			get_string('subtitle', 'elang'),
 			null,
-			array('subdirs' => 0, 'maxbytes' => $subtitlemaxsize, 'maxfiles' => 1, 'accepted_types' => array('subtitle'))
+			array('subdirs' => 0, 'maxbytes' => $subtitlemaxsize, 'maxfiles' => 1, 'accepted_types' => array('.vtt', '.srt'))
 		);
 		$mform->addHelpButton('subtitle', 'subtitle', 'elang');
 		$mform->addRule('subtitle', null, 'required', null, 'client');
@@ -303,7 +326,7 @@ class mod_elang_mod_form extends moodleform_mod
 	 *
 	 * @param   array  $data  Input data (not yet validated)
 	 *
-	 * @return  bool  true if one or more rules is enabled, false if none are; default returns false
+	 * @return  boolean  true if one or more rules is enabled, false if none are; default returns false
 	 *
 	 * @since  1.2.0
 	 */
@@ -352,7 +375,7 @@ class mod_elang_mod_form extends moodleform_mod
 	/**
 	 * Preprocess data before creating form
 	 *
-	 * @param   array  &$default_values  Array of default values
+	 * @param   array  $default_values  Array of default values
 	 *
 	 * @return  void
 	 *
@@ -489,28 +512,41 @@ class mod_elang_mod_form extends moodleform_mod
 					// Encoding succeeds, put back encoded contents in file
 					file_put_contents($filepath, $contents);
 
-					// Detect vtt format
-					try
-					{
-						$caption = new \Captioning\Format\WebvttFile($filepath);
-						$caption->setUseIconv(function_exists('mb_convert_encoding'));
-						$noerror = true;
-						break;
-					}
-					catch (\Exception $e)
-					{
-					}
+					$extension = pathinfo(unserialize($file->get_source())->source, PATHINFO_EXTENSION);
 
-					// Detect subrip format
-					try
+					// The extension is 'srt': it is a subrip file
+					if ($extension === 'srt')
 					{
-						$caption = new \Captioning\Format\SubripFile($filepath);
-						$caption->setUseIconv(function_exists('mb_convert_encoding'));
-						$noerror = true;
-						break;
+						// Detect subrip format
+						try
+						{
+							$caption = new \Captioning\Format\SubripFile($filepath);
+							$caption->setUseIconv(function_exists('mb_convert_encoding'));
+							$noerror = true;
+							unset($errors['subtitle']);
+							break;
+						}
+						catch (\Exception $e)
+						{
+							$errors['subtitle'] = str_replace($filepath, 'file', $e->getMessage());
+						}
 					}
-					catch (\Exception $e)
+					// The extension is 'vtt': it is a webvtt file
+					elseif ($extension === 'vtt')
 					{
+						// Detect vtt format
+						try
+						{
+							$caption = new \Captioning\Format\WebvttFile($filepath);
+							$caption->setUseIconv(function_exists('mb_convert_encoding'));
+							$noerror = true;
+							unset($errors['subtitle']);
+							break;
+						}
+						catch (\Exception $e)
+						{
+							$errors['subtitle'] = str_replace($filepath, 'file', $e->getMessage());
+						}
 					}
 				}
 			}
