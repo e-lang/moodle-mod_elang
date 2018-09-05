@@ -1,0 +1,8 @@
+title: moodle-mod_elang
+description: A moodle module for learning language
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-slate
+
+gems:
+  - jekyll-mentions
