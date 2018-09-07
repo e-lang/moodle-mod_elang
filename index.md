@@ -9,8 +9,8 @@ A moodle module ([official moodle page](https://moodle.org/plugins/view/mod_elan
 
 ### Downloads
 
-* [moodle-mod_elang-stable-1.3.2-2018090502-debug.zip](assets/moodle-mod_elang-stable-1.3.2-2018090502-debug.zip) for debugging purpose
-* [moodle-mod_elang-stable-1.3.2-2018090502.zip](assets/moodle-mod_elang-stable-1.3.2-2018090502.zip) compressed version.
+* [moodle-mod_elang-stable-1.3.2-2018090602-debug.zip](assets/moodle-mod_elang-stable-1.3.2-2018090602-debug.zip) for debugging purpose
+* [moodle-mod_elang-stable-1.3.2-2018090602.zip](assets/moodle-mod_elang-stable-1.3.2-2018090602.zip) compressed version.
 
 ### Authors
 
