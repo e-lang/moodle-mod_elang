@@ -208,7 +208,7 @@ class mod_elang_mod_form extends moodleform_mod
 			'videos',
 			get_string('videos', 'elang'),
 			null,
-			array('subdirs' => 0, 'maxbytes' => $videomaxsize, 'maxfiles' => 20, 'accepted_types' => array('video'))
+			array('subdirs' => 0, 'maxbytes' => $videomaxsize, 'maxfiles' => 20, 'accepted_types' => array('.webm', '.ogv', '.mp4'))
 		);
 		$mform->addHelpButton('videos', 'videos', 'elang');
 		$mform->addRule('videos', null, 'required', null, 'client');
