@@ -7,6 +7,9 @@ before_install:
   - npm install -g bower
   - composer self-update
   - composer install
+  - composer package
+  - rm *-debug.zip
+  - unzip *.zip -d build
 
   - phpenv config-rm xdebug.ini
   - nvm install 8.9
@@ -17,5 +20,5 @@ before_install:
 
 script:
   - composer test
-  - moodle-plugin-ci phplint
+  - moodle-plugin-ci phplint build/elang
 
