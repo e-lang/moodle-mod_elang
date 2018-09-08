@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<libraries>
+    <library>
+        <location>mod/elang/vendor/captioning/captioning/</location>
+        <name>captioning</name>
+        <version>2.6.0</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+</libraries>
