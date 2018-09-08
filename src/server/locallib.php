@@ -24,7 +24,7 @@ if (is_file(dirname(__FILE__) . '/vendor/autoload.php')) {
 /**
  * Encode options
  *
- * @param   object  $elang  An object from the form in mod_form.php
+ * @param   \stdClass  $elang  An object from the form in mod_form.php
  *
  * @return  void
  *
@@ -262,7 +262,7 @@ function transcode_subtitle($contents, $encodingto = 'UTF-8', $detectorder = nul
 /**
  * Save files for an instance
  *
- * @param   object               $elang  An object from the form in mod_form.php
+ * @param   \stdClass            $elang  An object from the form in mod_form.php
  * @param   \mod_elang_mod_form  $mform  The form
  *
  * @return void

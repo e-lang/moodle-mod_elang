@@ -1,4 +1,19 @@
 <?php
+// This file is part of mod_elang for moodle.
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * Library of interface functions and constants for module elang
  *
@@ -61,7 +76,7 @@ function elang_supports($feature) {
  * will create a new instance and return the id number
  * of the new instance.
  *
- * @param   object              $elang  An object from the form in mod_form.php
+ * @param   stdClass            $elang  An object from the form in mod_form.php
  * @param   mod_elang_mod_form  $mform  The form
  *
  * @return  integer  The id of the newly inserted elang record
@@ -95,7 +110,7 @@ function elang_add_instance(stdClass $elang, mod_elang_mod_form $mform = null) {
  * (defined by the form in mod_form.php) this function
  * will update an existing instance with new data.
  *
- * @param   object              $elang  An object from the form in mod_form.php
+ * @param   stdClass            $elang  An object from the form in mod_form.php
  * @param   mod_elang_mod_form  $mform  The form
  *
  * @return  boolean  Success/Fail
@@ -359,7 +374,7 @@ function elang_get_recent_mod_activity(&$activities, &$index, $timestart, $cours
 }
 
 /**
- * Prints single activity item prepared by {@see elang_get_recent_mod_activity()}
+ * Prints single activity item prepared by elang_get_recent_mod_activity()
  *
  * @param   stdClass  $activity       The activity module
  * @param   integer   $courseid       The course id
@@ -393,8 +408,6 @@ function elang_cron() {
 
 /**
  * Returns all other caps used in the module
- *
- * @example return array('moodle/site:accessallgroups');
  *
  * @return  array
  *
@@ -466,7 +479,7 @@ function elang_cm_info_dynamic(cm_info $cm) {
  *
  * @return array
  *
- * @catgory  code
+ * @category  code
  *
  * @since   0.0.1
  */
@@ -479,7 +492,7 @@ function elang_get_view_actions() {
  *
  * @return array
  *
- * @catgory  code
+ * @category  code
  *
  * @since   0.0.1
  */

@@ -24,6 +24,9 @@ require_once($CFG->dirroot . '/mod/elang/backup/moodle2/backup_elang_settingslib
 /**
  * Tasks executed for elang backup, using stepslib
  *
+ * @copyright   2013-2018 University of La Rochelle, France
+ * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ *
  * @since  1.1.0
  */
 class backup_elang_activity_task extends backup_activity_task

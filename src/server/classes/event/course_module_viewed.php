@@ -20,6 +20,9 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * The mod_elang course module viewed event class.
  *
+ * @copyright   2013-2018 University of La Rochelle, France
+ * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
+ *
  * @since  1.0.0
  */
 class course_module_viewed extends \core\event\course_module_viewed

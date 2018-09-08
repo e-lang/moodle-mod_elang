@@ -1,7 +1,8 @@
 <?php
 /**
- * This file replaces the legacy STATEMENTS section in db/install.xml,
- * lib.php/modulename_install() post installation hook and partially defaults.php
+ * This file replaces the legacy STATEMENTS section
+ *
+ * in db/install.xml, lib.php/modulename_install() post installation hook and partially defaults.php
  *
  * @package     mod_elang
  *

@@ -1,5 +1,7 @@
 <?php
 /**
+ * Custom uninstallation procedure.
+ *
  * @package     mod_elang
  *
  * @copyright   2013-2018 University of La Rochelle, France
