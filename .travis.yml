@@ -6,20 +6,9 @@ php:
 before_install:
   - npm install -g bower
   - composer self-update
-  - composer install --no-dev
+  - composer install
   - composer package
-  - rm *-debug.zip
-  - unzip *.zip -d mod
-  - composer update
-
-  - phpenv config-rm xdebug.ini
-  - nvm install 8.9
-  - nvm use 8.9
-  - cd ../..
-  - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^2
-  - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
 
 script:
   - composer test
-  - moodle-plugin-ci phplint mod/elang
 

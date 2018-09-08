@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file keeps track of upgrades to the elang module
  *
@@ -10,8 +9,8 @@
  * it cannot do itself, it will tell you what you need to do. The commands in
  * here will all be database-neutral, using the functions defined in DLL libraries.
  *
- * @package     mod
- * @subpackage  elang
+ * @package     mod_elang
+ *
  * @copyright   2013-2018 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
@@ -29,24 +28,23 @@ defined('MOODLE_INTERNAL') || die();
  *
  * @since  0.0.1
  */
-function xmldb_elang_upgrade($oldversion)
-{
-	global $DB;
+function xmldb_elang_upgrade($oldversion) {
+    global $DB;
 
-	// Loads ddl manager and xmldb classes
-	$dbman = $DB->get_manager();
+    // Loads ddl manager and xmldb classes.
+    $dbman = $DB->get_manager();
 
-	/*
-	 * And upgrade begins here. For each one, you'll need one
-	 * block of code similar to the next one. Please, delete
-	 * this comment lines once this file start handling proper
-	 * upgrade code.
-	 */
+    /*
+     * And upgrade begins here. For each one, you'll need one
+     * block of code similar to the next one. Please, delete
+     * this comment lines once this file start handling proper
+     * upgrade code.
+     */
 
-	/*
-	 * See https://github.com/moodlehq/moodle-mod_newmodule/blob/master/db/upgrade.php
-	 */
+    /*
+     * See https://github.com/moodlehq/moodle-mod_newmodule/blob/master/db/upgrade.php
+     */
 
-	// Final return of upgrade result (true, all went good) to Moodle.
-	return true;
+    // Final return of upgrade result (true, all went good) to Moodle.
+    return true;
 }

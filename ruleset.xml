@@ -1,67 +1,8 @@
 <?xml version="1.0"?>
 <ruleset name="Custom Standard">
 
-	<description>A custom coding standard based on Joomla one</description>
-	<rule ref="vendor/joomla/coding-standards/Joomla">
-		<exclude name="Joomla.NamingConventions.ValidFunctionName.ScopeNotCamelCaps"/>
-		<exclude name="Joomla.NamingConventions.ValidVariableName.NotCamelCaps"/>
-		<exclude name="Joomla.NamingConventions.ValidVariableName.MemberNotCamelCaps"/>
-		<exclude name="Joomla.NamingConventions.ValidFunctionName.FunctionNoCapital"/>
-		<exclude name="Joomla.Commenting.FileComment.InvalidPackage"/>
-		<exclude name="PEAR.NamingConventions.ValidClassName.StartWithCapital"/>
-		<exclude name="PEAR.NamingConventions.ValidClassName.Invalid"/>
+	<description>A custom coding standard based on the moodle one</description>
+	<rule ref="vendor/moodlerooms/moodle-coding-standard/moodle">
+		<exclude name="moodle.Files.BoilerplateComment.WrongLine"/>
 	</rule>
-
-	<rule ref="Squiz.PHP.GlobalKeyword.NotAllowed">
-		<exclude-pattern>src/server/backup/moodle2/restore_elang_stepslib.php</exclude-pattern>
-		<exclude-pattern>src/server/backup/moodle2/backup_elang_activity_task.class.php</exclude-pattern>
-		<exclude-pattern>src/server/mod_form.php</exclude-pattern>
-		<exclude-pattern>src/server/db/upgrade.php</exclude-pattern>
-		<exclude-pattern>src/server/locallib.php</exclude-pattern>
-		<exclude-pattern>src/server/report.php</exclude-pattern>
-		<exclude-pattern>src/server/lib.php</exclude-pattern>
-	</rule>
-
-	<rule ref="Joomla.Commenting.FileComment.WrongStyle">
-		<exclude-pattern>src/client/package.js</exclude-pattern>
-	</rule>
-
-	<rule ref="Joomla.ControlStructures.ControlStructuresBrackets.OpenBraceNewLine">
-		<exclude-pattern>src/server/play.php</exclude-pattern>
-	</rule>
-
-
-	<!--rule ref="Joomla.ControlStructures.ControlSignature">
-		<exclude-pattern>src/server/play.php</exclude-pattern>
-	</rule-->
-
-	<rule ref="Generic.WhiteSpace.ScopeIndent.Incorrect">
-		<exclude-pattern>src/client/source/Video.js</exclude-pattern>
-		<exclude-pattern>src/client/source/Cues.js</exclude-pattern>
-		<exclude-pattern>src/client/source/Head.js</exclude-pattern>
-		<exclude-pattern>src/client/source/App.js</exclude-pattern>
-		<exclude-pattern>src/client/source/Modal.js</exclude-pattern>
-	</rule>
-
-	<rule ref="Generic.WhiteSpace.ScopeIndent.IncorrectExact">
-		<exclude-pattern>src/client/source/Video.js</exclude-pattern>
-		<exclude-pattern>src/client/source/Cues.js</exclude-pattern>
-		<exclude-pattern>src/client/source/Head.js</exclude-pattern>
-		<exclude-pattern>src/client/source/App.js</exclude-pattern>
-		<exclude-pattern>src/client/source/Modal.js</exclude-pattern>
-	</rule>
-
-	<rule ref="Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore">
-		<exclude-pattern>src/server/play.php</exclude-pattern>
-	</rule>
-
-	<rule ref="Generic.Files.LineLength.TooLong">
-		<exclude-pattern>*/lang/*</exclude-pattern>
-	</rule>
-
-	<!--rule ref="Joomla.WhiteSpace.SuperfluousWhitespace">
-		<exclude-pattern>*.js</exclude-pattern>
-		<exclude-pattern>*.css</exclude-pattern>
-	</rule-->
-
 </ruleset>

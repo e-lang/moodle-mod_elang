@@ -29,12 +29,46 @@
 			"role": "conceptor"
 		}
 	],
+	"repositories": [
+		{
+			"type": "package",
+			"package": {
+			"name": "moodlehq/moodle-local_codechecker",
+			"version": "2.7.1",
+			"source": {
+				"url": "https://github.com/moodlehq/moodle-local_codechecker.git",
+				"type": "git",
+				"reference": "v2.7.1"
+			},
+			"autoload": {
+				"classmap": [
+				"pear/PHP/CodeSniffer.php",
+				"pear/PHP/CodeSniffer/CLI.php"
+				]
+			}
+			}
+		},
+		{
+			"type": "package",
+			"package": {
+			"name": "moodlehq/moodle-local_ci",
+			"version": "1.0.3",
+			"source": {
+				"url": "https://github.com/moodlehq/moodle-local_ci.git",
+				"type": "git",
+				"reference": "ea72c5f7c937014c1401a833e697afb3d95af7be"
+			}
+			}
+		}
+	],
 	"require": {
 		"captioning/captioning": "2.*"
 	},
 	"require-dev": {
 		"joomla/coding-standards": "~2.0@alpha",
-		"phpunit/phpunit": "^7.0"
+		"phpunit/phpunit": "~6", 
+		"moodlerooms/moodle-plugin-ci": "^2",
+		"moodlerooms/moodle-coding-standard": "^2.0"
 	},
 	"scripts": {
 		"post-install-cmd": [
@@ -45,7 +79,11 @@
 		],
 		"test": [
 			"vendor/bin/phpunit",
-			"vendor/bin/phpcs --standard=ruleset.xml src/ test/"
+			"rm -Rf mod; unzip moodle-mod_elang-`cat RELEASE`-`cat .DATE``cat .NUMBER`.zip -d mod",
+			"vendor/bin/moodle-plugin-ci phplint mod/elang/",
+			"vendor/bin/moodle-plugin-ci codechecker --standard ruleset.xml mod/elang/",
+			"vendor/bin/moodle-plugin-ci phpcpd mod/elang/",
+			"vendor/bin/moodle-plugin-ci phpmd mod/elang/"
 		],
 		"package": [
 			"[ -f .DATE -a `cat .DATE` -eq `date +%Y%m%d` ] || (date +%Y%m%d > .DATE && echo 00 > .NUMBER)",
@@ -55,7 +93,7 @@
 			"rm -Rf build",
 			"mkdir -p build/elang",
 			"cp -Rf src/server/* build/elang",
-			"cp -Rf vendor/ build/elang",
+			"cp -Rf vendor/autoload.php vendor/captioning build/elang",
 			"find build/elang -type d -empty -delete",
 			"sed 's/@RELEASE@/'`cat RELEASE`'/' build/elang/version.php > build/elang/version2.php",
 			"sed 's/@VERSION@/'`cat .DATE``cat .NUMBER`'/' build/elang/version2.php > build/elang/version3.php",

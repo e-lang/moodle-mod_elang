@@ -1,13 +1,12 @@
 <?php
-
 /**
  * Log a view all event
  *
  * You can have a rather longer description of the file as well,
  * if you like, and it can span multiple lines.
  *
- * @package     mod
- * @subpackage  elang
+ * @package     mod_elang
+ *
  * @copyright   2013-2018 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
@@ -25,5 +24,5 @@ defined('MOODLE_INTERNAL') || die();
  */
 class course_module_instance_list_viewed extends \core\event\course_module_instance_list_viewed
 {
-	// No code required here as the parent class handles it all.
+    // No code required here as the parent class handles it all.
 }

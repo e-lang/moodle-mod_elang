@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Library of interface functions and constants for module elang
  *
@@ -9,8 +8,8 @@
  * logic, should go to locallib.php. This will help to save some memory when
  * Moodle is performing actions across all modules.
  *
- * @package     mod
- * @subpackage  elang
+ * @package     mod_elang
+ *
  * @copyright   2013-2018 University of La Rochelle, France
  * @license     http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html CeCILL-B license
  *
@@ -32,28 +31,26 @@ defined('MOODLE_INTERNAL') || die();
  *
  * @since   0.0.1
  */
-function elang_supports($feature)
-{
-	switch ($feature)
-	{
-		case FEATURE_MOD_INTRO:
-			return true;
-		case FEATURE_SHOW_DESCRIPTION:
-			return true;
+function elang_supports($feature) {
+    switch ($feature) {
+        case FEATURE_MOD_INTRO:
+            return true;
+        case FEATURE_SHOW_DESCRIPTION:
+            return true;
 
-		// Usefull for backup, restore and clone action
-		case FEATURE_BACKUP_MOODLE2:
-			return true;
+        // Usefull for backup, restore and clone action.
+        case FEATURE_BACKUP_MOODLE2:
+            return true;
 
-		// Usefull for completion settings
-		case FEATURE_COMPLETION_TRACKS_VIEWS:
-			return true;
-		case FEATURE_COMPLETION_HAS_RULES:
-			return true;
+        // Usefull for completion settings.
+        case FEATURE_COMPLETION_TRACKS_VIEWS:
+            return true;
+        case FEATURE_COMPLETION_HAS_RULES:
+            return true;
 
-		default:
-			return null;
-	}
+        default:
+            return null;
+    }
 }
 
 /**
@@ -73,38 +70,22 @@ function elang_supports($feature)
  *
  * @since   0.0.1
  */
-function elang_add_instance(stdClass $elang, mod_elang_mod_form $mform = null)
-{
-	global $DB;
+function elang_add_instance(stdClass $elang, mod_elang_mod_form $mform = null) {
+    global $DB;
 
-	// Init some fields
-	$elang->timemodified = time();
-	$elang->timecreated = time();
-	$elang->options = json_encode(
-		array(
-			'showlanguage' => isset($elang->showlanguage) ? true : false,
-			'repeatedunderscore' => isset($elang->repeatedunderscore) ? $elang->repeatedunderscore : 10,
-			'titlelength' => isset($elang->titlelength) ? $elang->titlelength : 100,
-			'limit' => isset($elang->limit) ? $elang->limit : 10,
-			'left' => isset($elang->left) ? $elang->left : 20,
-			'top' => isset($elang->top) ? $elang->top : 20,
-			'size' => isset($elang->size) ? $elang->size : 16,
-			'usetransliteration' => isset($elang->usetransliteration) ? true : false,
-			'usecasesensitive' => isset($elang->usecasesensitive) ? true : false,
-			'jaroDistance' => isset($elang->jaroDistance) ? $elang->jaroDistance : 1,
-			'completion_gapfilled' => isset($elang->completion_gapfilled) ? $elang->completion_gapfilled : 0,
-			'completion_gapcompleted' => isset($elang->completion_gapcompleted) ? $elang->completion_gapcompleted : 0,
-		)
-	);
+    // Init some fields.
+    $elang->timemodified = time();
+    $elang->timecreated = time();
+    Elang\encode_options($elang);
 
-	// Storage of the main table of the module
-	$elang->id = $DB->insert_record('elang', $elang);
+    // Storage of the main table of the module.
+    $elang->id = $DB->insert_record('elang', $elang);
 
-	// Storage of files
-	require_once dirname(__FILE__) . '/locallib.php';
-	Elang\saveFiles($elang, $mform);
+    // Storage of files.
+    require_once(dirname(__FILE__) . '/locallib.php');
+    Elang\save_files($elang, $mform);
 
-	return $elang->id;
+    return $elang->id;
 }
 
 /**
@@ -123,43 +104,24 @@ function elang_add_instance(stdClass $elang, mod_elang_mod_form $mform = null)
  *
  * @since   0.0.1
  */
-function elang_update_instance(stdClass $elang, mod_elang_mod_form $mform = null)
-{
-	global $DB;
+function elang_update_instance(stdClass $elang, mod_elang_mod_form $mform = null) {
+    global $DB;
 
-	// Init some fields
-	$elang->timemodified = time();
-	$elang->id = $elang->instance;
-	$elang->options = json_encode(
-		array(
-			'showlanguage' => isset($elang->showlanguage) ? true : false,
-			'repeatedunderscore' => isset($elang->repeatedunderscore) ? $elang->repeatedunderscore : 10,
-			'titlelength' => isset($elang->titlelength) ? $elang->titlelength : 100,
-			'limit' => isset($elang->limit) ? $elang->limit : 10,
-			'left' => isset($elang->left) ? $elang->left : 20,
-			'top' => isset($elang->top) ? $elang->top : 20,
-			'size' => isset($elang->size) ? $elang->size : 16,
-			'usetransliteration' => isset($elang->usetransliteration) ? true : false,
-			'usecasesensitive' => isset($elang->usecasesensitive) ? true : false,
-			'jaroDistance' => isset($elang->jaroDistance) ? str_replace(",", ".", $elang->jaroDistance) : 1,
-			'completion_gapfilled' => isset($elang->completion_gapfilled) ? $elang->completion_gapfilled : 0,
-			'completion_gapcompleted' => isset($elang->completion_gapcompleted) ? $elang->completion_gapcompleted : 0,
-		)
-	);
+    // Init some fields.
+    $elang->timemodified = time();
+    $elang->id = $elang->instance;
+    Elang\encode_options($elang);
 
-	// Update of the main table of the module
-	if ($DB->update_record('elang', $elang))
-	{
-		// Storage of files
-		require_once dirname(__FILE__) . '/locallib.php';
-		Elang\saveFiles($elang, $mform);
+    // Update of the main table of the module.
+    if ($DB->update_record('elang', $elang)) {
+        // Storage of files.
+        require_once(dirname(__FILE__) . '/locallib.php');
+        Elang\save_files($elang, $mform);
 
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -177,44 +139,37 @@ function elang_update_instance(stdClass $elang, mod_elang_mod_form $mform = null
  *
  * @since   0.0.1
  */
-function elang_delete_instance($id)
-{
-	global $DB;
+function elang_delete_instance($id) {
+    global $DB;
 
-	if (! $elang = $DB->get_record('elang', array('id' => $id)))
-	{
-		return false;
-	}
+    if (! $elang = $DB->get_record('elang', array('id' => $id))) {
+        return false;
+    }
 
-	$result = true;
+    $result = true;
 
-	// Delete any dependent records
-	if (! $DB->delete_records('elang', array('id' => $elang->id)))
-	{
-		$result = false;
-	}
+    // Delete any dependent records.
+    if (! $DB->delete_records('elang', array('id' => $elang->id))) {
+        $result = false;
+    }
 
-	if (! $DB->delete_records('elang_cues', array('id_elang' => $elang->id)))
-	{
-		$result = false;
-	}
+    if (! $DB->delete_records('elang_cues', array('id_elang' => $elang->id))) {
+        $result = false;
+    }
 
-	if (! $DB->delete_records('elang_users', array('id_elang' => $elang->id)))
-	{
-		$result = false;
-	}
+    if (! $DB->delete_records('elang_users', array('id_elang' => $elang->id))) {
+        $result = false;
+    }
 
-	if (! $DB->delete_records('elang_help', array('id_elang' => $elang->id)))
-	{
-		$result = false;
-	}
+    if (! $DB->delete_records('elang_help', array('id_elang' => $elang->id))) {
+        $result = false;
+    }
 
-	if (! $DB->delete_records('elang_check', array('id_elang' => $elang->id)))
-	{
-		$result = false;
-	}
+    if (! $DB->delete_records('elang_check', array('id_elang' => $elang->id))) {
+        $result = false;
+    }
 
-	return $result;
+    return $result;
 }
 
 /**
@@ -235,13 +190,12 @@ function elang_delete_instance($id)
  *
  * @since   0.0.1
  */
-function elang_user_outline($course, $user, $mod, $elang)
-{
-	$return = new stdClass;
-	$return->time = 0;
-	$return->info = '';
+function elang_user_outline($course, $user, $mod, $elang) {
+    $return = new stdClass;
+    $return->time = 0;
+    $return->info = '';
 
-	return $return;
+    return $return;
 }
 
 /**
@@ -259,8 +213,7 @@ function elang_user_outline($course, $user, $mod, $elang)
  *
  * @since   0.0.1
  */
-function elang_user_complete($course, $user, $mod, $elang)
-{
+function elang_user_complete($course, $user, $mod, $elang) {
 }
 
 /**
@@ -275,115 +228,90 @@ function elang_user_complete($course, $user, $mod, $elang)
  *
  * @since  1.2.0
  */
-function elang_get_completion_state($course, $cm, $userid, $type = false)
-{
-	global $DB;
+function elang_get_completion_state($course, $cm, $userid, $type = false) {
+    global $DB;
 
-	// Get options for elang
-	if (!($elang = $DB->get_record('elang', array('id' => $cm->instance))))
-	{
-		throw new Exception("Can't find elang {$cm->instance}");
-	}
+    // Get options for elang.
+    if (!($elang = $DB->get_record('elang', array('id' => $cm->instance)))) {
+        throw new Exception("Can't find elang {$cm->instance}");
+    }
 
-	$options = json_decode($elang->options, true);
+    $options = json_decode($elang->options, true);
 
-	if (!array_key_exists('completion_gapfilled', $options))
-	{
-		$options['completion_gapfilled'] = 0;
-	}
+    if (!array_key_exists('completion_gapfilled', $options)) {
+        $options['completion_gapfilled'] = 0;
+    }
 
-	if (!array_key_exists('completion_gapcompleted', $options))
-	{
-		$options['completion_gapcompleted'] = 0;
-	}
+    if (!array_key_exists('completion_gapcompleted', $options)) {
+        $options['completion_gapcompleted'] = 0;
+    }
 
-	// Default return value.
-	$result = $type;
+    // Default return value.
+    $result = $type;
 
-	// Get all cues
-	$solutions = $DB->get_records('elang_cues', array('id_elang' => $cm->instance), 'number');
+    // Get all cues.
+    $solutions = $DB->get_records('elang_cues', array('id_elang' => $cm->instance), 'number');
 
-	// Get answers provided by a given user
-	$answers = $DB->get_records('elang_users', array('id_elang' => $cm->instance, 'id_user' => $userid));
+    // Get answers provided by a given user.
+    $answers = $DB->get_records('elang_users', array('id_elang' => $cm->instance, 'id_user' => $userid));
 
-	$answers2 = array();
+    $answers2 = array();
 
-	foreach ($answers as $answer)
-	{
-		$answers2[$answer->id_cue] = json_decode($answer->json, true);
-	}
+    foreach ($answers as $answer) {
+        $answers2[$answer->id_cue] = json_decode($answer->json, true);
+    }
 
-	// Count cues ans answers
-	$count = 0;
-	$success = 0;
-	$help = 0;
-	$error = 0;
+    // Count cues ans answers.
+    $count = 0;
+    $success = 0;
+    $help = 0;
+    $error = 0;
 
-	foreach ($solutions as $cue => $solution)
-	{
-		// Compute data
-		foreach (json_decode($solution->json, true) as $n => $data)
-		{
-			if (isset($data['content']) && $data['type'] == 'input')
-			{
-				$count++;
-			}
+    foreach ($solutions as $cue => $solution) {
+        // Compute data.
+        foreach (json_decode($solution->json, true) as $n => $data) {
+            if (isset($data['content']) && $data['type'] == 'input') {
+                $count++;
+            }
 
-			if (isset($answers2[$cue][$n]))
-			{
-				if ($answers2[$cue][$n]['help'])
-				{
-					$help++;
-				}
-				elseif ($answers2[$cue][$n]['content'] == $data['content'])
-				{
-					$success++;
-				}
-				elseif ($answers2[$cue][$n]['content'] != '')
-				{
-					$error++;
-				}
-			}
-		}
-	}
+            if (isset($answers2[$cue][$n])) {
+                if ($answers2[$cue][$n]['help']) {
+                    $help++;
+                } else if ($answers2[$cue][$n]['content'] == $data['content']) {
+                    $success++;
+                } else if ($answers2[$cue][$n]['content'] != '') {
+                    $error++;
+                }
+            }
+        }
+    }
 
-	// Avoid division by zero
-	if ($count == 0)
-	{
-		return $result;
-	}
-	else
-	{
-		if ($options['completion_gapfilled'] > 0)
-		{
-			$value = $options['completion_gapfilled'] <= (($success + $help + $error) * 100 / $count);
+    // Avoid division by zero.
+    if ($count == 0) {
+        return $result;
+    } else {
+        if ($options['completion_gapfilled'] > 0) {
+            $value = $options['completion_gapfilled'] <= (($success + $help + $error) * 100 / $count);
 
-			if ($type == COMPLETION_AND)
-			{
-				$result = $result && $value;
-			}
-			else
-			{
-				$result = $result || $value;
-			}
-		}
+            if ($type == COMPLETION_AND) {
+                $result = $result && $value;
+            } else {
+                $result = $result || $value;
+            }
+        }
 
-		if ($options['completion_gapcompleted'] > 0)
-		{
-			$value = $options['completion_gapcompleted'] <= (($success) * 100 / $count);
+        if ($options['completion_gapcompleted'] > 0) {
+            $value = $options['completion_gapcompleted'] <= (($success) * 100 / $count);
 
-			if ($type == COMPLETION_AND)
-			{
-				$result = $result && $value;
-			}
-			else
-			{
-				$result = $result || $value;
-			}
-		}
+            if ($type == COMPLETION_AND) {
+                $result = $result && $value;
+            } else {
+                $result = $result || $value;
+            }
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 }
 
 /**
@@ -401,10 +329,9 @@ function elang_get_completion_state($course, $cm, $userid, $type = false)
  *
  * @since   0.0.1
  */
-function elang_print_recent_activity($course, $viewfullnames, $timestart)
-{
-	// True if anything was printed, otherwise false
-	return false;
+function elang_print_recent_activity($course, $viewfullnames, $timestart) {
+    // True if anything was printed, otherwise false.
+    return false;
 }
 
 /**
@@ -428,8 +355,7 @@ function elang_print_recent_activity($course, $viewfullnames, $timestart)
  *
  * @since   0.0.1
  */
-function elang_get_recent_mod_activity(&$activities, &$index, $timestart, $courseid, $cmid, $userid=0, $groupid=0)
-{
+function elang_get_recent_mod_activity(&$activities, &$index, $timestart, $courseid, $cmid, $userid=0, $groupid=0) {
 }
 
 /**
@@ -445,8 +371,7 @@ function elang_get_recent_mod_activity(&$activities, &$index, $timestart, $cours
  *
  * @since   0.0.1
  */
-function elang_print_recent_mod_activity($activity, $courseid, $detail, $modnames, $viewfullnames)
-{
+function elang_print_recent_mod_activity($activity, $courseid, $detail, $modnames, $viewfullnames) {
 }
 
 /**
@@ -462,9 +387,8 @@ function elang_print_recent_mod_activity($activity, $courseid, $detail, $modname
  *
  * @since   0.0.1
  */
-function elang_cron()
-{
-	return true;
+function elang_cron() {
+    return true;
 }
 
 /**
@@ -478,9 +402,8 @@ function elang_cron()
  *
  * @since   0.0.1
  */
-function elang_get_extra_capabilities()
-{
-	return array();
+function elang_get_extra_capabilities() {
+    return array();
 }
 
 /**
@@ -496,31 +419,28 @@ function elang_get_extra_capabilities()
  *
  * @since   0.0.1
  */
-function elang_get_coursemodule_info($coursemodule)
-{
-	global $DB;
+function elang_get_coursemodule_info($coursemodule) {
+    global $DB;
 
-	$elang = $DB->get_record('elang', array('id' => $coursemodule->instance));
+    $elang = $DB->get_record('elang', array('id' => $coursemodule->instance));
 
-	if (!$elang)
-	{
-		return null;
-	}
+    if (!$elang) {
+        return null;
+    }
 
-	$options = json_decode($elang->options, true);
-	$info = new cached_cm_info;
+    $options = json_decode($elang->options, true);
+    $info = new cached_cm_info;
 
-	require_once dirname(__FILE__) . '/locallib.php';
-	$info->name = Elang\generateTitle($elang, $options);
-	$context = context_module::instance($coursemodule->id);
+    require_once(dirname(__FILE__) . '/locallib.php');
+    $info->name = Elang\generate_title($elang, $options);
+    $context = context_module::instance($coursemodule->id);
 
-	if ($coursemodule->showdescription)
-	{
-		// Convert intro to html. Do not filter cached version, filters run at display time.
-		$info->content = format_module_intro('elang', $elang, $coursemodule->id, false);
-	}
+    if ($coursemodule->showdescription) {
+        // Convert intro to html. Do not filter cached version, filters run at display time.
+        $info->content = format_module_intro('elang', $elang, $coursemodule->id, false);
+    }
 
-	return $info;
+    return $info;
 }
 
 /**
@@ -534,12 +454,10 @@ function elang_get_coursemodule_info($coursemodule)
  *
  * @since   1.1.0
  */
-function elang_cm_info_dynamic(cm_info $cm)
-{
-	if (!has_capability('mod/elang:report', $cm->context))
-	{
-		$cm->set_on_click("window.open('" . new moodle_url('/mod/elang/view.php', array('id' => $cm->id)) . "'); return false;");
-	}
+function elang_cm_info_dynamic(cm_info $cm) {
+    if (!has_capability('mod/elang:report', $cm->context)) {
+        $cm->set_on_click("window.open('" . new moodle_url('/mod/elang/view.php', array('id' => $cm->id)) . "'); return false;");
+    }
 }
 
 
@@ -552,9 +470,8 @@ function elang_cm_info_dynamic(cm_info $cm)
  *
  * @since   0.0.1
  */
-function elang_get_view_actions()
-{
-	return array('view', 'view help');
+function elang_get_view_actions() {
+    return array('view', 'view help');
 }
 
 /**
@@ -566,9 +483,8 @@ function elang_get_view_actions()
  *
  * @since   0.0.1
  */
-function elang_get_post_actions()
-{
-	return array('add check');
+function elang_get_post_actions() {
+    return array('add check');
 }
 
 /**
@@ -587,13 +503,12 @@ function elang_get_post_actions()
  *
  * @since   0.0.1
  */
-function elang_get_file_areas($course, $cm, $context)
-{
-	return array(
-		'poster' => get_string('filearea_poster', 'elang'),
-		'videos' => get_string('filearea_videos', 'elang'),
-		'subtitle' => get_string('filearea_subtitle', 'elang'),
-	);
+function elang_get_file_areas($course, $cm, $context) {
+    return array(
+        'poster' => get_string('filearea_poster', 'elang'),
+        'videos' => get_string('filearea_videos', 'elang'),
+        'subtitle' => get_string('filearea_subtitle', 'elang'),
+    );
 }
 
 /**
@@ -615,36 +530,32 @@ function elang_get_file_areas($course, $cm, $context)
  *
  * @since   0.0.1
  */
-function elang_get_file_info($browser, $areas, $course, $cm, $context, $filearea, $itemid, $filepath, $filename)
-{
-	global $CFG;
+function elang_get_file_info($browser, $areas, $course, $cm, $context, $filearea, $itemid, $filepath, $filename) {
+    global $CFG;
 
-	if (!has_capability('moodle/course:managefiles', $context))
-	{
-		// Students can not peak here!
-		return null;
-	}
+    if (!has_capability('moodle/course:managefiles', $context)) {
+        // Students can not peak here!
+        return null;
+    }
 
-	$fs = get_file_storage();
+    $fs = get_file_storage();
 
-	if ($filearea === 'videos' || $filearea === 'poster' || $filearea === 'subtitle')
-	{
-		$filepath = is_null($filepath) ? '/' : $filepath;
-		$filename = is_null($filename) ? '.' : $filename;
+    if ($filearea === 'videos' || $filearea === 'poster' || $filearea === 'subtitle') {
+        $filepath = is_null($filepath) ? '/' : $filepath;
+        $filename = is_null($filename) ? '.' : $filename;
 
-		$urlbase = $CFG->wwwroot . '/pluginfile.php';
+        $urlbase = $CFG->wwwroot . '/pluginfile.php';
 
-		if (!$storedfile = $fs->get_file($context->id, 'mod_elang', $filearea, 0, $filepath, $filename))
-		{
-			// Not found
-			return null;
-		}
+        if (!$storedfile = $fs->get_file($context->id, 'mod_elang', $filearea, 0, $filepath, $filename)) {
+            // Not found.
+            return null;
+        }
 
-		return new file_info_stored($browser, $context, $storedfile, $urlbase, $areas[$filearea], false, true, true, false);
-	}
+        return new file_info_stored($browser, $context, $storedfile, $urlbase, $areas[$filearea], false, true, true, false);
+    }
 
-	// Not found
-	return null;
+    // Not found.
+    return null;
 }
 
 /**
@@ -664,117 +575,110 @@ function elang_get_file_info($browser, $areas, $course, $cm, $context, $filearea
  *
  * @since   0.0.1
  */
-function elang_pluginfile($course, $cm, $context, $filearea, array $args, $forcedownload, array $options=array())
-{
-	global $DB, $CFG, $USER;
+function elang_pluginfile($course, $cm, $context, $filearea, array $args, $forcedownload, array $options=array()) {
+    global $DB, $CFG, $USER;
 
-	require_once dirname(__FILE__) . '/locallib.php';
+    require_once(dirname(__FILE__) . '/locallib.php');
 
-	if ($context->contextlevel != CONTEXT_MODULE)
-	{
-		send_file_not_found();
-	}
+    if ($context->contextlevel != CONTEXT_MODULE) {
+        send_file_not_found();
+    }
 
-	require_login($course, true, $cm);
+    require_login($course, true, $cm);
 
-	if (!has_capability('mod/elang:view', $context))
-	{
-		send_file_not_found();
-	}
+    if (!has_capability('mod/elang:view', $context)) {
+        send_file_not_found();
+    }
 
-	if ($filearea == 'subtitle')
-	{
-		$vtt = new \Captioning\Format\WebvttFile;
+    if ($filearea == 'subtitle') {
+        $vtt = new \Captioning\Format\WebvttFile;
 
-		$idlang = $cm->instance;
-		$records = $DB->get_records('elang_cues', array('id_elang' => $idlang), 'begin ASC');
-		$elang = $DB->get_record('elang', array('id' => $idlang));
-		$options = json_decode($elang->options, true);
-		$repeatedunderscore = isset($options['repeatedunderscore']) ? $options['repeatedunderscore'] : 10;
-		$i = 0;
-		$users = $DB->get_records('elang_users', array('id_elang' => $idlang, 'id_user' => $USER->id), '', 'id_cue,json');
+        $idlang = $cm->instance;
+        $records = $DB->get_records('elang_cues', array('id_elang' => $idlang), 'begin ASC');
+        $elang = $DB->get_record('elang', array('id' => $idlang));
+        $options = json_decode($elang->options, true);
+        $repeatedunderscore = isset($options['repeatedunderscore']) ? $options['repeatedunderscore'] : 10;
+        $i = 0;
+        $users = $DB->get_records('elang_users', array('id_elang' => $idlang, 'id_user' => $USER->id), '', 'id_cue,json');
 
-		foreach ($records as $id => $record)
-		{
-			if (isset($users[$id]))
-			{
-				$data = json_decode($users[$id]->json, true);
-			}
-			else
-			{
-				$data = array();
-			}
+        foreach ($records as $id => $record) {
+            if (isset($users[$id])) {
+                $data = json_decode($users[$id]->json, true);
+            } else {
+                $data = array();
+            }
 
-			$cue = new \Captioning\Format\WebvttCue(
-				\Captioning\Format\WebvttCue::ms2tc($record->begin),
-				\Captioning\Format\WebvttCue::ms2tc($record->end),
-				Elang\generateCueText(json_decode($record->json, true), $data, '-', $repeatedunderscore)
-			);
+            $cue = new \Captioning\Format\WebvttCue(
+                \Captioning\Format\WebvttCue::ms2tc($record->begin),
+                \Captioning\Format\WebvttCue::ms2tc($record->end),
+                Elang\generate_cue_text(json_decode($record->json, true), $data, '-', $repeatedunderscore)
+            );
 
-			$i++;
-			$cue->setIdentifier($i);
-			$vtt->addCue($cue);
-		}
+            $i++;
+            $cue->setIdentifier($i);
+            $vtt->addCue($cue);
+        }
 
-		send_file($vtt->build()->getFileContent(), end($args), 0, 0, true, false, 'text/vtt');
-	}
-	elseif ($filearea == 'pdf')
-	{
-		$idlang = $cm->instance;
-		$records = $DB->get_records('elang_cues', array('id_elang' => $idlang), 'begin ASC');
-		$elang = $DB->get_record('elang', array('id' => $idlang));
-		$options = json_decode($elang->options, true);
-		$repeatedunderscore = isset($options['repeatedunderscore']) ? $options['repeatedunderscore'] : 10;
+        send_file($vtt->build()->getFileContent(), end($args), 0, 0, true, false, 'text/vtt');
+    } else if ($filearea == 'pdf') {
+        $idlang = $cm->instance;
+        $records = $DB->get_records('elang_cues', array('id_elang' => $idlang), 'begin ASC');
+        $elang = $DB->get_record('elang', array('id' => $idlang));
+        $options = json_decode($elang->options, true);
+        $repeatedunderscore = isset($options['repeatedunderscore']) ? $options['repeatedunderscore'] : 10;
 
-		require_once $CFG->libdir . '/pdflib.php';
-		$doc = new pdf;
-		$doc->SetMargins(isset($options['left']) ? $options['left'] : 20, isset($options['top']) ? $options['top'] : 20);
-		$doc->SetFont('', '', isset($options['size']) ? $options['size'] : 16);
-		$doc->setPrintHeader(false);
-		$doc->setPrintFooter(false);
-		$doc->AddPage();
-		$doc->WriteHtml('<h1>' . sprintf(get_string('pdftitle', 'elang'), $course->fullname) . '</h1>');
-		$doc->WriteHtml(
-			'<h2>' . sprintf(
-				get_string('pdfsubtitle', 'elang'),
-				Elang\generateTitle($elang, $options),
-				userdate($elang->timecreated, get_string('strftimedaydate'))
-			) . '</h2>'
-		);
-		$doc->WriteHtml($elang->intro);
+        require_once($CFG->libdir . '/pdflib.php');
+        $doc = new pdf;
+        $doc->SetMargins(isset($options['left']) ? $options['left'] : 20, isset($options['top']) ? $options['top'] : 20);
+        $doc->SetFont('', '', isset($options['size']) ? $options['size'] : 16);
+        $doc->setPrintHeader(false);
+        $doc->setPrintFooter(false);
+        $doc->AddPage();
+        $doc->WriteHtml('<h1>' . sprintf(get_string('pdftitle', 'elang'), $course->fullname) . '</h1>');
+        $doc->WriteHtml(
+            '<h2>' . sprintf(
+                get_string('pdfsubtitle', 'elang'),
+                Elang\generate_title($elang, $options),
+                userdate($elang->timecreated, get_string('strftimedaydate'))
+            ) . '</h2>'
+        );
+        $doc->WriteHtml($elang->intro);
 
-		$i = 1;
+        $i = 1;
 
-		foreach ($records as $id => $record)
-		{
-			$doc->Write(5, '', '', false, '', true);
-			$doc->WriteHtml(
-				'<h3>' .
-				sprintf(
-					get_string('pdfcue', 'elang'),
-					$i++,
-					\Captioning\Format\WebvttCue::ms2tc($record->begin),
-					\Captioning\Format\WebvttCue::ms2tc($record->end)
-				) .
-				'</h3>'
-			);
-			$doc->Write(5, Elang\generateCueText(json_decode($record->json, true), array(), '_', $repeatedunderscore), '', false, '', true);
-		}
+        foreach ($records as $id => $record) {
+            $doc->Write(5, '', '', false, '', true);
+            $doc->WriteHtml(
+                '<h3>' .
+                sprintf(
+                    get_string('pdfcue', 'elang'),
+                    $i++,
+                    \Captioning\Format\WebvttCue::ms2tc($record->begin),
+                    \Captioning\Format\WebvttCue::ms2tc($record->end)
+                ) .
+                '</h3>'
+            );
+            $doc->Write(
+                5,
+                Elang\generate_cue_text(json_decode($record->json, true), array(), '_', $repeatedunderscore),
+                '',
+                false,
+                '',
+                true
+            );
+        }
 
-		send_file($doc->Output('', 'S'), end($args), 0, 0, true, false, 'application/pdf');
-	}
-	else
-	{
-		$fs = get_file_storage();
-		$relativepath = implode('/', $args);
-		$fullpath = rtrim('/' . $context->id . '/mod_elang/' . $filearea . '/0/' . $relativepath, '/');
-		$file = $fs->get_file_by_hash(sha1($fullpath));
+        send_file($doc->Output('', 'S'), end($args), 0, 0, true, false, 'application/pdf');
+    } else {
+        $fs = get_file_storage();
+        $relativepath = implode('/', $args);
+        $fullpath = rtrim('/' . $context->id . '/mod_elang/' . $filearea . '/0/' . $relativepath, '/');
+        $file = $fs->get_file_by_hash(sha1($fullpath));
 
-		if (!$file)
-		{
-			send_file_not_found();
-		}
+        if (!$file) {
+            send_file_not_found();
+        }
 
-		send_stored_file($file, 86400, 0, $forcedownload, $options);
-	}
+        send_stored_file($file, 86400, 0, $forcedownload, $options);
+    }
 }
