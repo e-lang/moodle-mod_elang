@@ -1,4 +1,19 @@
 <?php
+// This file is part of mod_elang for moodle.
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * French strings for elang
  *
@@ -46,7 +61,7 @@ $string['filearea_poster'] = 'Posters';
 $string['filearea_subtitle'] = 'Sous-titres';
 $string['filearea_videos'] = 'Vidéos';
 $string['Forbidden'] = 'Interdit';
-$string['formatname'] = '%s [%s]';
+$string['formatlang'] = 'Langue de la vidéo: %s';
 $string['getpdf'] = 'Obtenir une version pdf';
 $string['inputhelp'] = 'Obtenir la réponse';
 $string['inputlink'] = "Pour plus d'information";
@@ -91,8 +106,8 @@ $string['servicetimeout'] = 'Temps limite dépassé';
 $string['serviceunavailable'] = 'Service indisponible';
 $string['settings'] = 'Réglage spécifique du module';
 $string['showlanguage'] = 'Afficher la langue';
-$string['showlanguage_config'] = 'Cela affiche la langue dans le titre du module';
-$string['showlanguage_help'] = 'Cela affiche la langue dans le titre du module';
+$string['showlanguage_config'] = 'Cela affiche la langue sous le titre du module';
+$string['showlanguage_help'] = 'Cela affiche la langue sous le titre du module';
 $string['showplayer'] = 'Affiche votre vue étudiante';
 $string['showplayer_help'] = "Exécute le module dans le rôle d'un étudiant";
 $string['size_config'] = 'Cela définit la taille de la police dans le pdf';

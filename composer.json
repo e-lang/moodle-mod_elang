@@ -34,11 +34,11 @@
 			"type": "package",
 			"package": {
 			"name": "moodlehq/moodle-local_codechecker",
-			"version": "2.7.1",
+			"version": "v2.7.2",
 			"source": {
 				"url": "https://github.com/moodlehq/moodle-local_codechecker.git",
 				"type": "git",
-				"reference": "v2.7.1"
+				"reference": "v2.7.2"
 			},
 			"autoload": {
 				"classmap": [
@@ -66,8 +66,7 @@
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~6", 
-		"moodlerooms/moodle-plugin-ci": "^2",
-		"moodlerooms/moodle-coding-standard": "^2.0"
+		"moodlerooms/moodle-plugin-ci": "^2"
 	},
 	"scripts": {
 		"post-install-cmd": [
@@ -92,7 +91,8 @@
 			"rm -Rf build",
 			"mkdir -p build/elang",
 			"cp -Rf src/server/* build/elang",
-			"cp -Rf vendor/autoload.php vendor/captioning build/elang",
+			"cp -Rf vendor/captioning/captioning/src/Captioning build/elang",
+			"cp vendor/captioning/captioning/LICENSE build/elang/Captioning",
 			"find build/elang -type d -empty -delete",
 			"find build/elang/ -name '.gitignore' -delete",
 			"sed 's/@RELEASE@/'`cat RELEASE`'/' build/elang/version.php > build/elang/version2.php",

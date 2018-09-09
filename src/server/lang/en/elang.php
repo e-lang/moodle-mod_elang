@@ -1,4 +1,19 @@
 <?php
+// This file is part of mod_elang for moodle.
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * English strings for elang
  *
@@ -47,7 +62,7 @@ $string['filearea_poster'] = 'Posters';
 $string['filearea_subtitle'] = 'Subtitles';
 $string['filearea_videos'] = 'Videos';
 $string['Forbidden'] = 'Forbidden';
-$string['formatname'] = '%s [%s]';
+$string['formatlang'] = 'Video language: %s';
 $string['getpdf'] = 'Get a pdf version';
 $string['inputhelp'] = 'Get answer';
 $string['inputlink'] = 'For further information';
@@ -91,8 +106,8 @@ $string['resetplayer_help'] = 'This will reset your own response for the student
 $string['servicetimeout'] = 'Service Timeout';
 $string['serviceunavailable'] = 'Service Unavailable';
 $string['settings'] = 'Specific module settings';
-$string['showlanguage_config'] = 'Show the language in the course module title';
-$string['showlanguage_help'] = 'Show the language in the course module title';
+$string['showlanguage_config'] = 'Show the language below the course module title';
+$string['showlanguage_help'] = 'Show the language below the course module title';
 $string['showlanguage'] = 'Show language';
 $string['showplayer'] = 'Display your own student\'s view';
 $string['showplayer_help'] = 'Play the module as a student';

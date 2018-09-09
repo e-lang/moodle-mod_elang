@@ -2,7 +2,7 @@
 <ruleset name="Custom Standard">
 
 	<description>A custom coding standard based on the moodle one</description>
-	<rule ref="vendor/moodlerooms/moodle-coding-standard/moodle">
-		<exclude name="moodle.Files.BoilerplateComment.WrongLine"/>
+	<rule ref="vendor/moodlehq/moodle-local_codechecker/moodle">
+		<!--exclude name="moodle.Files.BoilerplateComment.WrongLine"/-->
 	</rule>
 </ruleset>

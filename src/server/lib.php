@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Library of interface functions and constants for module elang
@@ -445,13 +445,22 @@ function elang_get_coursemodule_info($coursemodule) {
     $info = new cached_cm_info;
 
     require_once(dirname(__FILE__) . '/locallib.php');
-    $info->name = Elang\generate_title($elang, $options);
-    $context = context_module::instance($coursemodule->id);
+
+    $content = array();
+
+    // Get all the languages.
+    $languages = Elang\get_languages();
+
+    if ($options['showlanguage']) {
+        $content[] = sprintf(get_string('formatlang', 'elang'), $languages[$elang->language]);
+    }
 
     if ($coursemodule->showdescription) {
         // Convert intro to html. Do not filter cached version, filters run at display time.
-        $info->content = format_module_intro('elang', $elang, $coursemodule->id, false);
+        $content[] = format_module_intro('elang', $elang, $coursemodule->id, false);
     }
+
+    $info->content = implode('<br>', $content);
 
     return $info;
 }
@@ -479,8 +488,6 @@ function elang_cm_info_dynamic(cm_info $cm) {
  *
  * @return array
  *
- * @category  code
- *
  * @since   0.0.1
  */
 function elang_get_view_actions() {
@@ -491,8 +498,6 @@ function elang_get_view_actions() {
  * Return the list of post actions
  *
  * @return array
- *
- * @category  code
  *
  * @since   0.0.1
  */

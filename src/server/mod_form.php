@@ -1,4 +1,19 @@
 <?php
+// This file is part of mod_elang for moodle.
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * The main elang configuration form
  *
@@ -196,7 +211,7 @@ class mod_elang_mod_form extends moodleform_mod
             'poster',
             get_string('poster', 'elang'),
             null,
-            array('subdirs' => 0, 'maxbytes' => $postermaxsize, 'maxfiles' => 1, 'accepted_types' => array('image'))
+            array('subdirs' => 0, 'maxbytes' => $postermaxsize, 'maxfiles' => 1, 'accepted_types' => array('.png', '.jpg', '.jpeg'))
         );
         $mform->addHelpButton('poster', 'poster', 'elang');
 
