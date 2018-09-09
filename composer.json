@@ -79,7 +79,7 @@
 			"vendor/bin/phpunit",
 			"rm -Rf mod; unzip moodle-mod_elang-`cat RELEASE`-`cat .DATE``cat .NUMBER`.zip -d mod",
 			"vendor/bin/moodle-plugin-ci phplint mod/elang/",
-			"vendor/bin/moodle-plugin-ci codechecker --standard ruleset.xml mod/elang/",
+			"vendor/bin/moodle-plugin-ci codechecker --standard vendor/moodlehq/moodle-local_codechecker/moodle mod/elang/",
 			"vendor/bin/moodle-plugin-ci phpcpd mod/elang/",
 			"vendor/bin/moodle-plugin-ci phpmd mod/elang/"
 		],

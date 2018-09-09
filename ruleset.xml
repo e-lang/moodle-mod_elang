@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<ruleset name="Custom Standard">
-
-	<description>A custom coding standard based on the moodle one</description>
-	<rule ref="vendor/moodlehq/moodle-local_codechecker/moodle">
-		<!--exclude name="moodle.Files.BoilerplateComment.WrongLine"/-->
-	</rule>
-</ruleset>
