@@ -32,7 +32,9 @@ namespace Elang;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once(dirname(__FILE__) . '/autoload.php');
+if (is_file(dirname(__FILE__) . '/vendor/autoload.php')) {
+    require_once(dirname(__FILE__) . '/vendor/autoload.php');
+}
 
 /**
  * Encode options

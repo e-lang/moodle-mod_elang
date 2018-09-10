@@ -20,7 +20,7 @@ Make sure you have installed *composer* and *bower* on your system.
 * Run
 
     ~~~sh
-    composer package
+    composer finalize
     ~~~
-  for creating creating zip files ready to be unzipped in the `mod` folder of the moodle directory
+  for creating zip files ready to be unzipped in the `mod` folder of the moodle directory
 

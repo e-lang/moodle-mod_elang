@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <libraries>
     <library>
-        <location>Captioning/</location>
+        <location>vendor/</location>
         <name>captioning/captioning</name>
         <version>2.6.0</version>
         <license>MIT</license>

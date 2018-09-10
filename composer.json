@@ -91,10 +91,9 @@
 			"rm -Rf build",
 			"mkdir -p build/elang",
 			"cp -Rf src/server/* build/elang",
-			"cp -Rf vendor/captioning/captioning/src/Captioning build/elang",
-			"cp vendor/captioning/captioning/LICENSE build/elang/Captioning",
+			"cp -Rf vendor/ build/elang",
 			"find build/elang -type d -empty -delete",
-			"find build/elang/ -name '.gitignore' -delete",
+			"find build/elang/ -name '.git*' -exec rm -Rf {} +",
 			"sed 's/@RELEASE@/'`cat RELEASE`'/' build/elang/version.php > build/elang/version2.php",
 			"sed 's/@VERSION@/'`cat .DATE``cat .NUMBER`'/' build/elang/version2.php > build/elang/version3.php",
 			"sed 's/@MATURITY@/'`cat MATURITY`'/' build/elang/version3.php > build/elang/version.php",
@@ -113,6 +112,13 @@
 			"cd build; zip -ru ../moodle-mod_elang-`cat ../RELEASE`-`cat ../.DATE``cat ../.NUMBER`.zip * -x \\*~ -x /elang/deploy/* -x /elang/enyo/* -x /elang/lib/* -x /elang/source/* -x /elang/index.html -x /elang/icon.png -x /elang/vendor/captioning/captioning/.gitignore ; cd ..",
 			"cd build/elang/deploy; zip -ru ../../../moodle-mod_elang-`cat ../../../RELEASE`-`cat ../../../.DATE``cat ../../../.NUMBER`.zip elang/build; cd ../../..",
 			"cd build; zip -ru ../moodle-mod_elang-`cat ../RELEASE`-`cat ../.DATE``cat ../.NUMBER`.zip elang/lib/bootstrap/fonts/; cd .."
+		],
+		"finalize": [
+			"rm -Rf vendor/ composer.lock",
+			"composer install --no-dev",
+			"composer package",
+			"composer update",
+			"composer test"
 		]
 	}
 }

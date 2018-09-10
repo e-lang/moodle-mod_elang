@@ -25,6 +25,16 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+----------------------------------------- stable-1.3.5 -----------------------------------------
+
+2018-09-10  Christophe Demko <chdemko@gmail.com>
+ ! Publish version 1.3.5
+
+2018-09-10  Christophe Demko <chdemko@gmail.com>
+ ^ Reuse vendor folder
+ $ reintroduce 'formatname' language string
+ + Introduce 'composer finalize' command
+
 ----------------------------------------- stable-1.3.4 -----------------------------------------
 
 2018-09-09  Christophe Demko <chdemko@gmail.com>

@@ -63,6 +63,7 @@ $string['filearea_subtitle'] = 'Subtitles';
 $string['filearea_videos'] = 'Videos';
 $string['Forbidden'] = 'Forbidden';
 $string['formatlang'] = 'Video language: %s';
+$string['formatname'] = '%s [%s]';
 $string['getpdf'] = 'Get a pdf version';
 $string['inputhelp'] = 'Get answer';
 $string['inputlink'] = 'For further information';
